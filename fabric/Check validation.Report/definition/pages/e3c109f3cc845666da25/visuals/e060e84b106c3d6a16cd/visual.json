@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "e060e84b106c3d6a16cd",
+  "position": {
+    "x": 125.74307788082395,
+    "y": 449.77331703525488,
+    "z": 3,
+    "height": 149.92443901175162,
+    "width": 374.811097529379,
+    "tabOrder": 3
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ml_supplier_risk_prediction"
+                    }
+                  },
+                  "Property": "Spend with High-Risk Suppliers"
+                }
+              },
+              "queryRef": "ml_supplier_risk_prediction.Spend with High-Risk Suppliers",
+              "nativeQueryRef": "Spend with High-Risk Suppliers"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "ml_supplier_risk_prediction"
+                  }
+                },
+                "Property": "Spend with High-Risk Suppliers"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "1725980bec64a83f644e",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ml_supplier_risk_prediction"
+              }
+            },
+            "Property": "Spend with High-Risk Suppliers"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

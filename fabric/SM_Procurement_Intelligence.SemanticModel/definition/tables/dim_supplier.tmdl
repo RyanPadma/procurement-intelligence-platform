@@ -1,0 +1,247 @@
+table dim_supplier
+	lineageTag: eb193791-6238-4460-84b7-62f39a960477
+	sourceLineageTag: [dbo].[dim_supplier]
+
+	column SupplierKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3ae099c6-bf07-4165-91c8-535373fe11ba
+		sourceLineageTag: SupplierKey
+		summarizeBy: none
+		sourceColumn: SupplierKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierID
+		dataType: string
+		lineageTag: 1c323c69-6147-4e56-9534-0d2fbf76ecf6
+		sourceLineageTag: SupplierID
+		summarizeBy: none
+		sourceColumn: SupplierID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierName
+		dataType: string
+		lineageTag: cc8f1c42-0ddf-4d3b-a9d5-3184d7d232f2
+		sourceLineageTag: SupplierName
+		summarizeBy: none
+		sourceColumn: SupplierName
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierType
+		dataType: string
+		lineageTag: 17ade576-ccba-4e11-bffc-96be40dc0cb9
+		sourceLineageTag: SupplierType
+		summarizeBy: none
+		sourceColumn: SupplierType
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: b32b9cea-cfbd-471b-a22f-43eedea912c2
+		sourceLineageTag: Country
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: c24bd38e-df3f-4043-8427-74480f0e810c
+		sourceLineageTag: Region
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column PreferredSupplier
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 1f84e659-c17e-49b5-a396-4f55ed3d93ac
+		sourceLineageTag: PreferredSupplier
+		summarizeBy: none
+		sourceColumn: PreferredSupplier
+
+		annotation SummarizationSetBy = Automatic
+
+	column StrategicSupplier
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: c6f85647-7f3f-4025-a2ad-8a2264e70d81
+		sourceLineageTag: StrategicSupplier
+		summarizeBy: none
+		sourceColumn: StrategicSupplier
+
+		annotation SummarizationSetBy = Automatic
+
+	column ESGRating
+		dataType: string
+		lineageTag: d603bcbe-a903-449d-9c20-f51ef1e0cd7d
+		sourceLineageTag: ESGRating
+		summarizeBy: none
+		sourceColumn: ESGRating
+
+		annotation SummarizationSetBy = Automatic
+
+	column FinancialRiskScore
+		dataType: int64
+		formatString: 0
+		lineageTag: f9ee5c9d-6a06-4bf8-ba54-565e57df7bb8
+		sourceLineageTag: FinancialRiskScore
+		summarizeBy: sum
+		sourceColumn: FinancialRiskScore
+
+		annotation SummarizationSetBy = Automatic
+
+	column CreatedDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 18d6b8a8-9864-43c6-9b97-4298371d5281
+		sourceLineageTag: CreatedDate
+		summarizeBy: none
+		sourceColumn: CreatedDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: 4cf5222c-f4c5-4169-85b0-7fcc7eeb649d
+		sourceLineageTag: Status
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierActiveFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 0ba5d124-e420-4a25-b3ec-da336bdd45cc
+		sourceLineageTag: SupplierActiveFlag
+		summarizeBy: none
+		sourceColumn: SupplierActiveFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceSilverRecordHash
+		dataType: string
+		isHidden
+		lineageTag: b687adc3-dd72-4805-bb4c-f35d98bcb7dd
+		sourceLineageTag: SourceSilverRecordHash
+		summarizeBy: none
+		sourceColumn: SourceSilverRecordHash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierAttributeHash
+		dataType: string
+		lineageTag: 9dfab62e-42ef-4057-8da6-05a8c779b60c
+		sourceLineageTag: SupplierAttributeHash
+		summarizeBy: none
+		sourceColumn: SupplierAttributeHash
+
+		annotation SummarizationSetBy = Automatic
+
+	column DimensionVersion
+		dataType: int64
+		formatString: 0
+		lineageTag: a9aa3786-18f8-4e1a-a0a5-4a51b25f9165
+		sourceLineageTag: DimensionVersion
+		summarizeBy: sum
+		sourceColumn: DimensionVersion
+
+		annotation SummarizationSetBy = Automatic
+
+	column EffectiveFromDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 399df459-a9be-4400-b229-5d88c0c2378c
+		sourceLineageTag: EffectiveFromDate
+		summarizeBy: none
+		sourceColumn: EffectiveFromDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column EffectiveToDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 1cbe96c1-4b40-4a31-bb8d-b56664aadaea
+		sourceLineageTag: EffectiveToDate
+		summarizeBy: none
+		sourceColumn: EffectiveToDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsCurrentFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 1070cc0f-a1c2-4ce3-9500-fdf2f16e65e5
+		sourceLineageTag: IsCurrentFlag
+		summarizeBy: none
+		sourceColumn: IsCurrentFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldSourceTable
+		dataType: string
+		isHidden
+		lineageTag: 61bae4a9-6523-4c10-8fad-370648edd018
+		sourceLineageTag: GoldSourceTable
+		summarizeBy: none
+		sourceColumn: GoldSourceTable
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldLoadTimestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 5dc64df7-2b5d-4382-a12f-91b6575c4e2d
+		sourceLineageTag: GoldLoadTimestamp
+		summarizeBy: none
+		sourceColumn: GoldLoadTimestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldLoadDate
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: cf59720b-78cf-44e1-9e91-30d84df1d8e0
+		sourceLineageTag: GoldLoadDate
+		summarizeBy: none
+		sourceColumn: GoldLoadDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldRecordHash
+		dataType: string
+		isHidden
+		lineageTag: 0332f4d7-6f42-4ab5-affb-10f51655c2bf
+		sourceLineageTag: GoldRecordHash
+		summarizeBy: none
+		sourceColumn: GoldRecordHash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_supplier = entity
+		mode: directLake
+		source
+			entityName: dim_supplier
+			expressionSource: 'DirectLake - lh_procurement_gold'
+

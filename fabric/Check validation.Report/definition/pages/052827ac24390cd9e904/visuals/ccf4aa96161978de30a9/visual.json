@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "ccf4aa96161978de30a9",
+  "position": {
+    "x": 389.90769230769229,
+    "y": 41.353846153846156,
+    "z": 1000,
+    "height": 149.66153846153847,
+    "width": 279.6307692307692,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_purchase_order"
+                    }
+                  },
+                  "Property": "Average Eligible Spend per PO"
+                }
+              },
+              "queryRef": "fact_purchase_order.Average Eligible Spend per PO",
+              "nativeQueryRef": "Average Eligible Spend per PO"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_purchase_order"
+                  }
+                },
+                "Property": "Average Eligible Spend per PO"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "4ffbf100e07756de6a20",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_purchase_order"
+              }
+            },
+            "Property": "Average Eligible Spend per PO"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

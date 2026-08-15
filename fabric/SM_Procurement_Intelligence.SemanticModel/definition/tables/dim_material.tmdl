@@ -1,0 +1,150 @@
+table dim_material
+	lineageTag: c05bd154-98bf-41c2-a679-65128f018e3f
+	sourceLineageTag: [dbo].[dim_material]
+
+	column MaterialID
+		dataType: string
+		lineageTag: 26767955-499b-4667-aaab-5d5df5ca3c25
+		sourceLineageTag: MaterialID
+		summarizeBy: none
+		sourceColumn: MaterialID
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaterialDescription
+		dataType: string
+		lineageTag: ebb439cd-808d-4237-a2bb-7af1e02777d6
+		sourceLineageTag: MaterialDescription
+		summarizeBy: none
+		sourceColumn: MaterialDescription
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryID
+		dataType: string
+		lineageTag: 05fcec3d-9fd8-4123-ac1f-b8e99b6d73e8
+		sourceLineageTag: CategoryID
+		summarizeBy: none
+		sourceColumn: CategoryID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StandardCost
+		dataType: double
+		lineageTag: d4c532d6-4e6b-4a05-b01c-b37c7d825f50
+		sourceLineageTag: StandardCost
+		summarizeBy: sum
+		sourceColumn: StandardCost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column UnitOfMeasure
+		dataType: string
+		lineageTag: 95a94c86-f4a5-4beb-a79f-1d164aff3065
+		sourceLineageTag: UnitOfMeasure
+		summarizeBy: none
+		sourceColumn: UnitOfMeasure
+
+		annotation SummarizationSetBy = Automatic
+
+	column Manufacturer
+		dataType: string
+		lineageTag: 64a32e44-87f1-4abf-8b7e-72ce38b6bb56
+		sourceLineageTag: Manufacturer
+		summarizeBy: none
+		sourceColumn: Manufacturer
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: 599717d7-d84c-47bb-ad22-8523eae627b4
+		sourceLineageTag: Status
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceSilverRecordHash
+		dataType: string
+		isHidden
+		lineageTag: 24f61e97-4526-4a64-9673-145b519774f7
+		sourceLineageTag: SourceSilverRecordHash
+		summarizeBy: none
+		sourceColumn: SourceSilverRecordHash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaterialKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c2e330b2-cf7a-4611-971f-a80793b5e176
+		sourceLineageTag: MaterialKey
+		summarizeBy: none
+		sourceColumn: MaterialKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldSourceTable
+		dataType: string
+		isHidden
+		lineageTag: 23e68c63-1d21-4937-a449-37e7cba049e0
+		sourceLineageTag: GoldSourceTable
+		summarizeBy: none
+		sourceColumn: GoldSourceTable
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldLoadTimestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 6b3ea93a-94ec-4bee-a351-ad635980e5b7
+		sourceLineageTag: GoldLoadTimestamp
+		summarizeBy: none
+		sourceColumn: GoldLoadTimestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldLoadDate
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 70fea67d-c6a2-4604-be82-fea50b72d9e6
+		sourceLineageTag: GoldLoadDate
+		summarizeBy: none
+		sourceColumn: GoldLoadDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldRecordHash
+		dataType: string
+		isHidden
+		lineageTag: 2338ed2c-043f-4c48-959f-9ee663fadcbb
+		sourceLineageTag: GoldRecordHash
+		summarizeBy: none
+		sourceColumn: GoldRecordHash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_material = entity
+		mode: directLake
+		source
+			entityName: dim_material
+			expressionSource: 'DirectLake - lh_procurement_gold'
+

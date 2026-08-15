@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Enterprise Procurement Intelligence"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "d50cab54-99e9-9b75-4033-83d8452e806b"
+  }
+}

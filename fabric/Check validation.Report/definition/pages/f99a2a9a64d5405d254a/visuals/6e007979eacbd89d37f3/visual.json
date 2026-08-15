@@ -1,0 +1,80 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "6e007979eacbd89d37f3",
+  "position": {
+    "x": 905.1019668040974,
+    "y": 175.67379946408641,
+    "z": 1,
+    "height": 149.92443901175162,
+    "width": 374.811097529379,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ml_pricing_anomaly_prediction"
+                    }
+                  },
+                  "Property": "Pricing Anomalies"
+                }
+              },
+              "queryRef": "ml_pricing_anomaly_prediction.Pricing Anomalies",
+              "nativeQueryRef": "Pricing Anomalies",
+              "format": "#,0.000"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "ml_pricing_anomaly_prediction"
+                  }
+                },
+                "Property": "Pricing Anomalies"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

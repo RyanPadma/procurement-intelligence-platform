@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "59e46e6603e20d493b80",
+  "position": {
+    "x": 399.75384615384615,
+    "y": 256,
+    "z": 1003,
+    "height": 149.66153846153847,
+    "width": 279.6307692307692,
+    "tabOrder": 1003
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_purchase_order"
+                    }
+                  },
+                  "Property": "Maverick Spend %"
+                }
+              },
+              "queryRef": "fact_purchase_order.Maverick Spend %",
+              "nativeQueryRef": "Maverick Spend %"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_purchase_order"
+                  }
+                },
+                "Property": "Maverick Spend %"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "04c8120b311aa790dec3",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_purchase_order"
+              }
+            },
+            "Property": "Maverick Spend %"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

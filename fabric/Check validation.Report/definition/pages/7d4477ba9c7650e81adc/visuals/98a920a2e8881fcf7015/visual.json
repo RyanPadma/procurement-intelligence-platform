@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "98a920a2e8881fcf7015",
+  "position": {
+    "x": 685.29230769230765,
+    "y": 405.66153846153844,
+    "z": 5,
+    "height": 149.66153846153847,
+    "width": 279.6307692307692,
+    "tabOrder": 5
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_savings"
+                    }
+                  },
+                  "Property": "Active Savings Projects"
+                }
+              },
+              "queryRef": "fact_savings.Active Savings Projects",
+              "nativeQueryRef": "Active Savings Projects"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_savings"
+                  }
+                },
+                "Property": "Active Savings Projects"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "eab828802f19aacac97f",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_savings"
+              }
+            },
+            "Property": "Active Savings Projects"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

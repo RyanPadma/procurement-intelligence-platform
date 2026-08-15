@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "550a30ff1755e926b642",
+  "position": {
+    "x": 405.66153846153844,
+    "y": 191.01538461538462,
+    "z": 1,
+    "height": 149.66153846153847,
+    "width": 279.6307692307692,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_savings"
+                    }
+                  },
+                  "Property": "Weighted Forecast Savings"
+                }
+              },
+              "queryRef": "fact_savings.Weighted Forecast Savings",
+              "nativeQueryRef": "Weighted Forecast Savings"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_savings"
+                  }
+                },
+                "Property": "Weighted Forecast Savings"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "5396a1d7739e78a145d0",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_savings"
+              }
+            },
+            "Property": "Weighted Forecast Savings"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

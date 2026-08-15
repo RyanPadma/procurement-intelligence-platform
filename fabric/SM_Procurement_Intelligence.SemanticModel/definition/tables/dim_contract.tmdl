@@ -1,0 +1,279 @@
+table dim_contract
+	lineageTag: cddfdfda-50b8-451d-af9b-6d69e2b9c411
+	sourceLineageTag: [dbo].[dim_contract]
+
+	column ContractID
+		dataType: string
+		lineageTag: 550a7c41-8e26-4fb9-80a6-83bbf2d99812
+		sourceLineageTag: ContractID
+		summarizeBy: none
+		sourceColumn: ContractID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierID
+		dataType: string
+		lineageTag: 6b11adeb-5b07-4fcf-8557-a9a36fb84843
+		sourceLineageTag: SupplierID
+		summarizeBy: none
+		sourceColumn: SupplierID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryID
+		dataType: string
+		lineageTag: 7013ece1-5213-4b02-96f5-3a2e61c6a289
+		sourceLineageTag: CategoryID
+		summarizeBy: none
+		sourceColumn: CategoryID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContractStartDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 60b029c1-79f6-4716-83b4-3a83e36ea4df
+		sourceLineageTag: ContractStartDate
+		summarizeBy: none
+		sourceColumn: ContractStartDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContractEndDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0ff63ccf-9392-46b6-b62f-74600dce6c15
+		sourceLineageTag: ContractEndDate
+		summarizeBy: none
+		sourceColumn: ContractEndDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column Currency
+		dataType: string
+		lineageTag: e01ffca0-f263-4965-887e-a2f802d4bd16
+		sourceLineageTag: Currency
+		summarizeBy: none
+		sourceColumn: Currency
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContractValue
+		dataType: double
+		lineageTag: c27b7599-cadc-4a94-8b06-7074f5cab835
+		sourceLineageTag: ContractValue
+		summarizeBy: sum
+		sourceColumn: ContractValue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column NegotiatedUnitPrice
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 615fc54e-317b-4216-abc9-222748669d28
+		sourceLineageTag: NegotiatedUnitPrice
+		summarizeBy: sum
+		sourceColumn: NegotiatedUnitPrice
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column ContractOwnerBuyerID
+		dataType: string
+		lineageTag: 64807100-167e-4b0d-94f5-952c2c29a01b
+		sourceLineageTag: ContractOwnerBuyerID
+		summarizeBy: none
+		sourceColumn: ContractOwnerBuyerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceContractOwner
+		dataType: string
+		lineageTag: 7bebffed-48af-4ee5-bcba-bbf2324c9aaa
+		sourceLineageTag: SourceContractOwner
+		summarizeBy: none
+		sourceColumn: SourceContractOwner
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContractType
+		dataType: string
+		lineageTag: 87645e10-c200-41dd-b598-836b84a394f0
+		sourceLineageTag: ContractType
+		summarizeBy: none
+		sourceColumn: ContractType
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceContractStatus
+		dataType: string
+		lineageTag: 058b2ce6-cda0-42aa-a0c2-57a8f42088ea
+		sourceLineageTag: SourceContractStatus
+		summarizeBy: none
+		sourceColumn: SourceContractStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column PaymentTermsDays
+		dataType: int64
+		formatString: 0
+		lineageTag: 17c3ee56-1b3e-4095-8f46-197f5e32d988
+		sourceLineageTag: PaymentTermsDays
+		summarizeBy: sum
+		sourceColumn: PaymentTermsDays
+
+		annotation SummarizationSetBy = Automatic
+
+	column AutoRenewalFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 71f5ed10-298a-478f-855a-eb75c37d1c41
+		sourceLineageTag: AutoRenewalFlag
+		summarizeBy: none
+		sourceColumn: AutoRenewalFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContractLifecycleStatus
+		dataType: string
+		lineageTag: 288c51a2-d331-476b-a0f7-8b8f30ea6d49
+		sourceLineageTag: ContractLifecycleStatus
+		summarizeBy: none
+		sourceColumn: ContractLifecycleStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsContractActiveAsOfDate
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: be83d5fa-f7ca-47aa-8491-ccde4f793b31
+		sourceLineageTag: IsContractActiveAsOfDate
+		summarizeBy: none
+		sourceColumn: IsContractActiveAsOfDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContractDurationDays
+		dataType: int64
+		formatString: 0
+		lineageTag: 9813aea7-5ec3-4b08-bab0-53b1fbc216cb
+		sourceLineageTag: ContractDurationDays
+		summarizeBy: sum
+		sourceColumn: ContractDurationDays
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContractStartYear
+		dataType: int64
+		formatString: 0
+		lineageTag: b5f1af3d-d287-46bd-b95a-2a128abae96c
+		sourceLineageTag: ContractStartYear
+		summarizeBy: sum
+		sourceColumn: ContractStartYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContractEndYear
+		dataType: int64
+		formatString: 0
+		lineageTag: ed24afe5-9a0c-4e3c-af8a-dabeeb81bdf3
+		sourceLineageTag: ContractEndYear
+		summarizeBy: sum
+		sourceColumn: ContractEndYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column DaysToExpiryAsOfDate
+		dataType: int64
+		formatString: 0
+		lineageTag: 983510dc-dbe8-42ca-b062-18b9b82f2f56
+		sourceLineageTag: DaysToExpiryAsOfDate
+		summarizeBy: sum
+		sourceColumn: DaysToExpiryAsOfDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceSilverRecordHash
+		dataType: string
+		isHidden
+		lineageTag: c0783c66-edc0-4df2-8815-8cf2f8024081
+		sourceLineageTag: SourceSilverRecordHash
+		summarizeBy: none
+		sourceColumn: SourceSilverRecordHash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContractKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f81239a5-530d-4042-934f-187ee27c2107
+		sourceLineageTag: ContractKey
+		summarizeBy: none
+		sourceColumn: ContractKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldSourceTable
+		dataType: string
+		isHidden
+		lineageTag: 84905cb1-e3d2-4618-b32b-d341d288aa99
+		sourceLineageTag: GoldSourceTable
+		summarizeBy: none
+		sourceColumn: GoldSourceTable
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldLoadTimestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: c9b3aa1e-fcdf-4eda-8691-5e56938b9118
+		sourceLineageTag: GoldLoadTimestamp
+		summarizeBy: none
+		sourceColumn: GoldLoadTimestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldLoadDate
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 3ed4c137-df25-4067-ab22-06e3e79735eb
+		sourceLineageTag: GoldLoadDate
+		summarizeBy: none
+		sourceColumn: GoldLoadDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldRecordHash
+		dataType: string
+		isHidden
+		lineageTag: 78c34b21-affb-4dc1-b531-bea09b72d2ab
+		sourceLineageTag: GoldRecordHash
+		summarizeBy: none
+		sourceColumn: GoldRecordHash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_contract = entity
+		mode: directLake
+		source
+			entityName: dim_contract
+			expressionSource: 'DirectLake - lh_procurement_gold'
+

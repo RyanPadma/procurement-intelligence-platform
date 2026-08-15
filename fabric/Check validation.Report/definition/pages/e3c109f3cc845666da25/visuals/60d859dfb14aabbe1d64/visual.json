@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "60d859dfb14aabbe1d64",
+  "position": {
+    "x": 142.6700306724733,
+    "y": 210.37784183907081,
+    "z": 2,
+    "height": 149.92443901175162,
+    "width": 374.811097529379,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ml_supplier_risk_prediction"
+                    }
+                  },
+                  "Property": "High-Risk Suppliers"
+                }
+              },
+              "queryRef": "ml_supplier_risk_prediction.High-Risk Suppliers",
+              "nativeQueryRef": "High-Risk Suppliers"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "ml_supplier_risk_prediction"
+                  }
+                },
+                "Property": "High-Risk Suppliers"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "98f4e1927c2d02479ca0",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ml_supplier_risk_prediction"
+              }
+            },
+            "Property": "High-Risk Suppliers"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

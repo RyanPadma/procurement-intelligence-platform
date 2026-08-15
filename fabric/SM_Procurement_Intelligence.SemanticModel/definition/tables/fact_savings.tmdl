@@ -1,0 +1,875 @@
+table fact_savings
+	lineageTag: 9ecf9828-bb4d-44d6-af8d-8af7da5911ba
+	sourceLineageTag: [dbo].[fact_savings]
+
+	measure 'Savings Projects' =
+			
+			DISTINCTCOUNT (
+			    fact_savings[SavingsProjectID]
+			)
+		formatString: #,0
+		displayFolder: 04 Savings Pipeline
+		lineageTag: 392bae27-630f-442b-9a61-7208e5a1215a
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Active Savings Projects' =
+			
+			CALCULATE (
+			    [Savings Projects],
+			    fact_savings[ActivePipelineFlag] = TRUE ()
+			)
+		formatString: #,0
+		displayFolder: 04 Savings Pipeline
+		lineageTag: da71c514-8abf-4ef0-9f64-4ee1f80dff81
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Forecasted Savings' =
+			
+			SUM (
+			    fact_savings[ForecastedSavingsEUR]
+			)
+		formatString: "€"\ #,0.00;-"€"\ #,0.00;"€"\ #,0.00
+		displayFolder: 04 Savings Pipeline
+		lineageTag: 30070743-0dd6-4c2c-9644-ce177c5f3ebb
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Weighted Forecast Savings' =
+			
+			SUM (
+			    fact_savings[WeightedForecastSavingsEUR]
+			)
+		formatString: "€"\ #,0.00;-"€"\ #,0.00;"€"\ #,0.00
+		displayFolder: 04 Savings Pipeline
+		lineageTag: 05d98133-8d32-400f-bbcc-4a7d442f169b
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Approved Savings' =
+			
+			SUM (
+			    fact_savings[ApprovedSavingsEUR]
+			)
+		formatString: "€"\ #,0.00;-"€"\ #,0.00;"€"\ #,0.00
+		displayFolder: 04 Savings Pipeline
+		lineageTag: 72ead696-ccc5-45a6-86b5-dd189eb82052
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Realized Savings' =
+			
+			CALCULATE (
+			    SUM (
+			        fact_savings[RealizedSavingsEUR]
+			    ),
+			    USERELATIONSHIP (
+			        fact_savings[ActualCompletionDateKey],
+			        dim_date[DateKey]
+			    )
+			)
+		formatString: "€"\ #,0.00;-"€"\ #,0.00;"€"\ #,0.00
+		displayFolder: 04 Savings Pipeline
+		lineageTag: e9801d78-fa6d-45b3-b556-d88de7a17b29
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Savings Realization %' =
+			
+			DIVIDE (
+			    [Realized Savings],
+			    [Approved Savings]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 04 Savings Pipeline
+		lineageTag: c23a1f0d-fc9d-43a2-8e9e-b73cd3bb8593
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	column CurrencyCode
+		dataType: string
+		lineageTag: 05633561-a918-4183-9613-541b8884a218
+		sourceLineageTag: CurrencyCode
+		summarizeBy: none
+		sourceColumn: CurrencyCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContractID
+		dataType: string
+		lineageTag: 45e46f4e-876c-46bf-a9bc-6e95b00f851f
+		sourceLineageTag: ContractID
+		summarizeBy: none
+		sourceColumn: ContractID
+
+		annotation SummarizationSetBy = Automatic
+
+	column BusinessUnitID
+		dataType: string
+		lineageTag: 4b6cc52b-479f-4283-b903-0314e9e5ae62
+		sourceLineageTag: BusinessUnitID
+		summarizeBy: none
+		sourceColumn: BusinessUnitID
+
+		annotation SummarizationSetBy = Automatic
+
+	column BuyerID
+		dataType: string
+		lineageTag: f69035b4-3c61-4a75-9413-19abf0b17516
+		sourceLineageTag: BuyerID
+		summarizeBy: none
+		sourceColumn: BuyerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryID
+		dataType: string
+		lineageTag: 1579dad6-5f26-43d6-8df5-fb55800e342a
+		sourceLineageTag: CategoryID
+		summarizeBy: none
+		sourceColumn: CategoryID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SavingsProjectID
+		dataType: string
+		lineageTag: aa0f4387-c7e1-4e8b-9fa0-380b68d13d3a
+		sourceLineageTag: SavingsProjectID
+		summarizeBy: none
+		sourceColumn: SavingsProjectID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SavingsProjectName
+		dataType: string
+		lineageTag: 1c9fec59-03f8-4de0-9de4-29f77147d661
+		sourceLineageTag: SavingsProjectName
+		summarizeBy: none
+		sourceColumn: SavingsProjectName
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierID
+		dataType: string
+		lineageTag: 52cd6779-efdd-4790-a1c8-3688654f82d8
+		sourceLineageTag: SupplierID
+		summarizeBy: none
+		sourceColumn: SupplierID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SavingsType
+		dataType: string
+		lineageTag: 1079b0a3-905f-4759-bea9-0e70558525f3
+		sourceLineageTag: SavingsType
+		summarizeBy: none
+		sourceColumn: SavingsType
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProjectStatus
+		dataType: string
+		lineageTag: 391da714-cef3-4c83-be94-9ee28439b4e5
+		sourceLineageTag: ProjectStatus
+		summarizeBy: none
+		sourceColumn: ProjectStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column SavingsLevel
+		dataType: string
+		lineageTag: fdc5d9b1-f851-48d0-ad96-1717bb0f4be4
+		sourceLineageTag: SavingsLevel
+		summarizeBy: none
+		sourceColumn: SavingsLevel
+
+		annotation SummarizationSetBy = Automatic
+
+	column ApprovalStatus
+		dataType: string
+		lineageTag: f752471d-59f8-41f9-882c-2eb3fa657984
+		sourceLineageTag: ApprovalStatus
+		summarizeBy: none
+		sourceColumn: ApprovalStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProjectCreatedDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0effa06d-abe4-4bf6-af38-5156c148d99b
+		sourceLineageTag: ProjectCreatedDate
+		summarizeBy: none
+		sourceColumn: ProjectCreatedDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column PlannedStartDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 95954fb1-60e0-431a-8bc8-a7749fd67e3b
+		sourceLineageTag: PlannedStartDate
+		summarizeBy: none
+		sourceColumn: PlannedStartDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column PlannedCompletionDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f2d9dd9d-538f-4452-9f7e-8c41a83568d0
+		sourceLineageTag: PlannedCompletionDate
+		summarizeBy: none
+		sourceColumn: PlannedCompletionDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ActualCompletionDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 3c9082eb-c5d9-4144-a35a-3f3d1e2bf3b8
+		sourceLineageTag: ActualCompletionDate
+		summarizeBy: none
+		sourceColumn: ActualCompletionDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column CancellationDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: df416dd4-4de2-4480-83a0-6ed3f2208583
+		sourceLineageTag: CancellationDate
+		summarizeBy: none
+		sourceColumn: CancellationDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column BaselineSpend
+		dataType: double
+		lineageTag: 28aed840-a284-435c-b5f9-c13a85ab0aea
+		sourceLineageTag: BaselineSpend
+		summarizeBy: sum
+		sourceColumn: BaselineSpend
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ForecastedSavings
+		dataType: double
+		lineageTag: 9a9ff76b-62c8-4f65-a15f-e51a2bc7fbd3
+		sourceLineageTag: ForecastedSavings
+		summarizeBy: sum
+		sourceColumn: ForecastedSavings
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column WeightedForecastSavings
+		dataType: double
+		lineageTag: 8da92544-001e-4a1b-b7db-ebea9db81eda
+		sourceLineageTag: WeightedForecastSavings
+		summarizeBy: sum
+		sourceColumn: WeightedForecastSavings
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ApprovedSavings
+		dataType: double
+		lineageTag: 4a038bfb-14b9-4497-929c-737c70a0694b
+		sourceLineageTag: ApprovedSavings
+		summarizeBy: sum
+		sourceColumn: ApprovedSavings
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column RealizedSavings
+		dataType: double
+		lineageTag: a80a22e2-609a-4fbe-81d7-73e6cd1504f8
+		sourceLineageTag: RealizedSavings
+		summarizeBy: sum
+		sourceColumn: RealizedSavings
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column BaselineSpendEUR
+		dataType: double
+		lineageTag: c40ea9e6-1cb5-41d2-9706-795f597274b9
+		sourceLineageTag: BaselineSpendEUR
+		summarizeBy: sum
+		sourceColumn: BaselineSpendEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ForecastedSavingsEUR
+		dataType: double
+		lineageTag: 33cf200a-096e-4562-8058-e5e9fe2a6308
+		sourceLineageTag: ForecastedSavingsEUR
+		summarizeBy: sum
+		sourceColumn: ForecastedSavingsEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column WeightedForecastSavingsEUR
+		dataType: double
+		lineageTag: 82422376-4d59-474f-97cd-d542827ad200
+		sourceLineageTag: WeightedForecastSavingsEUR
+		summarizeBy: sum
+		sourceColumn: WeightedForecastSavingsEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ApprovedSavingsEUR
+		dataType: double
+		lineageTag: df4cf6ad-5b3f-4133-bc6e-880798903564
+		sourceLineageTag: ApprovedSavingsEUR
+		summarizeBy: sum
+		sourceColumn: ApprovedSavingsEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column RealizedSavingsEUR
+		dataType: double
+		lineageTag: 6520d53a-abde-4b43-9632-eee9e5f6cac5
+		sourceLineageTag: RealizedSavingsEUR
+		summarizeBy: sum
+		sourceColumn: RealizedSavingsEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SavingsConfidenceWeight
+		dataType: double
+		lineageTag: b95dc0b9-fcaa-4e19-927c-c6e9ac82f4f5
+		sourceLineageTag: SavingsConfidenceWeight
+		summarizeBy: sum
+		sourceColumn: SavingsConfidenceWeight
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ForecastSavingsPctOfBaseline
+		dataType: double
+		lineageTag: 15b1bfc4-afb0-4b62-993c-4aa000f535ff
+		sourceLineageTag: ForecastSavingsPctOfBaseline
+		summarizeBy: sum
+		sourceColumn: ForecastSavingsPctOfBaseline
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ApprovedSavingsPctOfBaseline
+		dataType: double
+		lineageTag: 034d7595-d230-49f0-abdd-486ad6faad07
+		sourceLineageTag: ApprovedSavingsPctOfBaseline
+		summarizeBy: sum
+		sourceColumn: ApprovedSavingsPctOfBaseline
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column RealizedSavingsPctOfBaseline
+		dataType: double
+		lineageTag: 0e35a2a7-4b12-4469-8bc6-58494203548d
+		sourceLineageTag: RealizedSavingsPctOfBaseline
+		summarizeBy: sum
+		sourceColumn: RealizedSavingsPctOfBaseline
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SavingsAchievementPct
+		dataType: double
+		lineageTag: 21682f1a-ddef-41c2-8bf1-b108119e3da1
+		sourceLineageTag: SavingsAchievementPct
+		summarizeBy: sum
+		sourceColumn: SavingsAchievementPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SavingsAchievementVarianceEUR
+		dataType: double
+		lineageTag: 67fda783-1e7a-4891-aff2-e76edad4ac98
+		sourceLineageTag: SavingsAchievementVarianceEUR
+		summarizeBy: sum
+		sourceColumn: SavingsAchievementVarianceEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ActivePipelineFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 56752c20-80cc-4001-8938-1baae0290774
+		sourceLineageTag: ActivePipelineFlag
+		summarizeBy: none
+		sourceColumn: ActivePipelineFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsIdeaFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: bcb4fcca-89de-40f3-98c4-ffa058603f00
+		sourceLineageTag: IsIdeaFlag
+		summarizeBy: none
+		sourceColumn: IsIdeaFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsValidatedFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 01bbf4ad-7dcd-42b0-9056-a056e9f6b2f4
+		sourceLineageTag: IsValidatedFlag
+		summarizeBy: none
+		sourceColumn: IsValidatedFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsNegotiationFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 301f8087-681f-4b7b-8f0f-495c232f083e
+		sourceLineageTag: IsNegotiationFlag
+		summarizeBy: none
+		sourceColumn: IsNegotiationFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsImplementedFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 8ed9b05e-0d23-4560-914d-044d1fd99f77
+		sourceLineageTag: IsImplementedFlag
+		summarizeBy: none
+		sourceColumn: IsImplementedFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsCancelledFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: ffd8b776-0578-48a1-a53f-253cb3f0ce4f
+		sourceLineageTag: IsCancelledFlag
+		summarizeBy: none
+		sourceColumn: IsCancelledFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column OverdueProjectFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 437d6eb7-19bc-40b7-bc7a-be0f1c1f0276
+		sourceLineageTag: OverdueProjectFlag
+		summarizeBy: none
+		sourceColumn: OverdueProjectFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column DaysPastPlannedCompletion
+		dataType: int64
+		formatString: 0
+		lineageTag: be67e1d1-0039-4861-99ca-32c8b292b7b1
+		sourceLineageTag: DaysPastPlannedCompletion
+		summarizeBy: sum
+		sourceColumn: DaysPastPlannedCompletion
+
+		annotation SummarizationSetBy = Automatic
+
+	column PlannedDurationDays
+		dataType: int64
+		formatString: 0
+		lineageTag: 88eb59ad-005c-4043-a330-73eb4d051e71
+		sourceLineageTag: PlannedDurationDays
+		summarizeBy: sum
+		sourceColumn: PlannedDurationDays
+
+		annotation SummarizationSetBy = Automatic
+
+	column ActualDurationDays
+		dataType: int64
+		formatString: 0
+		lineageTag: 032d768d-96d6-4e28-8ed1-382a99eb334e
+		sourceLineageTag: ActualDurationDays
+		summarizeBy: sum
+		sourceColumn: ActualDurationDays
+
+		annotation SummarizationSetBy = Automatic
+
+	column ActivePipelineForecastEUR
+		dataType: double
+		lineageTag: 2a922da7-bfee-4e70-acf6-d27cb58b06ba
+		sourceLineageTag: ActivePipelineForecastEUR
+		summarizeBy: sum
+		sourceColumn: ActivePipelineForecastEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ActivePipelineWeightedForecastEUR
+		dataType: double
+		lineageTag: 072d8380-6f8d-460c-bf30-7512cd534fd2
+		sourceLineageTag: ActivePipelineWeightedForecastEUR
+		summarizeBy: sum
+		sourceColumn: ActivePipelineWeightedForecastEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ImplementedSavingsEUR
+		dataType: double
+		lineageTag: 5f76647c-0276-45ce-85f9-18e8b3a83180
+		sourceLineageTag: ImplementedSavingsEUR
+		summarizeBy: sum
+		sourceColumn: ImplementedSavingsEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column RecurringSavingsFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 8c3adda0-829f-40e3-a69b-28b9a4f453d7
+		sourceLineageTag: RecurringSavingsFlag
+		summarizeBy: none
+		sourceColumn: RecurringSavingsFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceSilverRecordHash
+		dataType: string
+		isHidden
+		lineageTag: c31cbf83-8cba-4e3a-b5a7-456517f76a5f
+		sourceLineageTag: SourceSilverRecordHash
+		summarizeBy: none
+		sourceColumn: SourceSilverRecordHash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProjectCreatedDateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 723d0468-4012-4f80-a421-240530986205
+		sourceLineageTag: ProjectCreatedDateKey
+		summarizeBy: count
+		sourceColumn: ProjectCreatedDateKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column PlannedStartDateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d1f7a9c2-8a1a-4b08-874f-d28c7458c640
+		sourceLineageTag: PlannedStartDateKey
+		summarizeBy: count
+		sourceColumn: PlannedStartDateKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column PlannedCompletionDateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1b420a17-5dfe-4c61-aaa5-44ded161b8f8
+		sourceLineageTag: PlannedCompletionDateKey
+		summarizeBy: none
+		sourceColumn: PlannedCompletionDateKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ActualCompletionDateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3e959265-ecce-4e52-8f6d-71a1bf8c6c81
+		sourceLineageTag: ActualCompletionDateKey
+		summarizeBy: count
+		sourceColumn: ActualCompletionDateKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column CancellationDateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 315e5900-6adf-432a-aba2-add96967a2e8
+		sourceLineageTag: CancellationDateKey
+		summarizeBy: count
+		sourceColumn: CancellationDateKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: fd6db19b-ce03-41df-90c1-16cf6ec1fa3b
+		sourceLineageTag: SupplierKey
+		summarizeBy: none
+		sourceColumn: SupplierKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierDimensionVersion
+		dataType: int64
+		formatString: 0
+		lineageTag: c4517f86-1c46-402b-81c2-04528fa4d4bc
+		sourceLineageTag: SupplierDimensionVersion
+		summarizeBy: sum
+		sourceColumn: SupplierDimensionVersion
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b380b2ba-ad85-4a5c-9ee1-c1477b9e6935
+		sourceLineageTag: CategoryKey
+		summarizeBy: none
+		sourceColumn: CategoryKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column BuyerKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 67a03dd2-3a37-4eba-af15-aa5dcb4d954b
+		sourceLineageTag: BuyerKey
+		summarizeBy: none
+		sourceColumn: BuyerKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column BusinessUnitKey
+		dataType: int64
+		formatString: 0
+		lineageTag: a4477571-5e93-4763-bace-2ac3b6c01889
+		sourceLineageTag: BusinessUnitKey
+		summarizeBy: none
+		sourceColumn: BusinessUnitKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContractKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ecfe6b4f-7db9-4061-8639-cfb0bcbda828
+		sourceLineageTag: ContractKey
+		summarizeBy: none
+		sourceColumn: ContractKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrencyKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5c5afd3f-05ee-43b5-beab-42d49e2d07b6
+		sourceLineageTag: CurrencyKey
+		summarizeBy: none
+		sourceColumn: CurrencyKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SavingsFactKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f7f22ad5-3aba-4450-a70c-54aa9ace1582
+		sourceLineageTag: SavingsFactKey
+		summarizeBy: count
+		sourceColumn: SavingsFactKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProjectCount
+		dataType: int64
+		formatString: 0
+		lineageTag: 159e5639-5f6a-40d8-b6ee-9d5cb55806de
+		sourceLineageTag: ProjectCount
+		summarizeBy: sum
+		sourceColumn: ProjectCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column ActivePipelineProjectCount
+		dataType: int64
+		formatString: 0
+		lineageTag: 5f78a3ef-14de-4d1b-bc52-af1083d85122
+		sourceLineageTag: ActivePipelineProjectCount
+		summarizeBy: sum
+		sourceColumn: ActivePipelineProjectCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column ImplementedProjectCount
+		dataType: int64
+		formatString: 0
+		lineageTag: 4543548f-cb15-49e4-b24a-7eb6f3b773ec
+		sourceLineageTag: ImplementedProjectCount
+		summarizeBy: sum
+		sourceColumn: ImplementedProjectCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column OverdueProjectCount
+		dataType: int64
+		formatString: 0
+		lineageTag: 8031badc-f277-4d8f-b175-7638d9cdc197
+		sourceLineageTag: OverdueProjectCount
+		summarizeBy: sum
+		sourceColumn: OverdueProjectCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column CancelledProjectCount
+		dataType: int64
+		formatString: 0
+		lineageTag: aa5d4274-4b55-4ff7-85c7-412a05e87e9f
+		sourceLineageTag: CancelledProjectCount
+		summarizeBy: sum
+		sourceColumn: CancelledProjectCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldSourceTable
+		dataType: string
+		isHidden
+		lineageTag: 699ae0fa-6bcb-478f-b6fe-2e483a55d375
+		sourceLineageTag: GoldSourceTable
+		summarizeBy: none
+		sourceColumn: GoldSourceTable
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldLoadTimestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 95d360c0-6f23-471a-bac0-0f344a79b171
+		sourceLineageTag: GoldLoadTimestamp
+		summarizeBy: none
+		sourceColumn: GoldLoadTimestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldLoadDate
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: f6924719-dd6f-40d8-8e80-2ef1364f979b
+		sourceLineageTag: GoldLoadDate
+		summarizeBy: none
+		sourceColumn: GoldLoadDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldRecordHash
+		dataType: string
+		isHidden
+		lineageTag: 751561cb-ad9c-4834-9f2a-d9c248800037
+		sourceLineageTag: GoldRecordHash
+		summarizeBy: none
+		sourceColumn: GoldRecordHash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_savings = entity
+		mode: directLake
+		source
+			entityName: fact_savings
+			expressionSource: 'DirectLake - lh_procurement_gold'
+

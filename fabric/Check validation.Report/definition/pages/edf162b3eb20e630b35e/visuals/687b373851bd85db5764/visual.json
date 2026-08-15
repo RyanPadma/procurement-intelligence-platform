@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "687b373851bd85db5764",
+  "position": {
+    "x": 61.04615384615385,
+    "y": 41.353846153846156,
+    "z": 0,
+    "height": 149.66153846153847,
+    "width": 279.6307692307692,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_supplier_performance"
+                    }
+                  },
+                  "Property": "Supplier OTD %"
+                }
+              },
+              "queryRef": "fact_supplier_performance.Supplier OTD %",
+              "nativeQueryRef": "Supplier OTD %"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_supplier_performance"
+                  }
+                },
+                "Property": "Supplier OTD %"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "9ac6c30484643600a649",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_supplier_performance"
+              }
+            },
+            "Property": "Supplier OTD %"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

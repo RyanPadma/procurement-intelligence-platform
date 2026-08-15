@@ -1,0 +1,590 @@
+table ml_pricing_anomaly_prediction
+	lineageTag: 076aead4-2a7b-4293-a9f1-b554c7d00b54
+	sourceLineageTag: [dbo].[ml_pricing_anomaly_prediction]
+
+	measure 'Latest Pricing Anomaly Prediction Date' =
+			
+			CALCULATE (
+			    MAX (
+			        ml_pricing_anomaly_prediction[PredictionDate]
+			    ),
+			    REMOVEFILTERS ()
+			)
+		formatString: General Date
+		displayFolder: 06 Pricing Anomaly
+		lineageTag: 3f64b065-a785-4b59-8346-37b8b522ba40
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+	measure 'Pricing Items Scored' =
+			
+			VAR LatestDate =
+			    [Latest Pricing Anomaly Prediction Date]
+			RETURN
+			    CALCULATE (
+			        DISTINCTCOUNT (
+			            ml_pricing_anomaly_prediction[POItemID]
+			        ),
+			        ml_pricing_anomaly_prediction[PredictionDate] = LatestDate
+			    )
+		formatString: #,0
+		displayFolder: 06 Pricing Anomaly
+		lineageTag: 3adafc0b-8040-4ca2-a4a8-83a4dc9fbf40
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Pricing Anomalies' =
+			
+			VAR LatestDate =
+			    [Latest Pricing Anomaly Prediction Date]
+			RETURN
+			    CALCULATE (
+			        DISTINCTCOUNT (
+			            ml_pricing_anomaly_prediction[POItemID]
+			        ),
+			        ml_pricing_anomaly_prediction[PredictionDate] = LatestDate,
+			        ml_pricing_anomaly_prediction[PricingAnomalyFlag] = 1
+			    )
+		formatString: #,0
+		displayFolder: 06 Pricing Anomaly
+		lineageTag: 7bbc2e4a-600f-424c-95df-d1acb42c401e
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Pricing Anomaly Rate' =
+			
+			DIVIDE (
+			    [Pricing Anomalies],
+			    [Pricing Items Scored]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 06 Pricing Anomaly
+		lineageTag: 36c00b97-45fe-4a9e-bb37-7af36d3362ca
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Eligible Spend with Pricing Anomalies' =
+			
+			VAR LatestDate =
+			    [Latest Pricing Anomaly Prediction Date]
+			
+			VAR AnomalousPOItems =
+			    CALCULATETABLE (
+			        VALUES (
+			            ml_pricing_anomaly_prediction[PurchaseOrderFactKey]
+			        ),
+			        ml_pricing_anomaly_prediction[PredictionDate] = LatestDate,
+			        ml_pricing_anomaly_prediction[PricingAnomalyFlag] = 1
+			    )
+			
+			RETURN
+			    CALCULATE (
+			        [Total Eligible Spend],
+			        TREATAS (
+			            AnomalousPOItems,
+			            fact_purchase_order[PurchaseOrderFactKey]
+			        )
+			    )
+		formatString: "€"\ #,0.00;-"€"\ #,0.00;"€"\ #,0.00
+		displayFolder: 06 Pricing Anomaly
+		lineageTag: 64a66613-e949-4e8f-a427-6f598f0d0a4e
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Eligible Spend with Pricing Anomalies %' =
+			
+			DIVIDE (
+			    [Eligible Spend with Pricing Anomalies],
+			    [Total Eligible Spend]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 06 Pricing Anomaly
+		lineageTag: b4505571-4026-4bfe-b7d9-5e30dadecc09
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Average Pricing Anomaly Score' =
+			
+			VAR LatestDate =
+			    [Latest Pricing Anomaly Prediction Date]
+			RETURN
+			    CALCULATE (
+			        AVERAGE (
+			            ml_pricing_anomaly_prediction[PricingAnomalyScore]
+			        ),
+			        ml_pricing_anomaly_prediction[PredictionDate] = LatestDate
+			    )
+		displayFolder: 06 Pricing Anomaly
+		lineageTag: 4c09d6c6-82e7-456a-aa39-4c3f161d4cc2
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PredictionDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 457edfbe-3543-41e1-ad21-bec4263b1442
+		sourceLineageTag: PredictionDate
+		summarizeBy: none
+		sourceColumn: PredictionDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column PredictionDateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: dabc74e6-9d7f-4532-9cee-9da8d52e7fa1
+		sourceLineageTag: PredictionDateKey
+		summarizeBy: count
+		sourceColumn: PredictionDateKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column PurchaseOrderFactKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 853451f8-b796-4ea3-8ecc-2fc900ff9745
+		sourceLineageTag: PurchaseOrderFactKey
+		summarizeBy: count
+		sourceColumn: PurchaseOrderFactKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column POItemID
+		dataType: string
+		lineageTag: 4449757c-e77e-4855-9bee-6b9ce7d4d5dc
+		sourceLineageTag: POItemID
+		summarizeBy: none
+		sourceColumn: POItemID
+
+		annotation SummarizationSetBy = Automatic
+
+	column POID
+		dataType: string
+		lineageTag: 6c070bdf-a340-4b8e-b306-4948bd301c52
+		sourceLineageTag: POID
+		summarizeBy: none
+		sourceColumn: POID
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 21ee2c98-6fdf-4138-b4b0-c8cb02e5a71f
+		sourceLineageTag: OrderDate
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 7d6b1e83-e514-4b82-8f89-b44663984d88
+		sourceLineageTag: SupplierKey
+		summarizeBy: none
+		sourceColumn: SupplierKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaterialKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8269880b-e421-452b-83f8-c000a7ff0d6b
+		sourceLineageTag: MaterialKey
+		summarizeBy: none
+		sourceColumn: MaterialKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d8121015-4405-4390-b533-5ce8f3699c04
+		sourceLineageTag: CategoryKey
+		summarizeBy: none
+		sourceColumn: CategoryKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContractKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 91aafe8f-dad3-4df8-aaad-a9bb135a6011
+		sourceLineageTag: ContractKey
+		summarizeBy: none
+		sourceColumn: ContractKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierID
+		dataType: string
+		lineageTag: ef397df6-39fa-4913-908c-a91a123a0db1
+		sourceLineageTag: SupplierID
+		summarizeBy: none
+		sourceColumn: SupplierID
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaterialID
+		dataType: string
+		lineageTag: 527b5c34-7c0a-4b04-8a38-d87b61ff0862
+		sourceLineageTag: MaterialID
+		summarizeBy: none
+		sourceColumn: MaterialID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryID
+		dataType: string
+		lineageTag: e4dbac08-b3e2-4575-95f9-7d912cd7c6aa
+		sourceLineageTag: CategoryID
+		summarizeBy: none
+		sourceColumn: CategoryID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContractID
+		dataType: string
+		lineageTag: aae7f1b2-2b8d-4592-a668-31f2fb044ca6
+		sourceLineageTag: ContractID
+		summarizeBy: none
+		sourceColumn: ContractID
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitPriceEUR
+		dataType: double
+		lineageTag: b95dcbd5-08e7-4c7d-afb2-2621f12cba3d
+		sourceLineageTag: UnitPriceEUR
+		summarizeBy: sum
+		sourceColumn: UnitPriceEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column LineAmountEUR
+		dataType: double
+		lineageTag: 81bdce53-f54e-4269-8219-44c2e28f4119
+		sourceLineageTag: LineAmountEUR
+		summarizeBy: sum
+		sourceColumn: LineAmountEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column RawAnomalyScore
+		dataType: double
+		lineageTag: c026fe0b-6eb3-4702-8e0f-b9d5d7996ab7
+		sourceLineageTag: RawAnomalyScore
+		summarizeBy: sum
+		sourceColumn: RawAnomalyScore
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PricingAnomalyScore
+		dataType: double
+		lineageTag: 3e9ad54e-3b44-462c-a365-e20345a25940
+		sourceLineageTag: PricingAnomalyScore
+		summarizeBy: sum
+		sourceColumn: PricingAnomalyScore
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PricingAnomalyFlag
+		dataType: int64
+		formatString: 0
+		lineageTag: b50a61de-f65f-4830-8655-82c0a5a3af6b
+		sourceLineageTag: PricingAnomalyFlag
+		summarizeBy: sum
+		sourceColumn: PricingAnomalyFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column RuleBasedExtremePriceFlag
+		dataType: int64
+		formatString: 0
+		lineageTag: 54ed2fb4-7362-4a9b-82a0-ae1cab5a7a03
+		sourceLineageTag: RuleBasedExtremePriceFlag
+		summarizeBy: sum
+		sourceColumn: RuleBasedExtremePriceFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column PriceComplianceExceptionFlag
+		dataType: int64
+		formatString: 0
+		lineageTag: 82dcc07f-6707-4be7-be7c-def67529693b
+		sourceLineageTag: PriceComplianceExceptionFlag
+		summarizeBy: sum
+		sourceColumn: PriceComplianceExceptionFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContractPriceVariancePct
+		dataType: double
+		lineageTag: f5bfb619-bdec-4506-9b96-c341a8a4b3e0
+		sourceLineageTag: ContractPriceVariancePct
+		summarizeBy: sum
+		sourceColumn: ContractPriceVariancePct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PriceVsMaterialHistoricalAvgPct
+		dataType: double
+		lineageTag: e69f6c54-ec3c-4389-b5c7-1434bcc37cc0
+		sourceLineageTag: PriceVsMaterialHistoricalAvgPct
+		summarizeBy: sum
+		sourceColumn: PriceVsMaterialHistoricalAvgPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PriceVsSupplierMaterialHistoricalAvgPct
+		dataType: double
+		lineageTag: 27172ebc-965c-4d05-9b03-76c28512d03e
+		sourceLineageTag: PriceVsSupplierMaterialHistoricalAvgPct
+		summarizeBy: sum
+		sourceColumn: PriceVsSupplierMaterialHistoricalAvgPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PriceVsCategoryHistoricalAvgPct
+		dataType: double
+		lineageTag: 85d750c7-d55a-467e-ae44-2506b9115c48
+		sourceLineageTag: PriceVsCategoryHistoricalAvgPct
+		summarizeBy: sum
+		sourceColumn: PriceVsCategoryHistoricalAvgPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column BenchmarkCoverageCount
+		dataType: int64
+		formatString: 0
+		lineageTag: cfb9e3e0-0a8b-46bf-afa3-ff58a808fd82
+		sourceLineageTag: BenchmarkCoverageCount
+		summarizeBy: sum
+		sourceColumn: BenchmarkCoverageCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModelName
+		dataType: string
+		lineageTag: 8a1b02f9-fa49-4228-b653-54ed4ddf69c4
+		sourceLineageTag: ModelName
+		summarizeBy: none
+		sourceColumn: ModelName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModelRunID
+		dataType: string
+		isHidden
+		lineageTag: 62903c7e-ff5b-435b-aa26-cb5e20733d71
+		sourceLineageTag: ModelRunID
+		summarizeBy: none
+		sourceColumn: ModelRunID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModelStage
+		dataType: string
+		lineageTag: fdd650c0-8cbc-4469-b7b4-ff67e766c03f
+		sourceLineageTag: ModelStage
+		summarizeBy: none
+		sourceColumn: ModelStage
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModelStatus
+		dataType: string
+		lineageTag: 751a9b4f-d33b-4172-b7db-15c229545c7a
+		sourceLineageTag: ModelStatus
+		summarizeBy: none
+		sourceColumn: ModelStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column AnomalyReviewRate
+		dataType: double
+		lineageTag: 0abc9bab-f8a8-4816-8c00-82c80e49b0e1
+		sourceLineageTag: AnomalyReviewRate
+		summarizeBy: sum
+		sourceColumn: AnomalyReviewRate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column RawAnomalyThreshold
+		dataType: double
+		lineageTag: ccc8fd0d-dec5-48fe-98cd-527ac8fd591c
+		sourceLineageTag: RawAnomalyThreshold
+		summarizeBy: sum
+		sourceColumn: RawAnomalyThreshold
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column AnomalyScoreCutoff
+		dataType: double
+		lineageTag: 965c866e-fccb-4849-bd73-abf7fff607ca
+		sourceLineageTag: AnomalyScoreCutoff
+		summarizeBy: sum
+		sourceColumn: AnomalyScoreCutoff
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PredictionTimestampUTC
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 65cda2cb-9287-4d40-8126-d7df162ff8e6
+		sourceLineageTag: PredictionTimestampUTC
+		summarizeBy: none
+		sourceColumn: PredictionTimestampUTC
+
+		annotation SummarizationSetBy = Automatic
+
+	column PricingAnomalyPredictionKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 93a7e87f-fe28-4358-9b6a-6337d6b5a092
+		sourceLineageTag: PricingAnomalyPredictionKey
+		summarizeBy: count
+		sourceColumn: PricingAnomalyPredictionKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column PromotionBatchID
+		dataType: string
+		isHidden
+		lineageTag: 55ed19ba-06ee-4bd3-ba40-5ff5e5c4f4c8
+		sourceLineageTag: PromotionBatchID
+		summarizeBy: none
+		sourceColumn: PromotionBatchID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MLSourceNotebook
+		dataType: string
+		isHidden
+		lineageTag: f0c0dc51-7946-4c4a-93fa-53be98920992
+		sourceLineageTag: MLSourceNotebook
+		summarizeBy: none
+		sourceColumn: MLSourceNotebook
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MLSourcePath
+		dataType: string
+		isHidden
+		lineageTag: 30cbaf86-7033-43fd-97f4-75147f7d2558
+		sourceLineageTag: MLSourcePath
+		summarizeBy: none
+		sourceColumn: MLSourcePath
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldMLLoadTimestampUTC
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 2aca76d8-8267-4e7e-bf45-7e10bc8c8c95
+		sourceLineageTag: GoldMLLoadTimestampUTC
+		summarizeBy: none
+		sourceColumn: GoldMLLoadTimestampUTC
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldMLLoadDate
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 4d98ad58-8151-4353-b771-0473f3b1ee73
+		sourceLineageTag: GoldMLLoadDate
+		summarizeBy: none
+		sourceColumn: GoldMLLoadDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ml_pricing_anomaly_prediction = entity
+		mode: directLake
+		source
+			entityName: ml_pricing_anomaly_prediction
+			expressionSource: 'DirectLake - lh_procurement_gold'
+

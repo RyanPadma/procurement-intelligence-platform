@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "171e6d1165134d46adca",
+  "position": {
+    "x": 41.353846153846156,
+    "y": 35.446153846153848,
+    "z": 0,
+    "height": 149.92443901175162,
+    "width": 374.811097529379,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ml_savings_opportunity"
+                    }
+                  },
+                  "Property": "Savings Opportunities"
+                }
+              },
+              "queryRef": "ml_savings_opportunity.Savings Opportunities",
+              "nativeQueryRef": "Savings Opportunities"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "ml_savings_opportunity"
+                  }
+                },
+                "Property": "Savings Opportunities"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "f1d2ad2206dfbd5b8e2d",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ml_savings_opportunity"
+              }
+            },
+            "Property": "Savings Opportunities"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

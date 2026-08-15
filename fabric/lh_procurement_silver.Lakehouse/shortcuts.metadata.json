@@ -1,0 +1,184 @@
+[
+  {
+    "name": "monitoring_bronze_data_quality_results",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dbo/monitoring_bronze_data_quality_results",
+        "itemId": "b37aed8e-f940-9c08-400f-2b9a6900e8cc",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "bronze_supplier",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dbo/bronze_supplier",
+        "itemId": "b37aed8e-f940-9c08-400f-2b9a6900e8cc",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "bronze_savings_project",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dbo/bronze_savings_project",
+        "itemId": "b37aed8e-f940-9c08-400f-2b9a6900e8cc",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "bronze_purchase_order_item",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dbo/bronze_purchase_order_item",
+        "itemId": "b37aed8e-f940-9c08-400f-2b9a6900e8cc",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "bronze_purchase_order_header",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dbo/bronze_purchase_order_header",
+        "itemId": "b37aed8e-f940-9c08-400f-2b9a6900e8cc",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "bronze_material",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dbo/bronze_material",
+        "itemId": "b37aed8e-f940-9c08-400f-2b9a6900e8cc",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "bronze_invoice_item",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dbo/bronze_invoice_item",
+        "itemId": "b37aed8e-f940-9c08-400f-2b9a6900e8cc",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "bronze_invoice_header",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dbo/bronze_invoice_header",
+        "itemId": "b37aed8e-f940-9c08-400f-2b9a6900e8cc",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "bronze_goods_receipt",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dbo/bronze_goods_receipt",
+        "itemId": "b37aed8e-f940-9c08-400f-2b9a6900e8cc",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "bronze_exchange_rate",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dbo/bronze_exchange_rate",
+        "itemId": "b37aed8e-f940-9c08-400f-2b9a6900e8cc",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "bronze_contract",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dbo/bronze_contract",
+        "itemId": "b37aed8e-f940-9c08-400f-2b9a6900e8cc",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "bronze_category",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dbo/bronze_category",
+        "itemId": "b37aed8e-f940-9c08-400f-2b9a6900e8cc",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "bronze_buyer",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dbo/bronze_buyer",
+        "itemId": "b37aed8e-f940-9c08-400f-2b9a6900e8cc",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  },
+  {
+    "name": "bronze_business_unit",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/dbo/bronze_business_unit",
+        "itemId": "b37aed8e-f940-9c08-400f-2b9a6900e8cc",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "artifactType": "Lakehouse"
+      }
+    }
+  }
+]

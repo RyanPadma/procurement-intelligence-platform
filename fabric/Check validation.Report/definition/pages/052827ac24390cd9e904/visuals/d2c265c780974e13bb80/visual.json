@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "d2c265c780974e13bb80",
+  "position": {
+    "x": 96.492307692307691,
+    "y": 210.7076923076923,
+    "z": 1004,
+    "height": 149.66153846153847,
+    "width": 279.6307692307692,
+    "tabOrder": 1004
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_purchase_order"
+                    }
+                  },
+                  "Property": "Contract Compliance %"
+                }
+              },
+              "queryRef": "fact_purchase_order.Contract Compliance %",
+              "nativeQueryRef": "Contract Compliance %"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_purchase_order"
+                  }
+                },
+                "Property": "Contract Compliance %"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "d1990e409812bb01de42",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_purchase_order"
+              }
+            },
+            "Property": "Contract Compliance %"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

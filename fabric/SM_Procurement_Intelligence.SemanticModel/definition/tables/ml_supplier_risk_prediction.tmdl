@@ -1,0 +1,379 @@
+table ml_supplier_risk_prediction
+	lineageTag: 9e99e2b2-2dac-46b5-a981-ff080214932d
+	sourceLineageTag: [dbo].[ml_supplier_risk_prediction]
+
+	measure 'Latest Supplier Risk Prediction Date' =
+			
+			CALCULATE (
+			    MAX (
+			        ml_supplier_risk_prediction[PredictionDate]
+			    ),
+			    REMOVEFILTERS (
+			        dim_supplier
+			    ),
+			    REMOVEFILTERS (
+			        ml_supplier_risk_prediction
+			    )
+			)
+		formatString: General Date
+		isHidden
+		displayFolder: 05 Supplier Risk
+		lineageTag: 815a134d-8b99-4345-8d60-347cbdc7eaf0
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = IsHidden
+
+	measure 'Suppliers Scored' =
+			
+			VAR LatestDate =
+			    [Latest Supplier Risk Prediction Date]
+			RETURN
+			    CALCULATE (
+			        DISTINCTCOUNT (
+			            ml_supplier_risk_prediction[SupplierID]
+			        ),
+			        ml_supplier_risk_prediction[PredictionDate] = LatestDate
+			    )
+		formatString: #,0.0
+		displayFolder: 05 Supplier Risk
+		lineageTag: 6a130662-e8b1-400b-9b25-1b62bd9acbcf
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Average Supplier Risk Score' =
+			
+			VAR LatestDate =
+			    [Latest Supplier Risk Prediction Date]
+			RETURN
+			    CALCULATE (
+			        AVERAGE (
+			            ml_supplier_risk_prediction[SupplierRiskScore]
+			        ),
+			        ml_supplier_risk_prediction[PredictionDate] = LatestDate
+			    )
+		formatString: 0.00
+		displayFolder: 05 Supplier Risk
+		lineageTag: 4d4f8bf0-c342-44c3-bdd7-9345e2db15aa
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'High-Risk Suppliers' =
+			
+			VAR LatestDate =
+			    [Latest Supplier Risk Prediction Date]
+			RETURN
+			    CALCULATE (
+			        DISTINCTCOUNT (
+			            ml_supplier_risk_prediction[SupplierID]
+			        ),
+			        ml_supplier_risk_prediction[PredictionDate] = LatestDate,
+			        ml_supplier_risk_prediction[PredictedHighRiskFlag] = 1
+			    )
+		formatString: 0
+		displayFolder: 05 Supplier Risk
+		lineageTag: 4d924959-92c1-44ec-ac9b-c024a58cd573
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+	measure 'High-Risk Supplier %' =
+			
+			DIVIDE (
+			    [High-Risk Suppliers],
+			    [Suppliers Scored]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 05 Supplier Risk
+		lineageTag: 7d75229e-96f2-473b-adf1-02557498b59c
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Spend with High-Risk Suppliers' =
+			
+			VAR LatestDate =
+			    [Latest Supplier Risk Prediction Date]
+			
+			VAR HighRiskSupplierSet =
+			    CALCULATETABLE (
+			        VALUES (
+			            ml_supplier_risk_prediction[SupplierID]
+			        ),
+			        ml_supplier_risk_prediction[PredictionDate] = LatestDate,
+			        ml_supplier_risk_prediction[PredictedHighRiskFlag] = 1
+			    )
+			
+			RETURN
+			    CALCULATE (
+			        [Total Eligible Spend],
+			        TREATAS (
+			            HighRiskSupplierSet,
+			            dim_supplier[SupplierID]
+			        )
+			    )
+		formatString: "€"\ #,0.00;-"€"\ #,0.00;"€"\ #,0.00
+		displayFolder: 05 Supplier Risk
+		lineageTag: 17a1c52a-cdfd-41ed-a57e-0677f1b2edb0
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Spend with High-Risk Suppliers %' =
+			
+			DIVIDE (
+			    [Spend with High-Risk Suppliers],
+			    [Total Eligible Spend]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 05 Supplier Risk
+		lineageTag: 9e23f0b3-6c4b-48a7-8f79-4dd674228f58
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	column PredictionDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 9da8a2b4-fb43-4988-a698-7e6362d3b2b2
+		sourceLineageTag: PredictionDate
+		summarizeBy: none
+		sourceColumn: PredictionDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column PredictionDateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: c8a4ac73-0633-4857-8150-40dabecd0e96
+		sourceLineageTag: PredictionDateKey
+		summarizeBy: count
+		sourceColumn: PredictionDateKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierKey
+		dataType: int64
+		formatString: 0
+		lineageTag: db3f7e40-3bcc-4a41-89d0-b1019abb4fb9
+		sourceLineageTag: SupplierKey
+		summarizeBy: none
+		sourceColumn: SupplierKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierDimensionVersion
+		dataType: int64
+		formatString: 0
+		lineageTag: 1070b468-4f46-4524-a000-7b612e00a16c
+		sourceLineageTag: SupplierDimensionVersion
+		summarizeBy: sum
+		sourceColumn: SupplierDimensionVersion
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierID
+		dataType: string
+		lineageTag: e32f24f0-559c-42de-a548-389f6d342fae
+		sourceLineageTag: SupplierID
+		summarizeBy: none
+		sourceColumn: SupplierID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierRiskScore
+		dataType: double
+		lineageTag: 86d8e8ca-7931-40f0-ae93-91abbaf2496d
+		sourceLineageTag: SupplierRiskScore
+		summarizeBy: sum
+		sourceColumn: SupplierRiskScore
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PredictedHighRiskFlag
+		dataType: int64
+		formatString: 0
+		lineageTag: 176d393c-f0cc-4b12-b397-da91e71e1bad
+		sourceLineageTag: PredictedHighRiskFlag
+		summarizeBy: sum
+		sourceColumn: PredictedHighRiskFlag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModelName
+		dataType: string
+		lineageTag: 3e96661d-5f23-461d-b2df-43ff33c1253c
+		sourceLineageTag: ModelName
+		summarizeBy: none
+		sourceColumn: ModelName
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModelRunID
+		dataType: string
+		isHidden
+		lineageTag: 7615c45b-e1a3-4866-a2b0-606a992f1108
+		sourceLineageTag: ModelRunID
+		summarizeBy: none
+		sourceColumn: ModelRunID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModelStatus
+		dataType: string
+		lineageTag: 75761789-793f-4cd8-9c1d-c29ae1cd99be
+		sourceLineageTag: ModelStatus
+		summarizeBy: none
+		sourceColumn: ModelStatus
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column DecisionThreshold
+		dataType: double
+		lineageTag: 6cd9342f-3e33-41f6-95a2-e2cb6dbf7014
+		sourceLineageTag: DecisionThreshold
+		summarizeBy: sum
+		sourceColumn: DecisionThreshold
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PredictionTimestampUTC
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f46b2f86-3fbb-4d46-a111-58afe725acc2
+		sourceLineageTag: PredictionTimestampUTC
+		summarizeBy: none
+		sourceColumn: PredictionTimestampUTC
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierRiskPredictionKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 62ce05c6-72aa-41a9-bc25-f8b71f7da7a3
+		sourceLineageTag: SupplierRiskPredictionKey
+		summarizeBy: count
+		sourceColumn: SupplierRiskPredictionKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column PromotionBatchID
+		dataType: string
+		isHidden
+		lineageTag: 825ee48b-3272-4d98-8fd9-71fc21a32687
+		sourceLineageTag: PromotionBatchID
+		summarizeBy: none
+		sourceColumn: PromotionBatchID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MLSourceNotebook
+		dataType: string
+		isHidden
+		lineageTag: 7da73563-7dc4-43e1-9fda-af47cf6787f6
+		sourceLineageTag: MLSourceNotebook
+		summarizeBy: none
+		sourceColumn: MLSourceNotebook
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MLSourcePath
+		dataType: string
+		isHidden
+		lineageTag: 325ebcee-81e2-43be-adc3-c263483cae88
+		sourceLineageTag: MLSourcePath
+		summarizeBy: none
+		sourceColumn: MLSourcePath
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldMLLoadTimestampUTC
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: c0a50412-ee9b-407f-b2fd-2d10aa7978a5
+		sourceLineageTag: GoldMLLoadTimestampUTC
+		summarizeBy: none
+		sourceColumn: GoldMLLoadTimestampUTC
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldMLLoadDate
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 285df0d6-c6c8-4fc6-9e4e-0e45fe11d6f7
+		sourceLineageTag: GoldMLLoadDate
+		summarizeBy: none
+		sourceColumn: GoldMLLoadDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ml_supplier_risk_prediction = entity
+		mode: directLake
+		source
+			entityName: ml_supplier_risk_prediction
+			expressionSource: 'DirectLake - lh_procurement_gold'
+
+	changedProperty = IsHidden
+

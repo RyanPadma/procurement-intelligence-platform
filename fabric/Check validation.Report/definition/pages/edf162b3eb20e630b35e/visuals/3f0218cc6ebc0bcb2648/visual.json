@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "3f0218cc6ebc0bcb2648",
+  "position": {
+    "x": 82.252138910482159,
+    "y": 209.15543894379749,
+    "z": 2,
+    "height": 149.66153846153847,
+    "width": 279.6307692307692,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_supplier_performance"
+                    }
+                  },
+                  "Property": "Invoice Dispute %"
+                }
+              },
+              "queryRef": "fact_supplier_performance.Invoice Dispute %",
+              "nativeQueryRef": "Invoice Dispute %"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_supplier_performance"
+                  }
+                },
+                "Property": "Invoice Dispute %"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "4e6b4c31e2407ec3bc2e",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_supplier_performance"
+              }
+            },
+            "Property": "Invoice Dispute %"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "2ce8dadf74c585024da7",
+  "position": {
+    "x": 143.22830144177604,
+    "y": 4.93890694626814,
+    "z": 6,
+    "height": 281.51769593728392,
+    "width": 760.59166972529351,
+    "tabOrder": 6
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_supplier"
+                    }
+                  },
+                  "Property": "SupplierName"
+                }
+              },
+              "queryRef": "dim_supplier.SupplierName",
+              "nativeQueryRef": "SupplierName"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ml_supplier_risk_prediction"
+                    }
+                  },
+                  "Property": "Average Supplier Risk Score"
+                }
+              },
+              "queryRef": "ml_supplier_risk_prediction.Average Supplier Risk Score",
+              "nativeQueryRef": "Average Supplier Risk Score"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_purchase_order"
+                    }
+                  },
+                  "Property": "Total Eligible Spend"
+                }
+              },
+              "queryRef": "fact_purchase_order.Total Eligible Spend",
+              "nativeQueryRef": "Total Eligible Spend"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "ml_supplier_risk_prediction"
+                  }
+                },
+                "Property": "Average Supplier Risk Score"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "5d152edd50b25005d58f",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ml_supplier_risk_prediction"
+              }
+            },
+            "Property": "Average Supplier Risk Score"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "2aa1a5d8a6f336a733d9",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_purchase_order"
+              }
+            },
+            "Property": "Total Eligible Spend"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "ee6da6b895be5724d26b",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_supplier"
+              }
+            },
+            "Property": "SupplierName"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
+}

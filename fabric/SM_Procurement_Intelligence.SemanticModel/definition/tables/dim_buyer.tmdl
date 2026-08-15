@@ -1,0 +1,139 @@
+table dim_buyer
+	lineageTag: cc8b7969-d2d3-434c-9642-45c2fcc8805f
+	sourceLineageTag: [dbo].[dim_buyer]
+
+	column BuyerID
+		dataType: string
+		lineageTag: fddf49c2-01b1-4eff-9b4a-36e87de51a58
+		sourceLineageTag: BuyerID
+		summarizeBy: none
+		sourceColumn: BuyerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column BuyerName
+		dataType: string
+		lineageTag: 43496217-10a9-4205-96c7-d1762331c726
+		sourceLineageTag: BuyerName
+		summarizeBy: none
+		sourceColumn: BuyerName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Email
+		dataType: string
+		lineageTag: 5bb9dd06-da0f-4159-9f77-923ab113f0e1
+		sourceLineageTag: Email
+		summarizeBy: none
+		sourceColumn: Email
+
+		annotation SummarizationSetBy = Automatic
+
+	column Department
+		dataType: string
+		lineageTag: a1ddd11d-3390-43ff-93b3-c678f4b393a0
+		sourceLineageTag: Department
+		summarizeBy: none
+		sourceColumn: Department
+
+		annotation SummarizationSetBy = Automatic
+
+	column BuyerRole
+		dataType: string
+		lineageTag: cb6a4569-49b7-4b28-a296-dc3703b72e67
+		sourceLineageTag: BuyerRole
+		summarizeBy: none
+		sourceColumn: BuyerRole
+
+		annotation SummarizationSetBy = Automatic
+
+	column BusinessUnitID
+		dataType: string
+		lineageTag: ac445534-f211-4de3-ab29-844a41214d61
+		sourceLineageTag: BusinessUnitID
+		summarizeBy: none
+		sourceColumn: BusinessUnitID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceSilverRecordHash
+		dataType: string
+		isHidden
+		lineageTag: ed82180f-e1ee-4c56-a7da-cbf321b9eaed
+		sourceLineageTag: SourceSilverRecordHash
+		summarizeBy: none
+		sourceColumn: SourceSilverRecordHash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column BuyerKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 7e3280d9-afb3-4b02-8809-eb120ea8452b
+		sourceLineageTag: BuyerKey
+		summarizeBy: none
+		sourceColumn: BuyerKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldSourceTable
+		dataType: string
+		isHidden
+		lineageTag: e76c8627-c153-4656-96f7-7f9475bdff18
+		sourceLineageTag: GoldSourceTable
+		summarizeBy: none
+		sourceColumn: GoldSourceTable
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldLoadTimestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 0a7367a9-35b2-4ee5-80e6-7a8fde5960cf
+		sourceLineageTag: GoldLoadTimestamp
+		summarizeBy: none
+		sourceColumn: GoldLoadTimestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldLoadDate
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 98c06938-fc13-4f6c-a06a-d6e7dd020b75
+		sourceLineageTag: GoldLoadDate
+		summarizeBy: none
+		sourceColumn: GoldLoadDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldRecordHash
+		dataType: string
+		isHidden
+		lineageTag: 036fb2de-bd5a-4011-bea5-52e993c13157
+		sourceLineageTag: GoldRecordHash
+		summarizeBy: none
+		sourceColumn: GoldRecordHash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_buyer = entity
+		mode: directLake
+		source
+			entityName: dim_buyer
+			expressionSource: 'DirectLake - lh_procurement_gold'
+

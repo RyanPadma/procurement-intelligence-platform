@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "4c19486e4bdba4bab31b",
+  "position": {
+    "x": 41.834863849425147,
+    "y": 233.39450358100345,
+    "z": 1,
+    "height": 149.92443901175162,
+    "width": 374.811097529379,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ml_savings_opportunity"
+                    }
+                  },
+                  "Property": "Positive Savings Opportunities"
+                }
+              },
+              "queryRef": "ml_savings_opportunity.Positive Savings Opportunities",
+              "nativeQueryRef": "Positive Savings Opportunities"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "ml_savings_opportunity"
+                  }
+                },
+                "Property": "Positive Savings Opportunities"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "02ae57ebeedb9269b11c",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ml_savings_opportunity"
+              }
+            },
+            "Property": "Positive Savings Opportunities"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

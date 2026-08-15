@@ -1,0 +1,122 @@
+table dim_currency
+	lineageTag: 3db9a771-a23a-4797-bc1e-895306252fd9
+	sourceLineageTag: [dbo].[dim_currency]
+
+	column CurrencyCode
+		dataType: string
+		lineageTag: 1a31be74-ddf2-4382-a4eb-f3ef48587463
+		sourceLineageTag: CurrencyCode
+		summarizeBy: none
+		sourceColumn: CurrencyCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column FirstAvailableRateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 092d8e5c-02c1-42d3-b46c-83ee0e0f2f29
+		sourceLineageTag: FirstAvailableRateDate
+		summarizeBy: none
+		sourceColumn: FirstAvailableRateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column LastAvailableRateDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 84984d23-7d6c-4969-b0c4-499c3e4c9c7d
+		sourceLineageTag: LastAvailableRateDate
+		summarizeBy: none
+		sourceColumn: LastAvailableRateDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column AvailableRateDateCount
+		dataType: int64
+		formatString: 0
+		lineageTag: 4ce456d8-b01a-4073-8782-38e97fde7a39
+		sourceLineageTag: AvailableRateDateCount
+		summarizeBy: sum
+		sourceColumn: AvailableRateDateCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrencyKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b032e914-204b-433b-928f-973dae094fc9
+		sourceLineageTag: CurrencyKey
+		summarizeBy: none
+		sourceColumn: CurrencyKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsBaseCurrencyFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 69ba15c6-3f39-464d-9f88-d8000825bae7
+		sourceLineageTag: IsBaseCurrencyFlag
+		summarizeBy: none
+		sourceColumn: IsBaseCurrencyFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldSourceTable
+		dataType: string
+		isHidden
+		lineageTag: 85e052e0-57f1-4213-845c-db81ddc04c54
+		sourceLineageTag: GoldSourceTable
+		summarizeBy: none
+		sourceColumn: GoldSourceTable
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldLoadTimestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 922709d2-c953-4899-af5b-bdc96cab3db3
+		sourceLineageTag: GoldLoadTimestamp
+		summarizeBy: none
+		sourceColumn: GoldLoadTimestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldLoadDate
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: b477d6c0-149c-46e5-9c0c-af568c027042
+		sourceLineageTag: GoldLoadDate
+		summarizeBy: none
+		sourceColumn: GoldLoadDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldRecordHash
+		dataType: string
+		isHidden
+		lineageTag: 0167b39c-04e1-47e6-82ea-0db82f67c4ea
+		sourceLineageTag: GoldRecordHash
+		summarizeBy: none
+		sourceColumn: GoldRecordHash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_currency = entity
+		mode: directLake
+		source
+			entityName: dim_currency
+			expressionSource: 'DirectLake - lh_procurement_gold'
+

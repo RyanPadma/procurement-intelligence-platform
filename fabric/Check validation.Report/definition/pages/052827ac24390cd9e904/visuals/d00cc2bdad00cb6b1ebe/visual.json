@@ -1,0 +1,201 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "d00cc2bdad00cb6b1ebe",
+  "position": {
+    "x": 184.46115288220551,
+    "y": 285.51378446115291,
+    "z": 1012,
+    "height": 431.47869674185466,
+    "width": 1032.9824561403509,
+    "tabOrder": 1012
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_category"
+                    }
+                  },
+                  "Property": "CategoryName"
+                }
+              },
+              "queryRef": "dim_category.CategoryName",
+              "nativeQueryRef": "CategoryName",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_purchase_order"
+                    }
+                  },
+                  "Property": "Total Eligible Spend"
+                }
+              },
+              "queryRef": "fact_purchase_order.Total Eligible Spend",
+              "nativeQueryRef": "Total Eligible Spend"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_purchase_order"
+                    }
+                  },
+                  "Property": "Contract Compliant Spend"
+                }
+              },
+              "queryRef": "fact_purchase_order.Contract Compliant Spend",
+              "nativeQueryRef": "Contract Compliant Spend"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_purchase_order"
+                    }
+                  },
+                  "Property": "Maverick Spend"
+                }
+              },
+              "queryRef": "fact_purchase_order.Maverick Spend",
+              "nativeQueryRef": "Maverick Spend"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_purchase_order"
+                    }
+                  },
+                  "Property": "Contract Compliance %"
+                }
+              },
+              "queryRef": "fact_purchase_order.Contract Compliance %",
+              "nativeQueryRef": "Contract Compliance %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_purchase_order"
+                    }
+                  },
+                  "Property": "Maverick Spend %"
+                }
+              },
+              "queryRef": "fact_purchase_order.Maverick Spend %",
+              "nativeQueryRef": "Maverick Spend %"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "1f3d379982b000cba073",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_purchase_order"
+              }
+            },
+            "Property": "Total Eligible Spend"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "0ad4c504e38b76664453",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_purchase_order"
+              }
+            },
+            "Property": "Contract Compliant Spend"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "8fba2d6c61e48a034cc8",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_purchase_order"
+              }
+            },
+            "Property": "Maverick Spend"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "775035099e8609754550",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_purchase_order"
+              }
+            },
+            "Property": "Contract Compliance %"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "40ff5a477770bac3ca6b",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_purchase_order"
+              }
+            },
+            "Property": "Maverick Spend %"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "8b2c06fbbed47a642690",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_category"
+              }
+            },
+            "Property": "CategoryName"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
+}
