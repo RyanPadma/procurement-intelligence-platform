@@ -1,0 +1,174 @@
+relationship 6d72a9a3-3680-a9fe-ca94-ac9d9563826c
+	fromColumn: fact_purchase_order.SupplierKey
+	toColumn: dim_supplier.SupplierKey
+
+relationship 8ccadcef-41df-b74e-5a48-7428d89479da
+	fromColumn: fact_purchase_order.CategoryKey
+	toColumn: dim_category.CategoryKey
+
+relationship feab7f23-daab-96cf-def1-2bc137d545b7
+	fromColumn: fact_purchase_order.MaterialKey
+	toColumn: dim_material.MaterialKey
+
+relationship faafe6a3-a266-e013-98fe-6b3f384b9b7b
+	fromColumn: fact_purchase_order.BuyerKey
+	toColumn: dim_buyer.BuyerKey
+
+relationship 7e09c77a-5e59-0b41-8537-16c5aae33a44
+	fromColumn: fact_purchase_order.BusinessUnitKey
+	toColumn: dim_business_unit.BusinessUnitKey
+
+relationship 33008d92-145e-c050-b244-3d0953c0e5d6
+	fromColumn: fact_purchase_order.CurrencyKey
+	toColumn: dim_currency.CurrencyKey
+
+relationship cfaa6737-08db-5860-94b3-133160f738cd
+	fromColumn: fact_purchase_order.ContractKey
+	toColumn: dim_contract.ContractKey
+
+relationship a84ee3fc-aa86-5a1c-3d28-8d249319d1d8
+	fromColumn: fact_purchase_order.OrderDateKey
+	toColumn: dim_date.DateKey
+
+relationship 6211a164-5594-98d2-9a7e-79fc873d4c4f
+	isActive: false
+	fromColumn: fact_purchase_order.RequestedDeliveryDateKey
+	toColumn: dim_date.DateKey
+
+relationship 103e341c-d9ad-454c-9b9e-62dcb1f6f67e
+	fromColumn: fact_invoice.BusinessUnitKey
+	toColumn: dim_business_unit.BusinessUnitKey
+
+relationship 1dd65cb6-d4a4-4cad-758d-1d7d2ab009d5
+	fromColumn: fact_invoice.BuyerKey
+	toColumn: dim_buyer.BuyerKey
+
+relationship d951d7e8-ecad-677e-b07d-173cff0045c4
+	fromColumn: fact_invoice.CategoryKey
+	toColumn: dim_category.CategoryKey
+
+relationship e4d746d6-059b-0ee6-e8fe-a5f54a7c10da
+	fromColumn: fact_invoice.ContractKey
+	toColumn: dim_contract.ContractKey
+
+relationship eb09da84-019c-a134-1f0f-6878596189b9
+	fromColumn: fact_invoice.InvoiceDateKey
+	toColumn: dim_date.DateKey
+
+relationship d43a92d7-2c5b-3234-108c-3afd839a1fbc
+	isActive: false
+	fromColumn: fact_invoice.DueDateKey
+	toColumn: dim_date.DateKey
+
+relationship 2ed4fca1-40cc-8276-1418-fb50a8684531
+	fromColumn: fact_invoice.SupplierKey
+	toColumn: dim_supplier.SupplierKey
+
+relationship 7fa1517a-faf3-ea00-d4b2-79cabfb165b9
+	fromColumn: fact_invoice.MaterialKey
+	toColumn: dim_material.MaterialKey
+
+relationship af971d38-4ea8-e792-0874-e573c281f789
+	fromColumn: fact_invoice.CurrencyKey
+	toColumn: dim_currency.CurrencyKey
+
+relationship 76bf9215-fd82-a1ea-e967-f34b8478f591
+	isActive: false
+	fromColumn: fact_invoice.PostingDateKey
+	toColumn: dim_date.DateKey
+
+relationship 110ffe56-a30f-2be7-3049-154086d40b58
+	fromColumn: fact_savings.SupplierKey
+	toColumn: dim_supplier.SupplierKey
+
+relationship 71ad9c0e-6f70-6706-c8fe-438fed90555d
+	fromColumn: fact_savings.CategoryKey
+	toColumn: dim_category.CategoryKey
+
+relationship 9f960afd-b388-34d6-14c5-4236483b9be4
+	fromColumn: fact_savings.BuyerKey
+	toColumn: dim_buyer.BuyerKey
+
+relationship 434ba5a7-883a-3c00-c73b-2345a32e692b
+	fromColumn: fact_savings.BusinessUnitKey
+	toColumn: dim_business_unit.BusinessUnitKey
+
+relationship e4a6b8b1-cdff-9833-86af-639a1c8ec106
+	fromColumn: fact_savings.CurrencyKey
+	toColumn: dim_currency.CurrencyKey
+
+relationship d79a296e-0923-2c14-76a8-23b0a857a192
+	fromColumn: fact_savings.ContractKey
+	toColumn: dim_contract.ContractKey
+
+relationship 0bee71bb-7996-9424-1091-20937fadbd8e
+	fromColumn: fact_savings.PlannedCompletionDateKey
+	toColumn: dim_date.DateKey
+
+relationship 75155136-0d63-d337-4249-13d6a65556a4
+	isActive: false
+	fromColumn: fact_savings.ProjectCreatedDateKey
+	toColumn: dim_date.DateKey
+
+relationship b7c8e191-8adb-b1ed-b9d0-b91bbf938f4f
+	isActive: false
+	fromColumn: fact_savings.ActualCompletionDateKey
+	toColumn: dim_date.DateKey
+
+relationship 1cf605e5-eef5-d3c4-50e7-93d34e60d100
+	isActive: false
+	fromColumn: fact_savings.PlannedStartDateKey
+	toColumn: dim_date.DateKey
+
+relationship 2b6f0f46-8ae3-de9b-ebf2-fc3b49b6de54
+	isActive: false
+	fromColumn: fact_savings.CancellationDateKey
+	toColumn: dim_date.DateKey
+
+relationship 4795322e-f923-b020-96c2-7061c37b755d
+	fromColumn: fact_supplier_performance.SupplierKey
+	toColumn: dim_supplier.SupplierKey
+
+relationship 110b9566-0bcc-d534-91f2-8f13af47dfa4
+	fromColumn: ml_supplier_risk_prediction.SupplierKey
+	toColumn: dim_supplier.SupplierKey
+
+relationship 8b59609b-b874-6429-f1cf-68ab6367a5d9
+	isActive: false
+	fromColumn: ml_supplier_risk_prediction.PredictionDateKey
+	toColumn: dim_date.DateKey
+
+relationship 41751973-f765-3851-aa45-d9db8d7167ba
+	fromColumn: ml_pricing_anomaly_prediction.SupplierKey
+	toColumn: dim_supplier.SupplierKey
+
+relationship d26a8446-73fb-33fb-844e-44c8094a817e
+	fromColumn: ml_pricing_anomaly_prediction.CategoryKey
+	toColumn: dim_category.CategoryKey
+
+relationship ee76f30d-a63c-f167-4c6c-de8ba1d8a149
+	fromColumn: ml_pricing_anomaly_prediction.MaterialKey
+	toColumn: dim_material.MaterialKey
+
+relationship 74c48810-4fd3-2ef9-9deb-71b22331bb06
+	fromColumn: ml_pricing_anomaly_prediction.ContractKey
+	toColumn: dim_contract.ContractKey
+
+relationship 79a5b310-4c70-b400-5576-286432c0c317
+	isActive: false
+	fromColumn: ml_pricing_anomaly_prediction.PredictionDateKey
+	toColumn: dim_date.DateKey
+
+relationship 4e4e33e0-0299-bdb8-36fb-a32fbd843a68
+	fromColumn: ml_savings_opportunity.SupplierKey
+	toColumn: dim_supplier.SupplierKey
+
+relationship 9a82a2dc-c671-9bbd-28ec-91dd9896169d
+	fromColumn: ml_savings_opportunity.CategoryKey
+	toColumn: dim_category.CategoryKey
+
+relationship 5de9d548-7486-b028-6bd3-b266ef2f6103
+	isActive: false
+	fromColumn: ml_savings_opportunity.PredictionDateKey
+	toColumn: dim_date.DateKey
+

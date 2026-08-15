@@ -1,0 +1,725 @@
+table fact_supplier_performance
+	lineageTag: f57363e1-b999-4579-a1d5-4bad4b1fc295
+	sourceLineageTag: [dbo].[fact_supplier_performance]
+
+	measure 'Suppliers with Performance' =
+			
+			DISTINCTCOUNT (
+			    fact_supplier_performance[SupplierID]
+			)
+		formatString: #,0
+		displayFolder: 02 Supplier Performance
+		lineageTag: 3e994b37-88e7-42df-a80e-eaec6354d430
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Fully Received PO Items' =
+			
+			SUM (
+			    fact_supplier_performance[FullyReceivedPOItemCount]
+			)
+		formatString: #,0
+		displayFolder: 02 Supplier Performance
+		lineageTag: e4e076d4-8985-466f-abfc-5d9ab3444e54
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'On-Time Fully Received PO Items' =
+			
+			SUM (
+			    fact_supplier_performance[OnTimeFullyReceivedPOItemCount]
+			)
+		formatString: #,0
+		displayFolder: 02 Supplier Performance
+		lineageTag: a9860b31-b7f2-4f5a-9b5a-b824388bbfe5
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Supplier OTD %' =
+			
+			DIVIDE (
+			    [On-Time Fully Received PO Items],
+			    [Fully Received PO Items]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 02 Supplier Performance
+		lineageTag: 209680b5-cf45-41aa-84ee-898522322fcb
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Overdue Open Deliveries' =
+			
+			SUM (
+			    fact_supplier_performance[OverdueOpenDeliveryCount]
+			)
+		formatString: #,0
+		displayFolder: 02 Supplier Performance
+		lineageTag: 3f0e0dd3-c21f-4fa1-a157-db9da8434860
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Overdue Open Delivery %' =
+			
+			DIVIDE (
+			    [Overdue Open Deliveries],
+			    [Fully Received PO Items]
+			        + [Overdue Open Deliveries]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 02 Supplier Performance
+		lineageTag: 4c89068b-8207-4883-a0f5-2c6af9435be7
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Supplier Invoice Count' =
+			
+			SUM (
+			    fact_supplier_performance[InvoiceCount]
+			)
+		formatString: #,0
+		displayFolder: 02 Supplier Performance
+		lineageTag: ffcd8531-4b09-41c9-9f1e-8900804f80a1
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Disputed Invoices' =
+			
+			SUM (
+			    fact_supplier_performance[DisputedInvoiceCount]
+			)
+		formatString: #,0
+		displayFolder: 02 Supplier Performance
+		lineageTag: 389b963e-033e-4a13-a73b-ae6b735755fa
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Invoice Dispute %' =
+			
+			DIVIDE (
+			    [Disputed Invoices],
+			    [Supplier Invoice Count]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 02 Supplier Performance
+		lineageTag: 58c19351-f2c9-485f-8f17-7db6687a412a
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Dispute-Free Invoices' =
+			
+			SUM (
+			    fact_supplier_performance[DisputeFreeInvoiceCount]
+			)
+		formatString: #,0
+		displayFolder: 02 Supplier Performance
+		lineageTag: 665934a5-3c5d-4362-ad3a-048926073f66
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Supplier Quality Index' =
+			
+			DIVIDE (
+			    [Dispute-Free Invoices],
+			    [Supplier Invoice Count]
+			)
+		formatString: 0%;-0%;0%
+		displayFolder: 02 Supplier Performance
+		lineageTag: 51ebd452-cc37-48e4-b5de-3bb316269711
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Three-Way Matched Invoice Items' =
+			
+			SUM (
+			    fact_supplier_performance[ThreeWayMatchedInvoiceItemCount]
+			)
+		formatString: #,0
+		displayFolder: 02 Supplier Performance
+		lineageTag: 141d9e7a-1d52-478e-b640-5c6e8e376334
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Supplier Invoice Items' =
+			
+			SUM (
+			    fact_supplier_performance[InvoiceItemCount]
+			)
+		formatString: #,0
+		displayFolder: 02 Supplier Performance
+		lineageTag: 4b7e7bb3-2180-46c5-b4f9-331cecc558a6
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Three-Way Match %' =
+			
+			DIVIDE (
+			    [Three-Way Matched Invoice Items],
+			    [Supplier Invoice Items]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 02 Supplier Performance
+		lineageTag: 83e84939-7dbe-4d01-bbe3-1ae32bffbcf7
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Invoice Exception Items' =
+			
+			SUM (
+			    fact_supplier_performance[InvoiceExceptionItemCount]
+			)
+		formatString: #,0
+		displayFolder: 02 Supplier Performance
+		lineageTag: ad25d555-641d-4d97-b2e8-e4eb5c7e7d20
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Invoice Exception %' =
+			
+			DIVIDE (
+			    [Invoice Exception Items],
+			    [Supplier Invoice Items]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 02 Supplier Performance
+		lineageTag: 58104d07-cbce-48a0-ae55-ec47d71bc69d
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Duplicate Invoices' =
+			
+			SUM (
+			    fact_supplier_performance[DuplicateInvoiceCount]
+			)
+		formatString: #,0
+		displayFolder: 02 Supplier Performance
+		lineageTag: 22603469-060a-497c-86f8-5fc422b2359e
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Duplicate Invoice %' =
+			
+			DIVIDE (
+			    [Duplicate Invoices],
+			    [Supplier Invoice Count]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 02 Supplier Performance
+		lineageTag: 38f94d5c-b3bc-451e-b0d7-ac854cb9939c
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Supplier Performance Eligible Spend' =
+			
+			SUM (
+			    fact_supplier_performance[EligibleSpendEUR]
+			)
+		formatString: "€"\ #,0.00;-"€"\ #,0.00;"€"\ #,0.00
+		displayFolder: 02 Supplier Performance
+		lineageTag: f205f74a-10a7-4939-a5d4-fdd55f6f7c61
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Supplier Performance Maverick %' =
+			
+			DIVIDE (
+			    SUM (
+			        fact_supplier_performance[MaverickSpendEUR]
+			    ),
+			    [Supplier Performance Eligible Spend]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 02 Supplier Performance
+		lineageTag: a27eeb85-c557-478b-b1d5-e28ae826a00f
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	column SupplierID
+		dataType: string
+		lineageTag: 6e830066-a4d5-40ef-aa6c-7ac029acbaf0
+		sourceLineageTag: SupplierID
+		summarizeBy: none
+		sourceColumn: SupplierID
+
+		annotation SummarizationSetBy = Automatic
+
+	column PerformanceYear
+		dataType: int64
+		formatString: 0
+		lineageTag: 35b11880-3238-421f-92ec-17776bb5ad2b
+		sourceLineageTag: PerformanceYear
+		summarizeBy: sum
+		sourceColumn: PerformanceYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column EligibleSpendEUR
+		dataType: double
+		lineageTag: ce18c240-92b2-4626-bae8-35f00fe6d680
+		sourceLineageTag: EligibleSpendEUR
+		summarizeBy: sum
+		sourceColumn: EligibleSpendEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ContractCompliantSpendEUR
+		dataType: double
+		lineageTag: f7c6cd1c-dd29-43b5-aa2e-a64e69173728
+		sourceLineageTag: ContractCompliantSpendEUR
+		summarizeBy: sum
+		sourceColumn: ContractCompliantSpendEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column MaverickSpendEUR
+		dataType: double
+		lineageTag: ad56666d-fdd9-4e23-8d83-13b8c04b96c9
+		sourceLineageTag: MaverickSpendEUR
+		summarizeBy: sum
+		sourceColumn: MaverickSpendEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ContractCompliancePct
+		dataType: double
+		lineageTag: c093a2b1-1bba-40f2-95a7-139afc679a95
+		sourceLineageTag: ContractCompliancePct
+		summarizeBy: sum
+		sourceColumn: ContractCompliancePct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column MaverickSpendPct
+		dataType: double
+		lineageTag: c703676b-228e-4e07-b5ba-6a5022b10889
+		sourceLineageTag: MaverickSpendPct
+		summarizeBy: sum
+		sourceColumn: MaverickSpendPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column FullyReceivedPOItemCount
+		dataType: int64
+		formatString: 0
+		lineageTag: fdd11734-f65e-4174-9b5b-0a09b1a8cc3b
+		sourceLineageTag: FullyReceivedPOItemCount
+		summarizeBy: sum
+		sourceColumn: FullyReceivedPOItemCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column OnTimeFullyReceivedPOItemCount
+		dataType: int64
+		formatString: 0
+		lineageTag: fbb34245-d1ac-4a42-ba38-666973b4b19c
+		sourceLineageTag: OnTimeFullyReceivedPOItemCount
+		summarizeBy: sum
+		sourceColumn: OnTimeFullyReceivedPOItemCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierOTDPct
+		dataType: double
+		lineageTag: d98f439f-3907-44a1-a8f8-0a674f9cb607
+		sourceLineageTag: SupplierOTDPct
+		summarizeBy: sum
+		sourceColumn: SupplierOTDPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column OverdueOpenDeliveryCount
+		dataType: int64
+		formatString: 0
+		lineageTag: 58aae245-f4b6-4b4b-b45b-f13e947d8567
+		sourceLineageTag: OverdueOpenDeliveryCount
+		summarizeBy: sum
+		sourceColumn: OverdueOpenDeliveryCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvoiceCount
+		dataType: int64
+		formatString: 0
+		lineageTag: 43d23ba0-4729-4f2f-838a-9cec09828354
+		sourceLineageTag: InvoiceCount
+		summarizeBy: sum
+		sourceColumn: InvoiceCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column DisputedInvoiceCount
+		dataType: int64
+		formatString: 0
+		lineageTag: a47c355f-e4ce-4962-83ab-24a5841e80b5
+		sourceLineageTag: DisputedInvoiceCount
+		summarizeBy: sum
+		sourceColumn: DisputedInvoiceCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column DisputeFreeInvoiceCount
+		dataType: int64
+		formatString: 0
+		lineageTag: e8f7e2b5-9e22-4ff2-b017-14551b4e708b
+		sourceLineageTag: DisputeFreeInvoiceCount
+		summarizeBy: sum
+		sourceColumn: DisputeFreeInvoiceCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierQualityIndexPct
+		dataType: double
+		lineageTag: a90a04f4-ef31-47fd-80dd-8fdb802b7cfd
+		sourceLineageTag: SupplierQualityIndexPct
+		summarizeBy: sum
+		sourceColumn: SupplierQualityIndexPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column InvoiceItemCount
+		dataType: int64
+		formatString: 0
+		lineageTag: eccb965d-ba4e-4eca-8ff5-dc76618acf35
+		sourceLineageTag: InvoiceItemCount
+		summarizeBy: sum
+		sourceColumn: InvoiceItemCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column ThreeWayMatchedInvoiceItemCount
+		dataType: int64
+		formatString: 0
+		lineageTag: 93807a61-b07b-4bea-a77d-2259464dc0b7
+		sourceLineageTag: ThreeWayMatchedInvoiceItemCount
+		summarizeBy: sum
+		sourceColumn: ThreeWayMatchedInvoiceItemCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvoiceExceptionItemCount
+		dataType: int64
+		formatString: 0
+		lineageTag: 8dbde074-dfe0-4434-b2d9-475af6279489
+		sourceLineageTag: InvoiceExceptionItemCount
+		summarizeBy: sum
+		sourceColumn: InvoiceExceptionItemCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column ThreeWayMatchPct
+		dataType: double
+		lineageTag: 0dfbe2e8-4958-43c1-958d-023b5e7e9540
+		sourceLineageTag: ThreeWayMatchPct
+		summarizeBy: sum
+		sourceColumn: ThreeWayMatchPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column InvoiceExceptionPct
+		dataType: double
+		lineageTag: 68a359a9-fcb1-4cc7-8d76-3272e37a7066
+		sourceLineageTag: InvoiceExceptionPct
+		summarizeBy: sum
+		sourceColumn: InvoiceExceptionPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DuplicateInvoiceCount
+		dataType: int64
+		formatString: 0
+		lineageTag: 0cf77612-aaca-4746-8254-530d527527f9
+		sourceLineageTag: DuplicateInvoiceCount
+		summarizeBy: sum
+		sourceColumn: DuplicateInvoiceCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column DuplicateInvoicePct
+		dataType: double
+		lineageTag: f47788e0-8c89-4d25-9fea-0688f4c9edf7
+		sourceLineageTag: DuplicateInvoicePct
+		summarizeBy: sum
+		sourceColumn: DuplicateInvoicePct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SourceSilverRecordHash
+		dataType: string
+		isHidden
+		lineageTag: 04e5edea-39c6-47f9-91bd-7bd0116a512e
+		sourceLineageTag: SourceSilverRecordHash
+		summarizeBy: none
+		sourceColumn: SourceSilverRecordHash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column PerformancePeriodStartDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 60161d71-b578-43f7-80cc-8add78a25879
+		sourceLineageTag: PerformancePeriodStartDate
+		summarizeBy: none
+		sourceColumn: PerformancePeriodStartDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column PerformancePeriodEndDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 8eaec24d-21a3-4048-8c20-ab30fd718c1c
+		sourceLineageTag: PerformancePeriodEndDate
+		summarizeBy: none
+		sourceColumn: PerformancePeriodEndDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column PerformancePeriodStartDateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 0e999a53-e291-4c01-95eb-4a7b18b883ad
+		sourceLineageTag: PerformancePeriodStartDateKey
+		summarizeBy: count
+		sourceColumn: PerformancePeriodStartDateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column PerformancePeriodEndDateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 8be68013-3f45-43b0-acf5-902f5ed5e6b4
+		sourceLineageTag: PerformancePeriodEndDateKey
+		summarizeBy: count
+		sourceColumn: PerformancePeriodEndDateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b4c98699-7918-4258-b6a2-b961ef564271
+		sourceLineageTag: SupplierKey
+		summarizeBy: none
+		sourceColumn: SupplierKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierDimensionVersion
+		dataType: int64
+		formatString: 0
+		lineageTag: 94ed2721-d661-478d-a426-e9d17f113dee
+		sourceLineageTag: SupplierDimensionVersion
+		summarizeBy: sum
+		sourceColumn: SupplierDimensionVersion
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierPerformanceFactKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 3d6eb5c4-bd6f-488a-8d2e-dbaf8e37e2c9
+		sourceLineageTag: SupplierPerformanceFactKey
+		summarizeBy: count
+		sourceColumn: SupplierPerformanceFactKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierPerformanceRecordCount
+		dataType: int64
+		formatString: 0
+		lineageTag: 8a8301fa-11ee-402d-824c-c2d4d15dd1ba
+		sourceLineageTag: SupplierPerformanceRecordCount
+		summarizeBy: sum
+		sourceColumn: SupplierPerformanceRecordCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierWithSpendCount
+		dataType: int64
+		formatString: 0
+		lineageTag: 81decb06-7961-40b6-a733-8244c5c43d20
+		sourceLineageTag: SupplierWithSpendCount
+		summarizeBy: sum
+		sourceColumn: SupplierWithSpendCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierWithDeliveryActivityCount
+		dataType: int64
+		formatString: 0
+		lineageTag: c294d842-241a-44fb-8a5d-536eb85b604c
+		sourceLineageTag: SupplierWithDeliveryActivityCount
+		summarizeBy: sum
+		sourceColumn: SupplierWithDeliveryActivityCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierWithInvoiceActivityCount
+		dataType: int64
+		formatString: 0
+		lineageTag: b94f9f90-6995-4ab8-ac0f-8538865f4ef5
+		sourceLineageTag: SupplierWithInvoiceActivityCount
+		summarizeBy: sum
+		sourceColumn: SupplierWithInvoiceActivityCount
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldSourceTable
+		dataType: string
+		isHidden
+		lineageTag: f02742d0-4cd1-4c6b-8f5d-e79afff208b0
+		sourceLineageTag: GoldSourceTable
+		summarizeBy: none
+		sourceColumn: GoldSourceTable
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldLoadTimestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 565ffdbf-40b1-466b-8992-88a0c06aaff6
+		sourceLineageTag: GoldLoadTimestamp
+		summarizeBy: none
+		sourceColumn: GoldLoadTimestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldLoadDate
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: b1d8be4c-36f9-40bd-a127-9b3006a0dc9f
+		sourceLineageTag: GoldLoadDate
+		summarizeBy: none
+		sourceColumn: GoldLoadDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldRecordHash
+		dataType: string
+		isHidden
+		lineageTag: eb21f14e-29dc-47b4-9072-873653e94ce2
+		sourceLineageTag: GoldRecordHash
+		summarizeBy: none
+		sourceColumn: GoldRecordHash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_supplier_performance = entity
+		mode: directLake
+		source
+			entityName: fact_supplier_performance
+			expressionSource: 'DirectLake - lh_procurement_gold'
+

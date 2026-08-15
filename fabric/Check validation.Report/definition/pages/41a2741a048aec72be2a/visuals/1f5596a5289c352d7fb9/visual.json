@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "1f5596a5289c352d7fb9",
+  "position": {
+    "x": 41.834863849425147,
+    "y": 405.13762885759087,
+    "z": 2,
+    "height": 149.92443901175162,
+    "width": 374.811097529379,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ml_savings_opportunity"
+                    }
+                  },
+                  "Property": "Actionable Savings Opportunities"
+                }
+              },
+              "queryRef": "ml_savings_opportunity.Actionable Savings Opportunities",
+              "nativeQueryRef": "Actionable Savings Opportunities"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "ml_savings_opportunity"
+                  }
+                },
+                "Property": "Actionable Savings Opportunities"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "bdd0c3c3af6e7eb36ec5",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ml_savings_opportunity"
+              }
+            },
+            "Property": "Actionable Savings Opportunities"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

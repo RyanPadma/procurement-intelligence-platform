@@ -1,0 +1,262 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "70ecf452215b9082c774",
+  "position": {
+    "x": 82.252138910482159,
+    "y": 444.16155011660368,
+    "z": 4,
+    "height": 218.55568339070973,
+    "width": 1177.3806169757588,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Columns": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_supplier_performance"
+                    }
+                  },
+                  "Property": "PerformanceYear"
+                }
+              },
+              "queryRef": "fact_supplier_performance.PerformanceYear",
+              "nativeQueryRef": "Sum of PerformanceYear",
+              "active": true
+            }
+          ]
+        },
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_supplier"
+                    }
+                  },
+                  "Property": "SupplierName"
+                }
+              },
+              "queryRef": "dim_supplier.SupplierName",
+              "nativeQueryRef": "SupplierName",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_supplier_performance"
+                    }
+                  },
+                  "Property": "Supplier OTD %"
+                }
+              },
+              "queryRef": "fact_supplier_performance.Supplier OTD %",
+              "nativeQueryRef": "Supplier OTD %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_supplier_performance"
+                    }
+                  },
+                  "Property": "Supplier Quality Index"
+                }
+              },
+              "queryRef": "fact_supplier_performance.Supplier Quality Index",
+              "nativeQueryRef": "Supplier Quality Index"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_supplier_performance"
+                    }
+                  },
+                  "Property": "Invoice Dispute %"
+                }
+              },
+              "queryRef": "fact_supplier_performance.Invoice Dispute %",
+              "nativeQueryRef": "Invoice Dispute %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_supplier_performance"
+                    }
+                  },
+                  "Property": "Three-Way Match %"
+                }
+              },
+              "queryRef": "fact_supplier_performance.Three-Way Match %",
+              "nativeQueryRef": "Three-Way Match %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_supplier_performance"
+                    }
+                  },
+                  "Property": "Invoice Exception %"
+                }
+              },
+              "queryRef": "fact_supplier_performance.Invoice Exception %",
+              "nativeQueryRef": "Invoice Exception %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_supplier_performance"
+                    }
+                  },
+                  "Property": "Overdue Open Delivery %"
+                }
+              },
+              "queryRef": "fact_supplier_performance.Overdue Open Delivery %",
+              "nativeQueryRef": "Overdue Open Delivery %"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "921ce97672ec26a66194",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_supplier"
+              }
+            },
+            "Property": "SupplierName"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "45a956096b8ea020b00c",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_supplier_performance"
+              }
+            },
+            "Property": "PerformanceYear"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "7598b085bea045be200d",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_supplier_performance"
+              }
+            },
+            "Property": "Supplier OTD %"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "15c24ba9037de86b01d4",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_supplier_performance"
+              }
+            },
+            "Property": "Supplier Quality Index"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "867ae1b9967a4ee8c246",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_supplier_performance"
+              }
+            },
+            "Property": "Invoice Dispute %"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "bbe2d3d41d5ab05d7164",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_supplier_performance"
+              }
+            },
+            "Property": "Three-Way Match %"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "96395966e423c0000d1b",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_supplier_performance"
+              }
+            },
+            "Property": "Invoice Exception %"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "8417a500a436b6cbec0c",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_supplier_performance"
+              }
+            },
+            "Property": "Overdue Open Delivery %"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

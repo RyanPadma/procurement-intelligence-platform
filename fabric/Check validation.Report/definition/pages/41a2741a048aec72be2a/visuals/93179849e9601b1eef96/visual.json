@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "93179849e9601b1eef96",
+  "position": {
+    "x": 41.834863849425147,
+    "y": 570.275249315848,
+    "z": 3,
+    "height": 149.92443901175162,
+    "width": 374.811097529379,
+    "tabOrder": 3
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ml_savings_opportunity"
+                    }
+                  },
+                  "Property": "Potential Annual Savings"
+                }
+              },
+              "queryRef": "ml_savings_opportunity.Potential Annual Savings",
+              "nativeQueryRef": "Potential Annual Savings"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "ml_savings_opportunity"
+                  }
+                },
+                "Property": "Potential Annual Savings"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "8b90cdb4fbdefee00bcf",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ml_savings_opportunity"
+              }
+            },
+            "Property": "Potential Annual Savings"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

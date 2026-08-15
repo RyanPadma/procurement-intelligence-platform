@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "4df545db45705ed593a2",
+  "position": {
+    "x": 404.21051121722661,
+    "y": 227.95592783762197,
+    "z": 3,
+    "height": 149.66153846153847,
+    "width": 279.6307692307692,
+    "tabOrder": 3
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_supplier_performance"
+                    }
+                  },
+                  "Property": "Three-Way Match %"
+                }
+              },
+              "queryRef": "fact_supplier_performance.Three-Way Match %",
+              "nativeQueryRef": "Three-Way Match %"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_supplier_performance"
+                  }
+                },
+                "Property": "Three-Way Match %"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "9a4b7c462e3be4c19aaa",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_supplier_performance"
+              }
+            },
+            "Property": "Three-Way Match %"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

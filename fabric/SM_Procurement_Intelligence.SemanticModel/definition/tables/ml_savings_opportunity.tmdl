@@ -1,0 +1,615 @@
+table ml_savings_opportunity
+	lineageTag: ec4f8fd8-dc31-4814-b1b3-91b8a5607b28
+	sourceLineageTag: [dbo].[ml_savings_opportunity]
+
+	measure 'Latest Savings Opportunity Prediction Date' =
+			
+			CALCULATE (
+			    MAX (
+			        ml_savings_opportunity[PredictionDate]
+			    ),
+			    REMOVEFILTERS (
+			        ml_savings_opportunity
+			    ),
+			    REMOVEFILTERS (
+			        dim_supplier
+			    ),
+			    REMOVEFILTERS (
+			        dim_category
+			    )
+			)
+		formatString: General Date
+		displayFolder: 07 Savings Opportunity
+		lineageTag: 83c11fd4-fc99-4da8-9c8b-837804a7d7ed
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+	measure 'Savings Opportunities' =
+			
+			VAR LatestDate =
+			    [Latest Savings Opportunity Prediction Date]
+			RETURN
+			    CALCULATE (
+			        COUNTROWS (
+			            ml_savings_opportunity
+			        ),
+			        ml_savings_opportunity[PredictionDate] = LatestDate
+			    )
+		formatString: #,0
+		displayFolder: 07 Savings Opportunity
+		lineageTag: f8b0dd74-739b-4e87-8193-9b0974241372
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Positive Savings Opportunities' =
+			
+			VAR LatestDate =
+			    [Latest Savings Opportunity Prediction Date]
+			RETURN
+			    CALCULATE (
+			        COUNTROWS (
+			            ml_savings_opportunity
+			        ),
+			        ml_savings_opportunity[PredictionDate] = LatestDate,
+			        ml_savings_opportunity[PotentialAnnualSavingsEUR] > 0
+			    )
+		formatString: #,0
+		displayFolder: 07 Savings Opportunity
+		lineageTag: 2a9ab71e-807b-4b68-8377-c8afeca56493
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Actionable Savings Opportunities' =
+			
+			VAR LatestDate =
+			    [Latest Savings Opportunity Prediction Date]
+			RETURN
+			    CALCULATE (
+			        COUNTROWS (
+			            ml_savings_opportunity
+			        ),
+			        ml_savings_opportunity[PredictionDate] = LatestDate,
+			        ml_savings_opportunity[ActionableOpportunityFlag] = 1
+			    )
+		formatString: 0
+		displayFolder: 07 Savings Opportunity
+		lineageTag: 08d7fbb1-6cd2-4494-b3ac-0ac80d0e8cf0
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+	measure 'Potential Annual Savings' =
+			
+			VAR LatestDate =
+			    [Latest Savings Opportunity Prediction Date]
+			RETURN
+			    CALCULATE (
+			        SUM (
+			            ml_savings_opportunity[PotentialAnnualSavingsEUR]
+			        ),
+			        ml_savings_opportunity[PredictionDate] = LatestDate
+			    )
+		formatString: "€"\ #,0.00;-"€"\ #,0.00;"€"\ #,0.00
+		displayFolder: 07 Savings Opportunity
+		lineageTag: 501cf0cb-50f8-4012-a994-c5421470428e
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Actionable Potential Annual Savings' =
+			
+			VAR LatestDate =
+			    [Latest Savings Opportunity Prediction Date]
+			RETURN
+			    CALCULATE (
+			        SUM (
+			            ml_savings_opportunity[PotentialAnnualSavingsEUR]
+			        ),
+			        ml_savings_opportunity[PredictionDate] = LatestDate,
+			        ml_savings_opportunity[ActionableOpportunityFlag] = 1
+			    )
+		formatString: "€"\ #,0.00;-"€"\ #,0.00;"€"\ #,0.00
+		displayFolder: 07 Savings Opportunity
+		lineageTag: 954abfd6-91d5-4418-8a3e-ff60ae9331c0
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Actionable Opportunity %' =
+			
+			DIVIDE (
+			    [Actionable Savings Opportunities],
+			    [Savings Opportunities]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 07 Savings Opportunity
+		lineageTag: 5202b705-6241-4951-b11f-abe8e8af2b66
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Opportunity Annualized Spend' =
+			
+			VAR LatestDate =
+			    [Latest Savings Opportunity Prediction Date]
+			RETURN
+			    CALCULATE (
+			        SUM (
+			            ml_savings_opportunity[AnnualizedEligibleSpendEUR]
+			        ),
+			        ml_savings_opportunity[PredictionDate] = LatestDate
+			    )
+		formatString: "€"\ #,0.00;-"€"\ #,0.00;"€"\ #,0.00
+		displayFolder: 07 Savings Opportunity
+		lineageTag: f17bd6ab-414f-4487-bb2f-0e1b3c1b74e3
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Savings Potential %' =
+			
+			DIVIDE (
+			    [Potential Annual Savings],
+			    [Opportunity Annualized Spend]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 07 Savings Opportunity
+		lineageTag: 79fe904e-d599-4b52-aab3-a596d3ca7c65
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	column PredictionDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f2402a70-b568-42f4-9f27-f4977cd442a7
+		sourceLineageTag: PredictionDate
+		summarizeBy: none
+		sourceColumn: PredictionDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column PredictionDateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: cb4c6ac0-82f7-4f3b-bcbe-6de8093d575a
+		sourceLineageTag: PredictionDateKey
+		summarizeBy: count
+		sourceColumn: PredictionDateKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e1710120-c06d-4737-ac98-a63c2a3aef43
+		sourceLineageTag: SupplierKey
+		summarizeBy: none
+		sourceColumn: SupplierKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierDimensionVersion
+		dataType: int64
+		formatString: 0
+		lineageTag: f7c5828a-877b-4421-9cf4-2088d1db1647
+		sourceLineageTag: SupplierDimensionVersion
+		summarizeBy: sum
+		sourceColumn: SupplierDimensionVersion
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b1e1878e-a4fd-4874-96e0-e7556e204949
+		sourceLineageTag: CategoryKey
+		summarizeBy: none
+		sourceColumn: CategoryKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierID
+		dataType: string
+		lineageTag: 3456cf4c-6241-49f6-afbd-96b52b53a29c
+		sourceLineageTag: SupplierID
+		summarizeBy: none
+		sourceColumn: SupplierID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryID
+		dataType: string
+		lineageTag: c203ac17-506d-48e1-974a-09a40af70241
+		sourceLineageTag: CategoryID
+		summarizeBy: none
+		sourceColumn: CategoryID
+
+		annotation SummarizationSetBy = Automatic
+
+	column EligibleSpendYTDEUR
+		dataType: double
+		lineageTag: a1f500c4-a70a-4320-ad89-a3b24d5606dc
+		sourceLineageTag: EligibleSpendYTDEUR
+		summarizeBy: sum
+		sourceColumn: EligibleSpendYTDEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column AnnualizedEligibleSpendEUR
+		dataType: double
+		lineageTag: 3d7b0c67-5da1-4e5c-b38f-877cae12c9ae
+		sourceLineageTag: AnnualizedEligibleSpendEUR
+		summarizeBy: sum
+		sourceColumn: AnnualizedEligibleSpendEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column AnnualizedPricingOpportunityEUR
+		dataType: double
+		lineageTag: cd2a53b7-8c89-42c1-8014-a17ff6fb7b8f
+		sourceLineageTag: AnnualizedPricingOpportunityEUR
+		summarizeBy: sum
+		sourceColumn: AnnualizedPricingOpportunityEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column AnnualizedMaverickOpportunityEUR
+		dataType: double
+		lineageTag: 85033e18-88ae-484f-81e9-a6e5bf12875b
+		sourceLineageTag: AnnualizedMaverickOpportunityEUR
+		summarizeBy: sum
+		sourceColumn: AnnualizedMaverickOpportunityEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PotentialAnnualSavingsEUR
+		dataType: double
+		lineageTag: 3057f8ac-8f5e-4b7c-b54a-c79cc4f2c29f
+		sourceLineageTag: PotentialAnnualSavingsEUR
+		summarizeBy: sum
+		sourceColumn: PotentialAnnualSavingsEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PotentialSavingsPct
+		dataType: double
+		lineageTag: 9db56f81-b613-4008-9687-4fafd909dc38
+		sourceLineageTag: PotentialSavingsPct
+		summarizeBy: sum
+		sourceColumn: PotentialSavingsPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PrimaryOpportunityDriver
+		dataType: string
+		lineageTag: adb6dc5b-d52a-4f5d-9c04-6f0ef0b9a1be
+		sourceLineageTag: PrimaryOpportunityDriver
+		summarizeBy: none
+		sourceColumn: PrimaryOpportunityDriver
+
+		annotation SummarizationSetBy = Automatic
+
+	column PricingAnomalyRatePct
+		dataType: double
+		lineageTag: 572b9861-9687-4571-bfe2-acb5203dcfc7
+		sourceLineageTag: PricingAnomalyRatePct
+		summarizeBy: sum
+		sourceColumn: PricingAnomalyRatePct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column MaverickSpendPct
+		dataType: double
+		lineageTag: b62b6c19-dac6-447b-903d-97a7b17f5d8d
+		sourceLineageTag: MaverickSpendPct
+		summarizeBy: sum
+		sourceColumn: MaverickSpendPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SupplierCategorySpendSharePct
+		dataType: double
+		lineageTag: e591545a-62c6-4406-9e4d-5bea1c82fadf
+		sourceLineageTag: SupplierCategorySpendSharePct
+		summarizeBy: sum
+		sourceColumn: SupplierCategorySpendSharePct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SupplierRiskScore
+		dataType: double
+		lineageTag: fbea63f8-f8b5-4214-b54d-2b9b8cf9befd
+		sourceLineageTag: SupplierRiskScore
+		summarizeBy: sum
+		sourceColumn: SupplierRiskScore
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PredictedHighRiskFlag
+		dataType: int64
+		formatString: 0
+		lineageTag: 66555d2a-2a69-4d3c-9773-2c8ee336a7b0
+		sourceLineageTag: PredictedHighRiskFlag
+		summarizeBy: sum
+		sourceColumn: PredictedHighRiskFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column NegotiationPriorityScore
+		dataType: double
+		lineageTag: 6332fb43-254a-4380-9873-bee92eddce11
+		sourceLineageTag: NegotiationPriorityScore
+		summarizeBy: sum
+		sourceColumn: NegotiationPriorityScore
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column NegotiationPriority
+		dataType: string
+		lineageTag: 4e498204-58f2-4540-b2d2-f9a0de2c39bb
+		sourceLineageTag: NegotiationPriority
+		summarizeBy: none
+		sourceColumn: NegotiationPriority
+
+		annotation SummarizationSetBy = Automatic
+
+	column SavingsOpportunityRank
+		dataType: int64
+		formatString: 0
+		lineageTag: 1e86330d-b031-457a-80ef-fe546769c907
+		sourceLineageTag: SavingsOpportunityRank
+		summarizeBy: sum
+		sourceColumn: SavingsOpportunityRank
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategorySavingsRank
+		dataType: int64
+		formatString: 0
+		lineageTag: a13923e5-61c8-4935-99fc-593b57b278fa
+		sourceLineageTag: CategorySavingsRank
+		summarizeBy: sum
+		sourceColumn: CategorySavingsRank
+
+		annotation SummarizationSetBy = Automatic
+
+	column NegotiationPriorityRank
+		dataType: int64
+		formatString: 0
+		lineageTag: 22451f35-f787-43ca-b566-55347c1ce8d1
+		sourceLineageTag: NegotiationPriorityRank
+		summarizeBy: sum
+		sourceColumn: NegotiationPriorityRank
+
+		annotation SummarizationSetBy = Automatic
+
+	column ActionableOpportunityFlag
+		dataType: int64
+		formatString: 0
+		lineageTag: f88683fb-b22d-4769-82de-7db88318d223
+		sourceLineageTag: ActionableOpportunityFlag
+		summarizeBy: sum
+		sourceColumn: ActionableOpportunityFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column PricingModelName
+		dataType: string
+		lineageTag: 110bc633-a3b1-484e-9872-2e04b26122ef
+		sourceLineageTag: PricingModelName
+		summarizeBy: none
+		sourceColumn: PricingModelName
+
+		annotation SummarizationSetBy = Automatic
+
+	column PricingModelRunID
+		dataType: string
+		isHidden
+		lineageTag: e41f2935-23fb-4218-ae75-468a404b7ed2
+		sourceLineageTag: PricingModelRunID
+		summarizeBy: none
+		sourceColumn: PricingModelRunID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierRiskModelName
+		dataType: string
+		lineageTag: 3c1062ab-3f56-4a18-84ae-8cb3b19a1386
+		sourceLineageTag: SupplierRiskModelName
+		summarizeBy: none
+		sourceColumn: SupplierRiskModelName
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierRiskModelRunID
+		dataType: string
+		isHidden
+		lineageTag: 6ea8be7e-30f7-45a4-adb5-dc40096dc0fc
+		sourceLineageTag: SupplierRiskModelRunID
+		summarizeBy: none
+		sourceColumn: SupplierRiskModelRunID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column EngineName
+		dataType: string
+		lineageTag: ade76580-a1c6-468e-8640-ff74836430e0
+		sourceLineageTag: EngineName
+		summarizeBy: none
+		sourceColumn: EngineName
+
+		annotation SummarizationSetBy = Automatic
+
+	column EngineVersion
+		dataType: string
+		lineageTag: a535f181-67e8-4ad2-baf9-13f7b75a1683
+		sourceLineageTag: EngineVersion
+		summarizeBy: none
+		sourceColumn: EngineVersion
+
+		annotation SummarizationSetBy = Automatic
+
+	column EngineStatus
+		dataType: string
+		lineageTag: f6870efb-cad3-4ad2-b389-2932daeac172
+		sourceLineageTag: EngineStatus
+		summarizeBy: none
+		sourceColumn: EngineStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column EngineRunID
+		dataType: string
+		isHidden
+		lineageTag: 4b107c34-7203-45c6-9bd9-7f8531dc7bf4
+		sourceLineageTag: EngineRunID
+		summarizeBy: none
+		sourceColumn: EngineRunID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SavingsOpportunityKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a7fb76b3-5744-4779-b814-b5623271456f
+		sourceLineageTag: SavingsOpportunityKey
+		summarizeBy: count
+		sourceColumn: SavingsOpportunityKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column PromotionBatchID
+		dataType: string
+		isHidden
+		lineageTag: b762a6dd-cffd-4990-b5d2-748bc35b3459
+		sourceLineageTag: PromotionBatchID
+		summarizeBy: none
+		sourceColumn: PromotionBatchID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MLSourceNotebook
+		dataType: string
+		isHidden
+		lineageTag: 0930b8e4-ccea-44c5-8c47-23d3b6a295ed
+		sourceLineageTag: MLSourceNotebook
+		summarizeBy: none
+		sourceColumn: MLSourceNotebook
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MLSourcePath
+		dataType: string
+		isHidden
+		lineageTag: 69111caf-5f91-439b-b954-1671c2ffca46
+		sourceLineageTag: MLSourcePath
+		summarizeBy: none
+		sourceColumn: MLSourcePath
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldMLLoadTimestampUTC
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: eb75259c-8a54-43a4-b626-acea1ceb252b
+		sourceLineageTag: GoldMLLoadTimestampUTC
+		summarizeBy: none
+		sourceColumn: GoldMLLoadTimestampUTC
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldMLLoadDate
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 8bdee8fe-d48b-49e6-b113-01e93aac30be
+		sourceLineageTag: GoldMLLoadDate
+		summarizeBy: none
+		sourceColumn: GoldMLLoadDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ml_savings_opportunity = entity
+		mode: directLake
+		source
+			entityName: ml_savings_opportunity
+			expressionSource: 'DirectLake - lh_procurement_gold'
+

@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "d1c5fb6129d80ccb1080",
+  "position": {
+    "x": 590.02521159463538,
+    "y": 406.24686699958505,
+    "z": 0,
+    "height": 149.92443901175162,
+    "width": 374.811097529379,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ml_supplier_risk_prediction"
+                    }
+                  },
+                  "Property": "Average Supplier Risk Score"
+                }
+              },
+              "queryRef": "ml_supplier_risk_prediction.Average Supplier Risk Score",
+              "nativeQueryRef": "Average Supplier Risk Score"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "ml_supplier_risk_prediction"
+                  }
+                },
+                "Property": "Average Supplier Risk Score"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "89296da8ca97b14ba62c",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ml_supplier_risk_prediction"
+              }
+            },
+            "Property": "Average Supplier Risk Score"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

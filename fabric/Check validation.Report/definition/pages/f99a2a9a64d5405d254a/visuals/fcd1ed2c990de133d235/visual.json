@@ -1,0 +1,111 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "fcd1ed2c990de133d235",
+  "position": {
+    "x": 150.85032780068289,
+    "y": 76.379912810472348,
+    "z": 5,
+    "height": 299.791157781104,
+    "width": 991.02936871587872,
+    "tabOrder": 5
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_supplier"
+                    }
+                  },
+                  "Property": "SupplierName"
+                }
+              },
+              "queryRef": "dim_supplier.SupplierName",
+              "nativeQueryRef": "SupplierName"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_category"
+                    }
+                  },
+                  "Property": "CategoryName"
+                }
+              },
+              "queryRef": "dim_category.CategoryName",
+              "nativeQueryRef": "CategoryName"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ml_pricing_anomaly_prediction"
+                    }
+                  },
+                  "Property": "Pricing Anomalies"
+                }
+              },
+              "queryRef": "ml_pricing_anomaly_prediction.Pricing Anomalies",
+              "nativeQueryRef": "Pricing Anomalies"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ml_pricing_anomaly_prediction"
+                    }
+                  },
+                  "Property": "Pricing Anomaly Rate"
+                }
+              },
+              "queryRef": "ml_pricing_anomaly_prediction.Pricing Anomaly Rate",
+              "nativeQueryRef": "Pricing Anomaly Rate"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ml_pricing_anomaly_prediction"
+                    }
+                  },
+                  "Property": "Eligible Spend with Pricing Anomalies"
+                }
+              },
+              "queryRef": "ml_pricing_anomaly_prediction.Eligible Spend with Pricing Anomalies",
+              "nativeQueryRef": "Eligible Spend with Pricing Anomalies"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "ml_pricing_anomaly_prediction"
+                  }
+                },
+                "Property": "Eligible Spend with Pricing Anomalies"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

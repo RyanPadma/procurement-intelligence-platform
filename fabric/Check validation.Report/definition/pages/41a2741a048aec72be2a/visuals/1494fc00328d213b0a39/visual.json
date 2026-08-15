@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "1494fc00328d213b0a39",
+  "position": {
+    "x": 548.5714060093386,
+    "y": 64.690024293554075,
+    "z": 4,
+    "height": 149.92443901175162,
+    "width": 374.811097529379,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ml_savings_opportunity"
+                    }
+                  },
+                  "Property": "Opportunity Annualized Spend"
+                }
+              },
+              "queryRef": "ml_savings_opportunity.Opportunity Annualized Spend",
+              "nativeQueryRef": "Opportunity Annualized Spend"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "ml_savings_opportunity"
+                  }
+                },
+                "Property": "Opportunity Annualized Spend"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "da748511e8a1cea9628a",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ml_savings_opportunity"
+              }
+            },
+            "Property": "Opportunity Annualized Spend"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "e6bdfe126e62a37b1dfe",
+  "position": {
+    "x": 685.29230769230765,
+    "y": 210.7076923076923,
+    "z": 4,
+    "height": 149.66153846153847,
+    "width": 279.6307692307692,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_savings"
+                    }
+                  },
+                  "Property": "Savings Realization %"
+                }
+              },
+              "queryRef": "fact_savings.Savings Realization %",
+              "nativeQueryRef": "Savings Realization %"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_savings"
+                  }
+                },
+                "Property": "Savings Realization %"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "8ef6b571a541d8c7ca0e",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_savings"
+              }
+            },
+            "Property": "Savings Realization %"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

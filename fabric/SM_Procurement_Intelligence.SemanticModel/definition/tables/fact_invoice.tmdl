@@ -1,0 +1,945 @@
+table fact_invoice
+	lineageTag: 3ab5f7b7-3882-443d-b416-ef7110e9eb26
+	sourceLineageTag: [dbo].[fact_invoice]
+
+	measure Invoices =
+			
+			DISTINCTCOUNT (
+			    fact_invoice[InvoiceID]
+			)
+		formatString: #,0
+		displayFolder: 03 Invoice & Matching
+		lineageTag: dba06f24-af7a-49ce-b81e-86223f6ecce1
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Invoice Items' =
+			
+			DISTINCTCOUNT (
+			    fact_invoice[InvoiceItemID]
+			)
+		formatString: 0
+		displayFolder: 03 Invoice & Matching
+		lineageTag: 22fd04cb-16aa-4a9f-b0fe-3ef3c6f15f72
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+	measure 'Gross Invoice Amount' =
+			
+			SUM (
+			    fact_invoice[GrossAmountEUR]
+			)
+		formatString: "€"\ #,0.00;-"€"\ #,0.00;"€"\ #,0.00
+		displayFolder: 03 Invoice & Matching
+		lineageTag: 674812cd-fd15-4ceb-9dc1-3c2f4f1e9bf3
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Invoice Three-Way Matched Items' =
+			
+			CALCULATE (
+			    [Invoice Items],
+			    fact_invoice[ThreeWayMatchFlag] = TRUE ()
+			)
+		formatString: 0
+		displayFolder: 03 Invoice & Matching
+		lineageTag: 5e7b5f03-3bb4-4f44-9dac-6a1180f69439
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+	measure 'Invoice Three-Way Match %' =
+			
+			DIVIDE (
+			    [Invoice Three-Way Matched Items],
+			    [Invoice Items]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 03 Invoice & Matching
+		lineageTag: 585d54a5-072b-4c87-a928-0b517c00f164
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+		changedProperty = DisplayFolder
+
+	measure 'Invoice Exception Items - Detail' =
+			
+			CALCULATE (
+			    [Invoice Items],
+			    fact_invoice[ThreeWayMatchFlag] = FALSE ()
+			)
+		formatString: 0
+		displayFolder: 03 Invoice & Matching
+		lineageTag: b12e29cf-0550-4890-b147-2b7a92ed5f69
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+	measure 'Invoice Exception % - Detail' =
+			
+			DIVIDE (
+			    [Invoice Exception Items - Detail],
+			    [Invoice Items]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 03 Invoice & Matching
+		lineageTag: 1978a52e-8166-41b4-a4e6-11a581a59231
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Invoice Exception Amount' =
+			
+			SUM (
+			    fact_invoice[InvoiceExceptionAmountEUR]
+			)
+		formatString: "€"\ #,0.00;-"€"\ #,0.00;"€"\ #,0.00
+		displayFolder: 03 Invoice & Matching
+		lineageTag: ce614c76-233d-4949-89a4-82ec044bc2c2
+
+		changedProperty = Name
+
+		changedProperty = DisplayFolder
+
+		changedProperty = FormatString
+
+	measure 'Invoice Exception Amount %' =
+			
+			DIVIDE (
+			    [Invoice Exception Amount],
+			    [Gross Invoice Amount]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 03 Invoice & Matching
+		lineageTag: 27e8f999-1469-4770-a7c7-541ca0719546
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Invoice Disputed Invoices' =
+			
+			CALCULATE (
+			    DISTINCTCOUNT (
+			        fact_invoice[InvoiceID]
+			    ),
+			    fact_invoice[DisputeFlag] = TRUE ()
+			)
+		formatString: #,0
+		displayFolder: 03 Invoice & Matching
+		lineageTag: 9d843472-5a81-422d-9174-74cfc4f0980e
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Invoice Dispute % - Detail' =
+			
+			DIVIDE (
+			    [Invoice Disputed Invoices],
+			    [Invoices]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: 03 Invoice & Matching
+		lineageTag: 462e426f-3452-4500-a11b-658db247fd37
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	column CurrencyCode
+		dataType: string
+		lineageTag: 9dfc6133-ae90-4c4e-a6fd-55df00238a44
+		sourceLineageTag: CurrencyCode
+		summarizeBy: none
+		sourceColumn: CurrencyCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvoiceID
+		dataType: string
+		lineageTag: ec9c03c5-cf04-493b-b665-47f1cef49984
+		sourceLineageTag: InvoiceID
+		summarizeBy: none
+		sourceColumn: InvoiceID
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvoiceNumber
+		dataType: string
+		lineageTag: 97fdc064-8f6e-4372-b968-de7280788ba1
+		sourceLineageTag: InvoiceNumber
+		summarizeBy: none
+		sourceColumn: InvoiceNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvoiceItemID
+		dataType: string
+		lineageTag: 8d8d3a15-0045-4ff2-bf89-f433bb3f7fa2
+		sourceLineageTag: InvoiceItemID
+		summarizeBy: none
+		sourceColumn: InvoiceItemID
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvoiceLineNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: 82479054-0b0f-448f-92e8-d156a5f8adfd
+		sourceLineageTag: InvoiceLineNumber
+		summarizeBy: sum
+		sourceColumn: InvoiceLineNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column POID
+		dataType: string
+		lineageTag: 2d7b69b1-6087-434b-b5e7-3d8a1f22de85
+		sourceLineageTag: POID
+		summarizeBy: none
+		sourceColumn: POID
+
+		annotation SummarizationSetBy = Automatic
+
+	column POItemID
+		dataType: string
+		lineageTag: 4b466da3-3b5e-43d6-8e97-b0e182d3667c
+		sourceLineageTag: POItemID
+		summarizeBy: none
+		sourceColumn: POItemID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierID
+		dataType: string
+		lineageTag: 34738fb7-9151-4897-88f1-b2e26584f97e
+		sourceLineageTag: SupplierID
+		summarizeBy: none
+		sourceColumn: SupplierID
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvoiceDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 17fd7ea4-1b28-46e8-8668-f85ae0898349
+		sourceLineageTag: InvoiceDate
+		summarizeBy: none
+		sourceColumn: InvoiceDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column PostingDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 79e0b051-54bd-4f2e-b293-5adba8a80148
+		sourceLineageTag: PostingDate
+		summarizeBy: none
+		sourceColumn: PostingDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column DueDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 9d21138e-6b2b-431a-9021-bc20456bc879
+		sourceLineageTag: DueDate
+		summarizeBy: none
+		sourceColumn: DueDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvoiceStatus
+		dataType: string
+		lineageTag: 678ceed3-98d9-4814-a879-decdc8d12547
+		sourceLineageTag: InvoiceStatus
+		summarizeBy: none
+		sourceColumn: InvoiceStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column PaymentStatus
+		dataType: string
+		lineageTag: d10030d3-0c9b-405e-bcc9-dd12d0c20527
+		sourceLineageTag: PaymentStatus
+		summarizeBy: none
+		sourceColumn: PaymentStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column DisputeFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 3517f590-7c0e-40c1-b1bc-2e9b7e83ffc3
+		sourceLineageTag: DisputeFlag
+		summarizeBy: none
+		sourceColumn: DisputeFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column DisputeReason
+		dataType: string
+		lineageTag: c28e0b73-bb01-4923-92fa-7424d751f7cd
+		sourceLineageTag: DisputeReason
+		summarizeBy: none
+		sourceColumn: DisputeReason
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvoicedQuantity
+		dataType: double
+		lineageTag: 0bc7f98c-de61-4ba5-9885-f08009de7a39
+		sourceLineageTag: InvoicedQuantity
+		summarizeBy: sum
+		sourceColumn: InvoicedQuantity
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column UnitOfMeasure
+		dataType: string
+		lineageTag: 5717fa1e-e51f-4436-bdf3-2ec61e794976
+		sourceLineageTag: UnitOfMeasure
+		summarizeBy: none
+		sourceColumn: UnitOfMeasure
+
+		annotation SummarizationSetBy = Automatic
+
+	column POUnitPrice
+		dataType: double
+		lineageTag: cc9cf7bf-08f8-4ccf-8eac-3b388dac5e6a
+		sourceLineageTag: POUnitPrice
+		summarizeBy: sum
+		sourceColumn: POUnitPrice
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column InvoiceUnitPrice
+		dataType: double
+		lineageTag: 01b19664-e677-4b26-8f8c-15060a93a33b
+		sourceLineageTag: InvoiceUnitPrice
+		summarizeBy: sum
+		sourceColumn: InvoiceUnitPrice
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column NetAmount
+		dataType: double
+		lineageTag: 8982dfd0-a179-4094-a5d9-83f849b52495
+		sourceLineageTag: NetAmount
+		summarizeBy: sum
+		sourceColumn: NetAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TaxAmount
+		dataType: double
+		lineageTag: 6644353d-ccb8-4df8-98df-1b0b3e119b0e
+		sourceLineageTag: TaxAmount
+		summarizeBy: sum
+		sourceColumn: TaxAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column GrossAmount
+		dataType: double
+		lineageTag: 8ba2dadb-acaf-45c5-849c-470440dbb8f6
+		sourceLineageTag: GrossAmount
+		summarizeBy: sum
+		sourceColumn: GrossAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column InvoiceUnitPriceEUR
+		dataType: double
+		lineageTag: bf3cdca1-39e6-4b83-a8fe-a3b90f487f8f
+		sourceLineageTag: InvoiceUnitPriceEUR
+		summarizeBy: sum
+		sourceColumn: InvoiceUnitPriceEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column NetAmountEUR
+		dataType: double
+		lineageTag: 7fa6a6ee-6f9d-45c6-b0d9-1c8117abd0b8
+		sourceLineageTag: NetAmountEUR
+		summarizeBy: sum
+		sourceColumn: NetAmountEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TaxAmountEUR
+		dataType: double
+		lineageTag: 8b38e83b-2450-40db-a2e0-9049bb0a0880
+		sourceLineageTag: TaxAmountEUR
+		summarizeBy: sum
+		sourceColumn: TaxAmountEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column GrossAmountEUR
+		dataType: double
+		lineageTag: 01085d91-73fd-4671-986e-141912dddcdd
+		sourceLineageTag: GrossAmountEUR
+		summarizeBy: sum
+		sourceColumn: GrossAmountEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CalculatedReceivedQuantityAtInvoiceDate
+		dataType: double
+		lineageTag: 270410ef-c8e1-4948-92d5-6e4ab09e686e
+		sourceLineageTag: CalculatedReceivedQuantityAtInvoiceDate
+		summarizeBy: sum
+		sourceColumn: CalculatedReceivedQuantityAtInvoiceDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column GoodsReceiptCountAtInvoiceDate
+		dataType: int64
+		formatString: 0
+		lineageTag: 6667d2af-8485-4648-bbef-0309feb7f9fa
+		sourceLineageTag: GoodsReceiptCountAtInvoiceDate
+		summarizeBy: sum
+		sourceColumn: GoodsReceiptCountAtInvoiceDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoodsReceiptAvailableAtInvoiceDateFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: c62b5879-37df-49ac-8d21-82036d145845
+		sourceLineageTag: GoodsReceiptAvailableAtInvoiceDateFlag
+		summarizeBy: none
+		sourceColumn: GoodsReceiptAvailableAtInvoiceDateFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalculatedPriceVarianceAmount
+		dataType: double
+		lineageTag: 6edfb000-0312-4ed3-b0d1-53432aa69890
+		sourceLineageTag: CalculatedPriceVarianceAmount
+		summarizeBy: sum
+		sourceColumn: CalculatedPriceVarianceAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CalculatedPriceVariancePercentage
+		dataType: double
+		lineageTag: 27410b0c-dbb7-40d8-a3c5-73a28377a0f0
+		sourceLineageTag: CalculatedPriceVariancePercentage
+		summarizeBy: sum
+		sourceColumn: CalculatedPriceVariancePercentage
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column InvoicePriceWithinToleranceFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 27c9d118-910f-47ab-ac8e-5b64c030f6e7
+		sourceLineageTag: InvoicePriceWithinToleranceFlag
+		summarizeBy: none
+		sourceColumn: InvoicePriceWithinToleranceFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalculatedQuantityVariance
+		dataType: double
+		lineageTag: 3d3bff1f-0129-40ad-99e5-acd423e52dfd
+		sourceLineageTag: CalculatedQuantityVariance
+		summarizeBy: sum
+		sourceColumn: CalculatedQuantityVariance
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CalculatedQuantityVariancePercentage
+		dataType: double
+		lineageTag: 2edb865b-9306-4288-9b30-c8a20c9f133f
+		sourceLineageTag: CalculatedQuantityVariancePercentage
+		summarizeBy: sum
+		sourceColumn: CalculatedQuantityVariancePercentage
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column InvoiceQuantityWithinToleranceFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: dacb535f-3e6e-49ac-a097-3cb2b1607e37
+		sourceLineageTag: InvoiceQuantityWithinToleranceFlag
+		summarizeBy: none
+		sourceColumn: InvoiceQuantityWithinToleranceFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column POReferenceResolvedFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 001a0d26-d179-4660-bb10-b667c3f96816
+		sourceLineageTag: POReferenceResolvedFlag
+		summarizeBy: none
+		sourceColumn: POReferenceResolvedFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvoicePOSupplierMatchFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: e6cc2dd8-00bb-436b-885b-04aef15cf8d8
+		sourceLineageTag: InvoicePOSupplierMatchFlag
+		summarizeBy: none
+		sourceColumn: InvoicePOSupplierMatchFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column DerivedDuplicateInvoiceFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 5394581b-0fa9-432a-b2d4-2973ee16b0ec
+		sourceLineageTag: DerivedDuplicateInvoiceFlag
+		summarizeBy: none
+		sourceColumn: DerivedDuplicateInvoiceFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column DerivedThreeWayMatchStatus
+		dataType: string
+		lineageTag: 3c38273d-f856-49fd-8988-96a587a6b712
+		sourceLineageTag: DerivedThreeWayMatchStatus
+		summarizeBy: none
+		sourceColumn: DerivedThreeWayMatchStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column ThreeWayMatchFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 0304ef77-2cd0-47cc-87db-45adf7ba6f00
+		sourceLineageTag: ThreeWayMatchFlag
+		summarizeBy: none
+		sourceColumn: ThreeWayMatchFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvoiceExceptionFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: f526f016-3b64-4c31-be58-01546ed39e9d
+		sourceLineageTag: InvoiceExceptionFlag
+		summarizeBy: none
+		sourceColumn: InvoiceExceptionFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvoiceExceptionAmountEUR
+		dataType: double
+		lineageTag: b8e5157d-911b-42b5-a227-0671f49086f4
+		sourceLineageTag: InvoiceExceptionAmountEUR
+		summarizeBy: sum
+		sourceColumn: InvoiceExceptionAmountEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SourceSilverRecordHash
+		dataType: string
+		isHidden
+		lineageTag: 67912f39-430c-4a67-922e-617ada47d36f
+		sourceLineageTag: SourceSilverRecordHash
+		summarizeBy: none
+		sourceColumn: SourceSilverRecordHash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column RefPOID
+		dataType: string
+		lineageTag: 6008c135-a5ee-401a-a63a-9dc947401fed
+		sourceLineageTag: RefPOID
+		summarizeBy: none
+		sourceColumn: RefPOID
+
+		annotation SummarizationSetBy = Automatic
+
+	column PurchaseOrderFactKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 84dffacd-4548-4b16-b1e3-871b1758f24b
+		sourceLineageTag: PurchaseOrderFactKey
+		summarizeBy: count
+		sourceColumn: PurchaseOrderFactKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderDateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 03f351ab-9f00-4771-bfc9-03ea7954c7a9
+		sourceLineageTag: OrderDateKey
+		summarizeBy: count
+		sourceColumn: OrderDateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column RequestedDeliveryDateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 02d675b9-c821-4e7f-9adf-60228e1c7642
+		sourceLineageTag: RequestedDeliveryDateKey
+		summarizeBy: count
+		sourceColumn: RequestedDeliveryDateKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column POSupplierKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 3106876b-22a4-4f1a-b644-7d7ef2f6dd2b
+		sourceLineageTag: POSupplierKey
+		summarizeBy: count
+		sourceColumn: POSupplierKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column POSupplierIDFromFact
+		dataType: string
+		lineageTag: c84b0cdc-953d-428b-bb9d-4996880e5ae0
+		sourceLineageTag: POSupplierIDFromFact
+		summarizeBy: none
+		sourceColumn: POSupplierIDFromFact
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9bace79d-ae60-4c59-811e-521a6b6979d6
+		sourceLineageTag: CategoryKey
+		summarizeBy: none
+		sourceColumn: CategoryKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaterialKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 446b2cc4-3148-49e3-ac17-6b4f5407bc03
+		sourceLineageTag: MaterialKey
+		summarizeBy: none
+		sourceColumn: MaterialKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column BuyerKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 899aacfb-771a-42be-b568-079d3560e2b9
+		sourceLineageTag: BuyerKey
+		summarizeBy: none
+		sourceColumn: BuyerKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column BusinessUnitKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: bdcba876-3e49-4c6b-ae99-9bae0290c358
+		sourceLineageTag: BusinessUnitKey
+		summarizeBy: none
+		sourceColumn: BusinessUnitKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContractKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: cbcebb1c-6dc2-4da6-8c8d-c56ce6a28d98
+		sourceLineageTag: ContractKey
+		summarizeBy: none
+		sourceColumn: ContractKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column POCurrencyKey
+		dataType: int64
+		formatString: 0
+		lineageTag: f4a18d6e-85ab-4331-9b12-b1d72703a159
+		sourceLineageTag: POCurrencyKey
+		summarizeBy: count
+		sourceColumn: POCurrencyKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column POCurrencyCode
+		dataType: string
+		lineageTag: 982a881f-aadf-4eeb-923f-0ae074355f65
+		sourceLineageTag: POCurrencyCode
+		summarizeBy: none
+		sourceColumn: POCurrencyCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column PurchaseOrderFactResolvedFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: d67d2c12-110e-45d2-8d3a-ff4e579a15d4
+		sourceLineageTag: PurchaseOrderFactResolvedFlag
+		summarizeBy: none
+		sourceColumn: PurchaseOrderFactResolvedFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column POIDFactConsistencyFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 52e3115a-e140-48bc-9f29-52c0a522ac05
+		sourceLineageTag: POIDFactConsistencyFlag
+		summarizeBy: none
+		sourceColumn: POIDFactConsistencyFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvoiceDateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 820d1dba-d662-4e92-baf4-54586e72bd95
+		sourceLineageTag: InvoiceDateKey
+		summarizeBy: none
+		sourceColumn: InvoiceDateKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column PostingDateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b0620e4b-f89f-4fad-a011-520c02ecb52f
+		sourceLineageTag: PostingDateKey
+		summarizeBy: count
+		sourceColumn: PostingDateKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column DueDateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0c795c83-5d37-4b02-af27-a5cad1fb4c09
+		sourceLineageTag: DueDateKey
+		summarizeBy: count
+		sourceColumn: DueDateKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a2dcff41-b8fc-4807-8d41-3c5a212c065b
+		sourceLineageTag: SupplierKey
+		summarizeBy: none
+		sourceColumn: SupplierKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SupplierDimensionVersion
+		dataType: int64
+		formatString: 0
+		lineageTag: 7775e28e-9d4c-4c01-90f2-d30bae31c0dd
+		sourceLineageTag: SupplierDimensionVersion
+		summarizeBy: sum
+		sourceColumn: SupplierDimensionVersion
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrencyKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 21918ad9-c596-470d-917e-ac7f7f5fe8fe
+		sourceLineageTag: CurrencyKey
+		summarizeBy: none
+		sourceColumn: CurrencyKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvoiceFactKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 675526ef-4123-47d4-8a22-119fd232943f
+		sourceLineageTag: InvoiceFactKey
+		summarizeBy: count
+		sourceColumn: InvoiceFactKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MatchedInvoiceAmountEUR
+		dataType: double
+		lineageTag: 524d18cc-71b6-47b1-aad4-65be0d643a9d
+		sourceLineageTag: MatchedInvoiceAmountEUR
+		summarizeBy: sum
+		sourceColumn: MatchedInvoiceAmountEUR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DisputedInvoiceItemFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 12bf5c92-6be1-480b-8746-43d6f73ac68b
+		sourceLineageTag: DisputedInvoiceItemFlag
+		summarizeBy: none
+		sourceColumn: DisputedInvoiceItemFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column DuplicateInvoiceItemFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: d9ed88ac-88b3-4d69-b927-c509cef7926f
+		sourceLineageTag: DuplicateInvoiceItemFlag
+		summarizeBy: none
+		sourceColumn: DuplicateInvoiceItemFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldSourceTable
+		dataType: string
+		isHidden
+		lineageTag: effcd3d8-6ff3-4cef-918a-7f3e290a4932
+		sourceLineageTag: GoldSourceTable
+		summarizeBy: none
+		sourceColumn: GoldSourceTable
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldLoadTimestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 22164a4f-0419-4f54-88d4-ea7e99640976
+		sourceLineageTag: GoldLoadTimestamp
+		summarizeBy: none
+		sourceColumn: GoldLoadTimestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldLoadDate
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 1fbac34b-3471-43da-a657-c8fddd687adc
+		sourceLineageTag: GoldLoadDate
+		summarizeBy: none
+		sourceColumn: GoldLoadDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldRecordHash
+		dataType: string
+		isHidden
+		lineageTag: 6ea89b64-e054-4826-8296-b54b85a534ed
+		sourceLineageTag: GoldRecordHash
+		summarizeBy: none
+		sourceColumn: GoldRecordHash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_invoice = entity
+		mode: directLake
+		source
+			entityName: fact_invoice
+			expressionSource: 'DirectLake - lh_procurement_gold'
+

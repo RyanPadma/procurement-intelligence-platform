@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "35c3af3f27d3f9262794",
+  "position": {
+    "x": 471.64596160466675,
+    "y": 557.57336351644813,
+    "z": 4,
+    "height": 149.92443901175162,
+    "width": 374.811097529379,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "ml_pricing_anomaly_prediction"
+                    }
+                  },
+                  "Property": "Eligible Spend with Pricing Anomalies %"
+                }
+              },
+              "queryRef": "ml_pricing_anomaly_prediction.Eligible Spend with Pricing Anomalies %",
+              "nativeQueryRef": "Eligible Spend with Pricing Anomalies %"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "ml_pricing_anomaly_prediction"
+                  }
+                },
+                "Property": "Eligible Spend with Pricing Anomalies %"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "outline": [
+        {
+          "properties": {
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "c0cc514ed06473cf8ece",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "ml_pricing_anomaly_prediction"
+              }
+            },
+            "Property": "Eligible Spend with Pricing Anomalies %"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

@@ -1,0 +1,121 @@
+table dim_business_unit
+	lineageTag: 97083330-f24f-4bcb-ae7f-342496b37970
+	sourceLineageTag: [dbo].[dim_business_unit]
+
+	column BusinessUnitID
+		dataType: string
+		lineageTag: 71a5d2d9-9221-488c-9b4a-b0ce9b99024c
+		sourceLineageTag: BusinessUnitID
+		summarizeBy: none
+		sourceColumn: BusinessUnitID
+
+		annotation SummarizationSetBy = Automatic
+
+	column BusinessUnitName
+		dataType: string
+		lineageTag: d1885e6f-0555-441f-aa48-93f5d7aa5bed
+		sourceLineageTag: BusinessUnitName
+		summarizeBy: none
+		sourceColumn: BusinessUnitName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: 11330a55-b233-4593-8d54-988825b83d96
+		sourceLineageTag: Country
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 7daf23df-5636-4827-a295-8b4e3d595fe8
+		sourceLineageTag: Region
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceSilverRecordHash
+		dataType: string
+		isHidden
+		lineageTag: 7f1ec7d6-0ce2-4508-a5ab-76aeb9f6dc79
+		sourceLineageTag: SourceSilverRecordHash
+		summarizeBy: none
+		sourceColumn: SourceSilverRecordHash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column BusinessUnitKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 435c720b-f1e0-424e-a4cd-8207bd89a16f
+		sourceLineageTag: BusinessUnitKey
+		summarizeBy: none
+		sourceColumn: BusinessUnitKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldSourceTable
+		dataType: string
+		isHidden
+		lineageTag: 155c9f61-e0a0-4bb0-b9ed-a2490d1ac433
+		sourceLineageTag: GoldSourceTable
+		summarizeBy: none
+		sourceColumn: GoldSourceTable
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldLoadTimestamp
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: c125addf-a1f5-471e-aea5-82c3fb8c8862
+		sourceLineageTag: GoldLoadTimestamp
+		summarizeBy: none
+		sourceColumn: GoldLoadTimestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldLoadDate
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 904b60fe-e225-4874-989b-666a4194f715
+		sourceLineageTag: GoldLoadDate
+		summarizeBy: none
+		sourceColumn: GoldLoadDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldRecordHash
+		dataType: string
+		isHidden
+		lineageTag: 98f80df8-cc73-4db9-95fa-957c6fd724b5
+		sourceLineageTag: GoldRecordHash
+		summarizeBy: none
+		sourceColumn: GoldRecordHash
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_business_unit = entity
+		mode: directLake
+		source
+			entityName: dim_business_unit
+			expressionSource: 'DirectLake - lh_procurement_gold'
+
