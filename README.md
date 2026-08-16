@@ -287,8 +287,7 @@ The final Fabric-side validation notebook executed:
 
 **64 validation rules → 64 PASS → 0 FAIL**
 
-<!-- SCREENSHOT: docs/screenshots/fabric/02-final-ml-gold-validation.png -->
-![Final Fabric ML Gold validation](docs/screenshots/fabric/02-final-ml-gold-validation.png)
+<img width="1144" height="780" alt="02-final-ml-gold-validation" src="https://github.com/user-attachments/assets/3b1b95de-b00c-44a2-9942-8ad528853cbb" />
 
 *NB_40 evidence confirming the three promoted ML products and the consolidated 64 PASS / 0 FAIL validation result.*
 
