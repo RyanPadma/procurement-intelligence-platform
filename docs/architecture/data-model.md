@@ -1,13 +1,13 @@
 # Enterprise Procurement Intelligence Platform
 ## Analytical Data Model
 
-This document describes the Gold analytical model used by the procurement intelligence platform and the modeling rules that support Direct Lake and Power BI.
+This document describes the **Gold analytical model** used by the procurement intelligence platform and the modeling rules that support Direct Lake and Power BI.
 
-> **Scope:** This page focuses on analytical grain, table roles, relationships, historical modeling, and ML output integration. Pipeline and platform architecture are documented separately in `architecture.md`.
+> **Scope:** This page focuses on table grain, dimensions, facts, relationships, Supplier SCD Type 2, date roles, and ML output integration. Platform architecture is documented separately in [`architecture.md`](architecture.md).
 
 ---
 
-## 1. Model Overview
+## 1. Model at a Glance
 
 The Gold layer uses a **star-schema-oriented analytical model**.
 
@@ -24,8 +24,8 @@ flowchart LR
 
     FPO[fact_purchase_order]
     FI[fact_invoice]
-    FS[fact_savings]
     FSP[fact_supplier_performance]
+    FS[fact_savings]
 
     DS --> FPO
     DC --> FPO
@@ -37,341 +37,263 @@ flowchart LR
     DCU --> FPO
 
     DS --> FI
-    DBU --> FI
     DD --> FI
-    DCU --> FI
+
+    DS --> FSP
+    DD --> FSP
 
     DS --> FS
     DC --> FS
     DB --> FS
     DBU --> FS
     DD --> FS
-
-    DS --> FSP
-    DD --> FSP
 ```
 
 The model separates:
 
 - descriptive business entities into **dimensions**
-- measurable procurement events into **facts**
-- model predictions and prescriptive outputs into dedicated **ML tables**
+- measurable procurement processes into **facts**
+- machine-learning predictions and prescriptive outputs into dedicated **ML tables**
 
 ---
 
-## 2. Core Modeling Principles
+## 2. Implemented Semantic Model
 
-### Clear grain
+The screenshots below show the implemented Fabric/Power BI semantic model rather than only a conceptual design.
 
-Every fact and ML table must have one explicit grain.
+<!-- SCREENSHOT: docs/screenshots/fabric/03-core-semantic-model.jpg -->
+![Core analytical semantic model](../screenshots/fabric/03-core-semantic-model.jpg)
 
-Measures should be calculated from that grain rather than from ambiguous mixed-level records.
+*Core model evidence showing the shared dimensions and the four main analytical facts: purchase orders, invoices, supplier performance, and savings.*
+
+The core view demonstrates that the model is designed around reusable dimensions instead of fact-to-fact reporting logic.
+
+<!-- SCREENSHOT: docs/screenshots/fabric/04-ml-semantic-model-extension.jpg -->
+![ML semantic model extension](../screenshots/fabric/04-ml-semantic-model-extension.jpg)
+
+*ML extension showing supplier-risk, pricing-anomaly, and savings-opportunity outputs connected back to governed Gold dimensions.*
+
+This separation is intentional: ML prediction snapshots have different grains from operational procurement facts.
+
+---
+
+## 3. Core Modeling Principles
+
+### Explicit grain
+
+Every fact and ML table has one defined analytical grain.
+
+Measures are calculated from that grain rather than from mixed header/line or mixed operational/prediction records.
+
+### Conformed dimensions
+
+Shared dimensions are reused across business processes so filtering behaves consistently across spend, invoice, supplier-performance, savings, and ML analysis.
 
 ### Surrogate keys
 
-Gold dimensions use analytical keys rather than relying only on operational business keys.
+Gold dimensions use analytical surrogate keys rather than relying only on source-system business keys.
 
-This is especially important for supplier history.
+This is especially important for historical Supplier SCD Type 2 resolution.
 
 ### Historical correctness
 
-Supplier history is modeled using **SCD Type 2** so historical transactions can resolve to the supplier version that was valid at the relevant time.
+Supplier history is preserved through effective-dated versions instead of overwriting current attributes onto historical transactions.
 
-### Shared dimensions
+### Separate ML grains
 
-Facts reuse common dimensions wherever possible.
+Prediction and opportunity tables remain separate from operational facts.
 
-This allows supplier, category, business-unit, buyer, date, and currency analysis to behave consistently across reporting domains.
+For example:
 
-### ML outputs remain separate
+```text
+Supplier Performance Event
+        ≠
+Supplier Risk Prediction Snapshot
+```
 
-ML prediction tables are not forced into operational fact grains.
+and:
 
-Prediction snapshots and transaction facts represent different analytical events and are modeled separately.
-
----
-
-# 3. Dimensions
-
-## `dim_date`
-
-**Purpose:** Shared calendar dimension for procurement analysis.
-
-Typical use cases:
-
-- purchase-order dates
-- invoice dates
-- savings dates
-- performance periods
-
-The semantic model uses inactive date relationships where multiple date roles are required.
+```text
+Savings Project / Realization
+        ≠
+Modeled Savings Opportunity
+```
 
 ---
 
-## `dim_supplier`
+## 4. Dimension Tables
 
-**Purpose:** Governed supplier master with historical context.
+| Dimension | Purpose |
+|---|---|
+| `dim_date` | Shared calendar and date-role filtering |
+| `dim_supplier` | Governed supplier master with SCD Type 2 history |
+| `dim_category` | Procurement category classification |
+| `dim_material` | Material/item analytical context |
+| `dim_buyer` | Procurement buyer and ownership context |
+| `dim_business_unit` | Organizational reporting context |
+| `dim_contract` | Contract validity and commercial context |
+| `dim_currency` | Currency reference and source-currency context |
 
-### Key characteristics
+### `dim_supplier` and SCD Type 2
+
+Supplier history is preserved using version-aware records with:
 
 - Supplier business key
 - Supplier surrogate key
-- supplier attributes
-- effective start date
-- effective end date
+- effective-from date
+- effective-to date
 - current-version indicator
-
-### SCD Type 2
-
-When tracked supplier attributes change, a new dimension version is created instead of overwriting the historical record.
 
 Conceptually:
 
 ```text
 Supplier A
-├── Version 1: valid until 2025-12-31
-└── Version 2: valid from 2026-01-01
+├── Version 1: historical attributes
+└── Version 2: current attributes
 ```
 
-Historical facts resolve to the supplier version valid at the transaction or analytical reference date.
+Historical transactions resolve to the supplier version valid at the relevant transaction date.
+
+This prevents a current supplier classification from silently rewriting historical reporting.
 
 ---
 
-## `dim_category`
+## 5. Fact Tables
 
-**Purpose:** Procurement category classification.
+### `fact_purchase_order`
 
-Supports analysis such as:
+**Primary role:** Procurement spend and contract-governance analysis.
 
-- spend by category
-- contract compliance by category
-- pricing anomalies by category
-- savings opportunity by category
-
----
-
-## `dim_material`
-
-**Purpose:** Material-level analytical context.
+**Grain:** Purchase-order item / analytical transaction level.
 
 Supports:
-
-- item-level spend analysis
-- material/category hierarchy
-- pricing comparisons
-- purchasing-pattern analysis
-
----
-
-## `dim_buyer`
-
-**Purpose:** Buyer or procurement-owner context.
-
-Used for:
-
-- buyer-level spend
-- savings ownership
-- procurement workload
-- operational accountability
-
----
-
-## `dim_business_unit`
-
-**Purpose:** Organizational reporting context.
-
-Used for:
-
-- spend by entity or business unit
-- compliance comparison
-- savings ownership
-- management reporting
-
----
-
-## `dim_contract`
-
-**Purpose:** Contract context used by procurement facts and compliance logic.
-
-Typical attributes include:
-
-- contract identifier
-- supplier/category scope
-- contract validity
-- contract type/status
-- contract ownership
-- currency and commercial context
-
-Contract logic is prepared upstream so Power BI does not independently determine contract eligibility.
-
----
-
-## `dim_currency`
-
-**Purpose:** Currency reference for financial analysis.
-
-The model retains original currency context while downstream measures use EUR-normalized analytical values produced in Silver.
-
----
-
-# 4. Fact Tables
-
-## `fact_purchase_order`
-
-**Primary role:** Core procurement spend fact.
-
-### Grain
-
-Purchase-order transaction level used by the Gold model, typically aligned to PO item/line analysis.
-
-### Supports
 
 - eligible spend
 - contract-compliant spend
 - maverick spend
 - supplier/category/material spend
-- purchase price analysis
-- pricing anomaly linkage
+- pricing analysis
+- pricing-anomaly linkage
 
-### Important rule
-
-The grain must remain stable. Header-level and line-level amounts should not be mixed in a way that creates duplicated spend.
+**Modeling rule:** Header-level and line-level values are not mixed in a way that duplicates spend.
 
 ---
 
-## `fact_invoice`
+### `fact_invoice`
 
 **Primary role:** Invoice and matching analytics.
 
-### Supports
+Supports:
 
 - invoice value
 - invoice exceptions
-- three-way match metrics
 - dispute analysis
+- three-way matching
 - payment/invoice performance
 
-Invoice facts are modeled separately from purchase orders because invoice events have their own dates, statuses, and business logic.
+Invoice activity remains separate from purchase-order activity because invoices have their own dates, statuses, and matching logic.
 
 ---
 
-## `fact_savings`
+### `fact_supplier_performance`
+
+**Primary role:** Historical operational supplier performance.
+
+Supports:
+
+- Supplier OTD %
+- delivery performance
+- quality indicators
+- invoice-dispute indicators
+- supplier performance trends
+
+This fact is deliberately separate from the supplier-risk ML table.
+
+---
+
+### `fact_savings`
 
 **Primary role:** Savings pipeline and realization.
 
-### Supports
+Supports:
 
-- savings forecast
+- forecasted savings
+- weighted forecast
 - approved savings
 - realized savings
 - savings status
 - buyer/business-unit ownership
 
-The savings fact represents the procurement savings lifecycle rather than purchase transactions.
+This represents the savings execution lifecycle, not theoretical ML opportunity.
 
 ---
 
-## `fact_supplier_performance`
+## 6. ML Output Tables
 
-**Primary role:** Operational supplier-performance analytics.
+The three ML outputs are persisted in Gold before Direct Lake consumption.
 
-### Supports
+| Table | Analytical grain | Purpose |
+|---|---|---|
+| `ml_supplier_risk_prediction` | Supplier × Prediction Date | Predictive supplier-risk snapshot |
+| `ml_pricing_anomaly_prediction` | PO Item × Prediction Date | Pricing anomaly score and flag |
+| `ml_savings_opportunity` | Supplier × Category × Prediction Date | Prescriptive sourcing opportunity |
 
-- Supplier OTD %
-- delivery performance
-- quality indicators
-- supplier performance trends
+### Supplier risk
 
-### Grain
+`ml_supplier_risk_prediction` stores the current prediction snapshot, including the risk score/classification and model lineage fields.
 
-Supplier performance is modeled at its own operational reporting grain.
+It is not treated as historical operational performance.
 
-It should not be treated as equivalent to an ML supplier-risk prediction snapshot.
+### Pricing anomaly
 
----
+`ml_pricing_anomaly_prediction` retains PO-item-level anomaly scoring so unusual transactions can be analyzed by supplier, category, contract, and material context.
 
-# 5. ML Output Tables
+### Savings opportunity
 
-## `ml_supplier_risk_prediction`
+`ml_savings_opportunity` stores supplier-category opportunities and negotiation prioritization.
 
-**Purpose:** Supplier-risk model output.
+It remains separate from `fact_savings` because:
 
-### Grain
-
-Supplier prediction snapshot.
-
-Typical fields include:
-
-- supplier key
-- prediction date
-- risk score/probability
-- predicted risk class
-- model/version metadata where retained
-
-### Modeling rule
-
-Prediction date is not treated as a normal transaction date.
-
-Supplier risk is joined to supplier context while preserving the distinct prediction-snapshot grain.
+```text
+Modeled Future Opportunity
+        ≠
+Approved / Realized Savings
+```
 
 ---
 
-## `ml_pricing_anomaly_prediction`
+## 7. ML Gold Promotion Evidence
 
-**Purpose:** Transaction-level pricing anomaly output.
+The ML tables are not conceptual placeholders. They are validated in Databricks and promoted back into Fabric Gold.
 
-### Grain
+<!-- SCREENSHOT: docs/screenshots/ml/07-ml-output-promotion-validation.jpg -->
+![ML output promotion validation](../screenshots/ml/07-ml-output-promotion-validation.jpg)
 
-Scored purchase-order item.
+*DB_07 evidence showing the validated supplier-risk, pricing-anomaly, and savings-opportunity data products written into physical Fabric Gold tables.*
 
-Validated portfolio snapshot:
+Validated snapshot:
 
-- **21,752** items scored
-- **1,216** anomalies
-- **5.59%** anomaly rate
+| Gold ML product | Rows |
+|---|---:|
+| Supplier Risk Prediction | **356** |
+| Pricing Anomaly Prediction | **21,752** |
+| Savings Opportunity | **983** |
 
-Typical analytical fields:
-
-- PO item reference
-- anomaly score
-- anomaly flag
-
-This table is connected back to purchasing context so anomalies can be evaluated by supplier, category, spend, and business unit.
+The promotion process also validates Gold key mappings, analytical grain, score ranges, and reconciliation before semantic-model consumption.
 
 ---
 
-## `ml_savings_opportunity`
+## 8. Relationship Strategy
 
-**Purpose:** Prescriptive procurement opportunity output.
-
-### Grain
-
-Supplier-category opportunity.
-
-Validated synthetic snapshot:
-
-- **983** supplier-category opportunities
-- **955** positive savings opportunities
-- **471** actionable opportunities
-- **€97.55M** modeled potential annual savings
-
-The table is intentionally not merged into `fact_savings`.
-
-`fact_savings` represents the savings pipeline and realization process, while `ml_savings_opportunity` represents modeled future opportunity.
-
----
-
-# 6. Relationship Strategy
-
-The semantic model primarily uses **one-to-many dimension-to-fact relationships**.
-
-Conceptually:
+The model primarily follows **one-to-many dimension-to-fact relationships**.
 
 ```text
 Dimension 1 ───────< Fact many
 ```
 
-Examples:
+This supports consistent filtering without depending on unnecessary fact-to-fact relationships.
+
+Examples include:
 
 ```text
 dim_supplier      → fact_purchase_order
@@ -382,21 +304,16 @@ dim_category      → fact_purchase_order
 dim_category      → fact_savings
 
 dim_business_unit → fact_purchase_order
-dim_business_unit → fact_invoice
 dim_business_unit → fact_savings
 ```
 
-The goal is to avoid unnecessary fact-to-fact relationships.
-
-Where analytical comparison between facts is required, shared dimensions provide the filtering context.
+Where the report needs to compare multiple business processes, shared dimensions provide the analytical context.
 
 ---
 
-# 7. Date Roles
+## 9. Date Roles
 
-Procurement data contains multiple meaningful dates.
-
-Examples include:
+Procurement data contains multiple meaningful dates, including:
 
 - PO date
 - invoice date
@@ -405,128 +322,146 @@ Examples include:
 - supplier-performance period
 - prediction date
 
-The model uses a shared `dim_date`, with inactive relationships where appropriate.
+The semantic model uses a shared `dim_date` with active and inactive relationships where appropriate.
 
 DAX activates alternative date roles only when required.
 
-This avoids duplicating date logic and keeps time intelligence governed.
+### Prediction dates
+
+ML prediction dates are not treated as normal transaction dates.
+
+For example, the supplier-risk score shown in Power BI uses the latest prediction snapshot while operational supplier-performance KPIs can still be filtered historically.
+
+This preserves the difference between:
+
+```text
+Historical Operational Date
+        and
+ML Prediction Snapshot Date
+```
 
 ---
 
-# 8. Currency Modeling
+## 10. Currency Modeling
 
 The model separates:
 
 1. **source currency context**
 2. **governed EUR analytical values**
 
-EUR conversion occurs in Silver.
+EUR normalization occurs upstream in Silver.
 
-Gold therefore receives already-standardized values for cross-company reporting while retaining relevant currency references.
+Gold therefore receives standardized values for enterprise reporting while retaining relevant currency references.
 
-### Modeling rule
-
-Raw contract prices in one currency must not be compared directly with transaction unit prices expressed in another currency.
+**Important rule:** raw contract prices in one currency are not directly compared with transaction prices expressed in another currency.
 
 ---
 
-# 9. SCD2 Supplier Alignment
+## 11. SCD2 Supplier Alignment
 
-Supplier SCD2 requires facts to resolve to the correct supplier version.
+Supplier SCD2 requires facts to resolve to the correct historical supplier version.
 
 Conceptually:
 
 ```text
-Transaction date
+Transaction Date
+      +
+Supplier Business Key
       ↓
-Supplier business key
+EffectiveFrom <= Transaction Date
+      AND
+Transaction Date < EffectiveTo
       ↓
-Find supplier version where:
-EffectiveFrom <= TransactionDate
-AND
-TransactionDate < EffectiveTo
-      ↓
-Supplier surrogate key
+Correct Supplier Surrogate Key
 ```
 
-This ensures historical supplier analysis remains correct after supplier attributes change.
+Validation checks that:
 
-SCD2 alignment is validated before the model is considered reporting-ready.
+- supplier effective-date ranges do not overlap incorrectly
+- fact rows resolve to valid supplier versions
+- current/historical flags remain consistent
+- no unintended supplier-key gaps are introduced
 
 ---
 
-# 10. Data Quality Rules Affecting the Model
+## 12. Data Quality Controls Affecting the Model
 
-The Gold model is validated for issues that could produce incorrect reporting.
+The Gold model is validated for issues that could distort reporting.
 
 Key controls include:
 
 - duplicate fact grain
 - duplicate dimension keys
 - orphaned foreign keys
-- invalid SCD2 alignment
+- Supplier SCD2 alignment
 - spend reconciliation
 - contract-compliance reconciliation
 - ML output grain validation
 - ML score-range validation
 - savings reconciliation
 
-The validated DEV environment completed **64 validation rules with 64 PASS and 0 FAIL** in the final Fabric-side ML validation notebook.
+The final Fabric-side ML validation completed:
+
+**64 rules → 64 PASS → 0 FAIL**
+
+in the validated DEV environment.
+
+For the full validation framework, see [Data Quality & Validation](../data-quality.md).
 
 ---
 
-# 11. Semantic Model Responsibilities
+## 13. Semantic Model vs. Upstream Responsibilities
 
-The Gold model provides the structural analytical layer.
+The Gold and semantic layers have deliberately different responsibilities.
 
-The Direct Lake semantic model adds:
+### Upstream Fabric processing
+
+Handles:
+
+- cleansing
+- standardization
+- EUR conversion
+- contract/compliance classification
+- Supplier SCD Type 2
+- invoice matching
+- ML output promotion
+- validation and reconciliation
+
+### Direct Lake semantic model
+
+Handles:
 
 - relationships
-- active/inactive date roles
+- date-role behavior
 - DAX measures
 - KPI definitions
-- report-facing formatting and behavior
+- report-facing formatting and analytical behavior
 
-Core measures include:
-
-- Contract Compliance %
-- Maverick Spend %
-- Supplier OTD %
-- Supplier Quality Index
-- Three-Way Match %
-- Invoice Exception %
-- Supplier Risk Score
-- Pricing Anomaly Rate
-- Potential Annual Savings
-- Savings Forecast
-- Approved Savings
-- Realized Savings
-
-The semantic model should calculate business measures, but it should not recreate upstream cleansing or data-engineering logic.
+Power BI therefore does not recreate upstream data-engineering or ML logic.
 
 ---
 
-# 12. Model Design Summary
+## 14. Model Design Summary
 
-| Design area | Decision |
+| Area | Decision |
 |---|---|
 | Overall model | Star-schema-oriented |
 | Supplier history | SCD Type 2 |
-| Fact design | Explicit grain per business process |
+| Fact design | Explicit grain by business process |
 | Shared filtering | Conformed dimensions |
 | Currency | EUR normalization upstream in Silver |
 | Date handling | Shared date dimension with role-playing relationships |
 | ML predictions | Separate analytical tables |
-| ML consumption | Promoted back into Fabric Gold |
+| ML consumption | Promoted into Fabric Gold |
 | BI access | Direct Lake semantic model |
-| Validation | Reconciliation and referential-integrity checks before reporting |
+| Validation | Grain, key, reconciliation, and referential-integrity checks |
 
 ---
 
 ## Related Documentation
 
-- `README.md` — project overview
-- `docs/architecture/architecture.md` — platform architecture
-- `docs/data-quality.md` — validation and monitoring
-- `docs/ml/` — machine-learning implementation
-- `docs/cicd/` — source control and deployment
+- [Main README](../../README.md)
+- [Technical Architecture](architecture.md)
+- [Data Quality & Validation](../data-quality.md)
+- [ML Pipeline & Fabric Integration](../ml/ml-pipeline.md)
+- [Power BI Report Guide](../../power-bi/report-guide.md)
