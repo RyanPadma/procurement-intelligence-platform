@@ -37,7 +37,7 @@ Savings execution and realization
 **Audience:** CPO / Procurement Leadership  
 **Purpose:** Provide one management view of spend governance, supplier performance, risk, and savings potential.
 
-![Executive Overview](../../power-bi/screenshots/01-executive-overview.jpg)
+<img width="1252" height="685" alt="01-executive-overview" src="https://github.com/user-attachments/assets/e537d3f7-26f2-4994-8c85-a3e618bb36ac" />
 
 ### Headline KPIs
 
@@ -74,7 +74,7 @@ It combines current performance with forward-looking ML signals instead of separ
 **Audience:** Procurement Leadership / Category Managers  
 **Purpose:** Explain the financial scale and location of off-contract purchasing.
 
-![Spend and Contract Compliance](../../power-bi/screenshots/02-spend-compliance.jpg)
+<img width="1251" height="681" alt="02-spend-compliance" src="https://github.com/user-attachments/assets/05cd1fdf-0bc7-4a5f-bf8d-2df4382d65cc" />
 
 ### Headline KPIs
 
@@ -128,7 +128,7 @@ The page moves from the enterprise compliance rate to the specific suppliers and
 **Audience:** Supplier Management / Category Managers  
 **Purpose:** Combine operational supplier performance with predictive risk.
 
-![Supplier Performance and Risk](../../power-bi/screenshots/03-supplier-performance-risk.jpg)
+<img width="1246" height="682" alt="03-supplier-performance-risk" src="https://github.com/user-attachments/assets/132733a3-14c8-4866-91fb-a36a7cbaa82b" />
 
 ### Headline KPIs
 
@@ -187,7 +187,7 @@ ml_supplier_risk_prediction
 **Audience:** Strategic Sourcing / Category Managers  
 **Purpose:** Turn ML pricing signals into prioritized procurement opportunities.
 
-![Pricing Anomaly and Savings Intelligence](../../power-bi/screenshots/04-pricing-savings-intelligence.jpg)
+<img width="1240" height="688" alt="04-pricing-savings-intelligence" src="https://github.com/user-attachments/assets/a50f528c-a7ce-435c-a9b4-07de16d61089" />
 
 ### Headline KPIs
 
@@ -248,7 +248,7 @@ Pricing anomaly and opportunity measures use the latest available ML prediction 
 **Audience:** Procurement Leadership / Savings Owners  
 **Purpose:** Track execution of the synthetic savings portfolio separately from ML-generated future opportunity.
 
-![Savings Pipeline and Realization](../../power-bi/screenshots/05-savings-pipeline-realization.jpg)
+<img width="1246" height="690" alt="05-savings-pipeline-realization" src="https://github.com/user-attachments/assets/046ab8fd-f7da-4cca-9dba-d0c7a795a39a" />
 
 ### Headline KPIs
 
