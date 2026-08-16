@@ -65,17 +65,20 @@ Latest validated scoring population:
 
 Model experiments and metrics were tracked using MLflow.
 
+<img width="1899" height="846" alt="01-mlflow-supplier-risk-experiment" src="https://github.com/user-attachments/assets/f891f063-0dcd-4a55-b178-463b636de14c" />
+
+
 ## DB04 - Pricing Anomaly Feature Engineering
 
 Creates PO-item-level features for pricing anomaly detection.
 
 Feature engineering incorporates signals such as:
 
-Historical purchasing prices
-Contract price variance
-Category-level pricing behavior
-Supplier pricing behavior
-Transaction characteristics
+- Historical purchasing prices
+- Contract price variance
+- Category-level pricing behavior
+- Supplier pricing behavior
+- Transaction characteristics
 
 ## DB05 - Pricing Anomaly Detection
 
@@ -88,6 +91,9 @@ Latest validated scoring snapshot:
 - 5.59% anomaly rate
 
 A governed anomaly threshold is persisted downstream rather than relying directly on the default Isolation Forest prediction label.
+
+<img width="1911" height="873" alt="02-pricing-anomaly-results" src="https://github.com/user-attachments/assets/4241905d-d112-4d2c-ae8b-5e9ce97fa9ba" />
+
 
 ## DB06 - Savings Opportunity Engine
 
@@ -109,6 +115,9 @@ Latest validated synthetic portfolio results:
 - €97.55M modeled potential annual savings
 
 These values are simulated portfolio outputs and do not represent realized business savings.
+
+<img width="1905" height="867" alt="03-savings-opportunity-results" src="https://github.com/user-attachments/assets/87b404fd-08dd-4f8e-8117-3f0b07fcd4ef" />
+
 
 ## DB07 - ML Output Promotion
 
