@@ -1,8 +1,8 @@
 # Pricing Anomaly Detection
 
-This document summarizes the pricing-anomaly workflow implemented in Azure Databricks.
+This document explains the pricing-anomaly workflow implemented in **Azure Databricks** and how unusual purchasing-price behavior is scored, validated, and promoted into Microsoft Fabric Gold.
 
-> **Portfolio note:** The model uses synthetic procurement data. Anomalies identify unusual pricing patterns for review; they do not automatically represent confirmed overcharges.
+> **Portfolio note:** The model uses synthetic procurement data. Anomalies identify unusual pricing patterns for review; they do not automatically represent confirmed overcharges or realized savings.
 
 ---
 
@@ -11,18 +11,20 @@ This document summarizes the pricing-anomaly workflow implemented in Azure Datab
 The model identifies PO items whose purchasing prices behave unusually relative to historical and governed pricing context.
 
 ```text
-PO-item pricing history
+PO-Item Pricing History
         ↓
-Leakage-safe benchmarks
+Leakage-Safe Historical Benchmarks
         ↓
 Isolation Forest
         ↓
-Anomaly score and flag
+Anomaly Score & Flag
         ↓
-Fabric Gold → Power BI
+Fabric Gold
+        ↓
+Direct Lake → Power BI
 ```
 
-The output is intended to help procurement focus investigation on transactions with unusual price behavior and meaningful spend exposure.
+The objective is to help procurement prioritize transactions for investigation based on unusual pricing behavior and meaningful spend exposure.
 
 ---
 
@@ -30,35 +32,40 @@ The output is intended to help procurement focus investigation on transactions w
 
 `DB_04_Pricing_Anomaly_Feature_Engineering` operates at **PO-item grain**.
 
-The central design rule is:
+The central engineering rule is:
 
-> The current PO item's price never contributes to its own historical benchmark.
+> **The current PO item's price never contributes to its own historical benchmark.**
 
-Historical windows therefore use only transactions that occurred before the item being evaluated.
+Historical benchmarks therefore use only transactions available before the item being evaluated.
 
-Benchmarks are engineered at three levels:
+Benchmark levels include:
 
 - same material
 - same supplier + material
 - category
 
-Governed contract-price information is also carried into the feature set when available.
+Governed contract-price information is also included when available.
 
-The PO-item grain was validated across **75,994** eligible historical and current records.
+The PO-item grain was validated across:
+
+**75,994 eligible historical and current records**
+
+This ensures anomaly scoring is built on a controlled transaction population rather than on duplicated or mixed-grain records.
 
 ---
 
-## 3. Model Feature Contract
+## 3. Feature Contract
 
 The Isolation Forest uses **19 numeric features** covering:
 
 - price-to-history ratios
 - percentage deviations
-- price z-scores
+- historical price z-scores
 - supplier-material price variability
-- category deviations
+- category-level price behavior
 - governed contract-price variance
-- log unit price and quantity
+- log unit price
+- log quantity
 - historical benchmark availability
 
 Examples include:
@@ -72,43 +79,55 @@ SupplierMaterialHistoricalCVPct
 BenchmarkCoverageCount
 ```
 
-A rule-based extreme-price flag is retained only as a **diagnostic proxy**. It is **not used as a training target**.
+A rule-based extreme-price flag is retained only as a **diagnostic proxy**.
+
+It is **not used as a training target**.
+
+This distinction matters because the model remains unsupervised while still being evaluated against independent pricing signals.
 
 ---
 
 ## 4. Temporal Design
 
-The feature store contains **54,023 historical rows** through 2025.
+The historical feature store contains:
 
-Model development is deliberately separated by time:
+**54,023 rows through 2025**
+
+The workflow uses a deliberate temporal split:
 
 ```text
-2023–2024 → development
-2025      → untouched temporal diagnostic
-2023–2025 → final production training
-2026      → scoring
+2023–2024 → Model Development
+2025      → Untouched Temporal Diagnostic
+2023–2025 → Final Production Training
+2026      → Production Scoring
 ```
 
 | Population | Rows |
 |---|---:|
-| Development, 2023–2024 | 22,569 |
-| 2025 temporal diagnostic | 18,940 |
-| Production training, 2023–2025 | 41,509 |
-| 2026 scoring | 21,752 |
+| Development, 2023–2024 | **22,569** |
+| 2025 temporal diagnostic | **18,940** |
+| Production training, 2023–2025 | **41,509** |
+| 2026 scoring | **21,752** |
 
 All **21,752** 2026 pricing rows were model-eligible.
+
+This separation prevents the 2025 diagnostic period from influencing model-development decisions.
 
 ---
 
 ## 5. Isolation Forest
 
-Isolation Forest is used because the problem is naturally unsupervised: confirmed anomaly labels are not available.
+Isolation Forest is used because the problem is naturally **unsupervised**: confirmed anomaly labels are not available.
 
-The pipeline applies median imputation before the model.
+The modeling pipeline applies median imputation before Isolation Forest scoring.
 
-The development model uses a **5% review rate** to establish the anomaly threshold.
+During development:
 
-A normalized anomaly score from **0 to 100** is produced for business consumption.
+- a **5% review rate** is used to establish the anomaly threshold
+- the raw model output is converted into a normalized **0–100 anomaly score**
+- the governed anomaly threshold is persisted downstream rather than relying directly on the default Isolation Forest label
+
+This produces a business-friendly score while preserving the unsupervised modeling approach.
 
 ---
 
@@ -116,31 +135,39 @@ A normalized anomaly score from **0 to 100** is produced for business consumptio
 
 The untouched 2025 population is used to test whether the unsupervised ranking aligns with independent pricing signals.
 
+### Extreme-price proxy diagnostic
+
 | Metric | Result |
 |---|---:|
 | Predicted anomaly rate | **5.79%** |
-| Extreme-price proxy prevalence | 8.40% |
+| Extreme-price proxy prevalence | **8.40%** |
 | ROC-AUC vs. proxy | **0.7958** |
 | PR-AUC vs. proxy | **0.2857** |
-| Precision vs. proxy | 35.64% |
-| Recall vs. proxy | 24.58% |
+| Precision vs. proxy | **35.64%** |
+| Recall vs. proxy | **24.58%** |
 | Precision lift vs. proxy baseline | **4.24×** |
 
-A second diagnostic compares anomalies against governed contract-price exceptions:
+### Governed contract-price diagnostic
 
 | Metric | Result |
 |---|---:|
-| Overall contract-price exception rate | 1.38% |
+| Overall contract-price exception rate | **1.38%** |
 | Exception rate among anomalies | **11.03%** |
 | Enrichment lift | **7.97×** |
 
-These proxies are validation aids, not ground-truth anomaly labels.
+These proxies are **validation aids**, not ground-truth anomaly labels.
+
+The important conclusion is that the anomaly ranking shows meaningful enrichment against independent pricing signals, while still being presented honestly as an unsupervised detection model.
 
 ---
 
 ## 7. Production Scoring
 
-The final model is retrained on **41,509 rows from 2023–2025** and then scores 2026.
+After temporal diagnostics, the final model is retrained on:
+
+**41,509 rows from 2023–2025**
+
+It then scores the 2026 population.
 
 Validated result:
 
@@ -150,54 +177,196 @@ Validated result:
 | Pricing anomalies | **1,216** |
 | Anomaly rate | **5.59%** |
 
-The output is promoted into:
+<!-- SCREENSHOT: docs/screenshots/ml/05-pricing-anomaly-results.jpg -->
+![Pricing anomaly production scoring](../screenshots/ml/05-pricing-anomaly-results.jpg)
+
+*DB_05 production-scoring evidence confirming 21,752 PO items scored, 1,216 pricing anomalies, and a 5.59% anomaly rate.*
+
+The output is persisted as:
 
 ```text
 ml_pricing_anomaly_prediction
 ```
 
-Gold validation found:
+at:
 
-- duplicate grain: 0
-- missing PurchaseOrderFactKey: 0
-- missing dimensional keys: 0
-- invalid anomaly scores: 0
+```text
+PO Item × Prediction Date
+```
+
+grain.
 
 ---
 
-## 8. Business Use
+## 8. Fabric Gold Promotion
 
-An anomaly flag is not treated as proof of savings.
+Pricing-anomaly results are not consumed directly from Databricks by Power BI.
+
+They are validated and promoted into Fabric Gold through DB_07.
+
+Checks include:
+
+- source row-count reconciliation
+- unique PO-item prediction grain
+- PurchaseOrderFactKey completeness
+- dimensional-key completeness
+- valid anomaly-score range
+- valid anomaly classification
+
+<!-- SCREENSHOT: docs/screenshots/ml/07-ml-output-promotion-validation.jpg -->
+![Pricing anomaly Gold promotion](../screenshots/ml/07-ml-output-promotion-validation.jpg)
+
+*DB_07 evidence showing the pricing-anomaly output promoted together with the other validated ML data products into physical Fabric Gold tables.*
+
+Validated Gold result:
+
+| Check | Result |
+|---|---:|
+| Pricing rows written | **21,752** |
+| Duplicate grain | **0** |
+| Missing PurchaseOrderFactKey | **0** |
+| Missing dimensional keys | **0** |
+| Invalid anomaly scores | **0** |
+
+Post-write pricing-anomaly classification reconciliation difference:
+
+**0**
+
+---
+
+## 9. Semantic-Model Consumption
+
+The pricing-anomaly output remains at PO-item prediction grain.
+
+```text
+fact_purchase_order
+        +
+ml_pricing_anomaly_prediction
+        ↓
+Supplier / Material / Category / Contract Context
+```
+
+This allows the Direct Lake semantic model to evaluate anomaly scores together with:
+
+- eligible spend
+- supplier
+- material
+- category
+- business unit
+- contract context
+- pricing exposure
+
+The model output therefore becomes useful as a governed analytical signal rather than as an isolated ML result.
+
+---
+
+## 10. Business Use
+
+An anomaly is not treated as proof of savings or overpayment.
 
 Instead:
 
 ```text
-Anomaly
-   +
+Pricing Anomaly
+      +
 Spend Exposure
-   +
+      +
 Supplier / Material / Category Context
-   +
+      +
 Contract Pricing Evidence
-        ↓
+      ↓
 Procurement Review
 ```
 
-The model therefore supports investigation and also feeds the downstream Savings Opportunity Engine.
+Examples of appropriate use include:
+
+- prioritizing PO items for commercial review
+- identifying supplier/material combinations with unusual pricing
+- comparing anomaly exposure across categories
+- supporting contract-price investigation
+- feeding the downstream Savings Opportunity Engine
+
+The model supports **investigation and prioritization**, not automated commercial conclusions.
 
 ---
 
-## 9. Key Engineering Controls
+## 11. Relationship to Savings Opportunity
 
-- PO-item grain is explicitly validated.
-- The current transaction is excluded from its own benchmark.
-- Historical benchmark availability is modeled explicitly.
-- A diagnostic proxy is kept separate from training.
-- 2025 is untouched during development.
-- Production training incorporates 2025 only after temporal diagnostics.
-- Anomaly score ranges and row counts are validated.
-- MLflow retains both diagnostic and production model runs.
-- Databricks results are reconciled after promotion to Fabric Gold.
+Pricing anomaly is one input into the prescriptive savings layer.
+
+```text
+Pricing Signal
+      +
+Maverick Spend
+      +
+Supplier Risk
+      +
+Eligible Spend
+      ↓
+Savings Opportunity Engine
+```
+
+The pricing signal is therefore separated from the savings calculation itself.
+
+An anomaly may indicate unusual pricing without necessarily producing a modeled savings opportunity.
+
+For the downstream logic, see [Savings Opportunity Engine](savings-opportunity.md).
+
+---
+
+## 12. Key Engineering Controls
+
+The workflow demonstrates:
+
+- explicit PO-item analytical grain
+- exclusion of the current transaction from its own benchmark
+- leakage-safe historical windows
+- modeled historical benchmark coverage
+- diagnostic proxy kept separate from training
+- untouched 2025 temporal diagnostic
+- production training only after temporal evaluation
+- normalized anomaly-score output
+- governed anomaly threshold
+- MLflow tracking of diagnostic and production runs
+- Gold key and grain validation
+- Databricks-to-Fabric reconciliation
+
+---
+
+## 13. Implemented vs. Production Extensions
+
+### Implemented
+
+- leakage-safe historical benchmark engineering
+- PO-item feature store
+- 19-feature Isolation Forest contract
+- temporal diagnostic design
+- proxy-based independent validation
+- contract-price enrichment diagnostic
+- final 2023–2025 production training
+- 2026 scoring
+- normalized anomaly score
+- Fabric Gold promotion
+- cross-platform reconciliation
+- semantic-model consumption
+- downstream savings integration
+
+### Production extensions
+
+A production pricing-anomaly solution would additionally require:
+
+- confirmed investigation outcomes
+- analyst feedback loop
+- anomaly disposition tracking
+- dynamic threshold governance
+- alerting
+- model drift monitoring
+- feature drift monitoring
+- retraining policy
+- automated case management
+- formal commercial review ownership
+
+These are documented as productionization extensions rather than represented as completed portfolio functionality.
 
 ---
 
@@ -207,4 +376,13 @@ The model therefore supports investigation and also feeds the downstream Savings
 - `DB_05_Train_Pricing_Anomaly_Model`
 - `DB_07_Score_and_Write_ML_Outputs`
 
-Related docs: `supplier-risk.md`, `savings-opportunity.md`, `data-quality.md`, and `ml-pipeline.md`.
+## Related Documentation
+
+- [Main README](../../README.md)
+- [Technical Architecture](../architecture/architecture.md)
+- [Data Model](../architecture/data-model.md)
+- [Data Quality & Validation](../data-quality.md)
+- [ML Pipeline & Fabric Integration](ml-pipeline.md)
+- [Supplier Risk Modeling](supplier-risk.md)
+- [Savings Opportunity Engine](savings-opportunity.md)
+- [Power BI Report Guide](../../power-bi/report-guide.md)
