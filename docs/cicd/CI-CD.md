@@ -31,7 +31,8 @@ Two mechanisms are intentionally separated:
 
 The Development workspace is connected directly to the GitHub repository and the `dev` branch.
 
-![Uploading 4. Git Integration.jpg…](<img width="1014" height="924" alt="4  Git Integration" src="https://github.com/user-attachments/assets/94d0d466-daa0-43e3-8401-caa45293b6f7" />)
+<img width="1014" height="924" alt="4  Git Integration" src="https://github.com/user-attachments/assets/dbcc387d-eb07-4508-b854-da0225339edd" />
+
 
 The connection uses:
 
@@ -45,7 +46,7 @@ Fabric-generated item definitions are therefore version controlled under `/fabri
 
 The synchronized repository contains Fabric notebooks, Lakehouse definitions, semantic-model artifacts, and Power BI report artifacts.
 
-![Fabric artifacts in GitHub](../screenshots/cicd/01-github-fabric-artifacts.jpg)
+<img width="1894" height="993" alt="1  GIthub repository showing Fabric" src="https://github.com/user-attachments/assets/bbfd78f8-3fba-4466-9d92-8abcf0289615" />
 
 ---
 
@@ -58,13 +59,13 @@ The repository uses a simple two-branch strategy:
 | `dev` | Active Fabric development |
 | `main` | Reviewed stable baseline |
 
-![GitHub dev and main branches](../screenshots/cicd/02-dev-main-branches.jpg)
+<img width="1900" height="769" alt="2  Dev and main branches" src="https://github.com/user-attachments/assets/8a46ef91-9b12-4f77-97fa-c995e42452ca" />
 
 Changes are promoted through a pull request rather than committed directly from development into the stable baseline.
 
 The initial platform baseline was successfully merged from `dev` into `main`.
 
-![Merged pull request](../screenshots/cicd/03-merged-pull-request.jpg)
+<img width="1354" height="876" alt="3  Merged pull request" src="https://github.com/user-attachments/assets/3032db47-2175-4583-be7a-cd9d6d7d6abc" />
 
 The initial PR included the version-controlled Fabric platform baseline, including notebooks, Lakehouse definitions, the semantic model, and report artifacts.
 
@@ -90,13 +91,13 @@ A three-stage Fabric deployment pipeline is configured:
 Development → Test → Production
 ```
 
-![Fabric DEV TEST PROD deployment pipeline](../screenshots/cicd/05-fabric-deployment-pipeline.jpg)
+<img width="1566" height="583" alt="5  Deployment Pipeline" src="https://github.com/user-attachments/assets/d76ab304-eeb6-4d00-ac7a-8e8f0d952569" />
 
 The **Development → Test** promotion has been executed successfully.
 
 The deployment history confirms a successful Test deployment containing **33 Fabric items**.
 
-![Successful Test deployment history](../screenshots/cicd/06-test-deployment-history.jpg)
+<img width="1912" height="826" alt="6" src="https://github.com/user-attachments/assets/17829a13-4571-4923-a072-5ecb6d6ecc7c" />
 
 After deployment, TEST notebook dependencies were rebound to TEST workspace artifacts and the deployed environment was validated.
 
