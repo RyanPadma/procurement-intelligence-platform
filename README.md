@@ -89,7 +89,7 @@ flowchart LR
 
 Bronze preserves synthetic ERP-style master and transaction data. Silver standardizes and enriches it with governed procurement logic. Gold contains the dimensional model, KPI-ready fact tables, Supplier SCD Type 2, and promoted ML outputs.
 
-<img width="1225" height="817" alt="01-fabric-platform-artifacts" src="https://github.com/user-attachments/assets/b23a4f81-be37-45d1-88fb-5614de7899d3" /><img width="1399" height="541" alt="03-core-semantic-model" src="https://github.com/user-attachments/assets/781052b3-d927-4596-9cac-b178fb409703" />
+<img width="1225" height="817" alt="01-fabric-platform-artifacts" src="https://github.com/user-attachments/assets/b23a4f81-be37-45d1-88fb-5614de7899d3" />
 
 
 *Fabric implementation showing the Bronze, Silver, and Gold Lakehouses together with the validation notebook, semantic model, and Power BI report artifacts.*
