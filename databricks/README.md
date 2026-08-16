@@ -28,9 +28,9 @@ Direct Lake Semantic Model
 Power BI
 ```
 
-#Notebooks
+# Notebooks
 
-##DB01 - OneLake Access
+## DB01 - OneLake Access
 
 Establishes secure connectivity between Azure Databricks and Microsoft Fabric OneLake.
 
