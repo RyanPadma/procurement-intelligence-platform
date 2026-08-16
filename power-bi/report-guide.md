@@ -1,12 +1,26 @@
 # Power BI Report Guide
 
-The Power BI report is the decision layer of the Enterprise Procurement Intelligence Platform. It combines governed procurement KPIs, supplier-performance analytics, ML predictions, and savings intelligence through a **Direct Lake semantic model**.
+The Power BI report is the **decision layer** of the Enterprise Procurement Intelligence Platform. It combines governed procurement KPIs, supplier-performance analytics, ML predictions, and savings intelligence through a **Direct Lake semantic model**.
 
 > **Portfolio note:** All values are generated from synthetic data and are presented only to demonstrate the analytical solution.
 
 ---
 
-## Report at a Glance
+## 1. Report at a Glance
+
+The report is designed as a decision journey rather than a collection of disconnected dashboards.
+
+```text
+Executive Performance
+        ↓
+Spend Governance
+        ↓
+Supplier Performance & Risk
+        ↓
+Pricing & Savings Opportunity
+        ↓
+Savings Execution & Realization
+```
 
 | Page | Primary question |
 |---|---|
@@ -16,28 +30,20 @@ The Power BI report is the decision layer of the Enterprise Procurement Intellig
 | Pricing Anomaly & Savings Intelligence | Where do pricing signals indicate investigation or negotiation potential? |
 | Savings Pipeline & Realization | How is the savings portfolio progressing from forecast to realization? |
 
-The report follows a deliberate progression:
+<!-- SCREENSHOT: power-bi/screenshots/01-executive-overview.jpg -->
+![Enterprise Procurement Intelligence - Executive Overview](screenshots/01-executive-overview.jpg)
 
-```text
-Executive performance
-        ↓
-Spend governance
-        ↓
-Supplier performance and risk
-        ↓
-Pricing and savings opportunity
-        ↓
-Savings execution and realization
-```
+*Executive landing page combining spend governance, supplier performance, predictive risk, realized savings, and modeled savings opportunity.*
 
 ---
 
-# 1. Executive Overview
+# 2. Executive Overview
 
 **Audience:** CPO / Procurement Leadership  
 **Purpose:** Provide one management view of spend governance, supplier performance, risk, and savings potential.
 
-<img width="1252" height="685" alt="01-executive-overview" src="https://github.com/user-attachments/assets/e537d3f7-26f2-4994-8c85-a3e618bb36ac" />
+<!-- SCREENSHOT: power-bi/screenshots/01-executive-overview.jpg -->
+![Executive Overview](screenshots/01-executive-overview.jpg)
 
 ### Headline KPIs
 
@@ -53,28 +59,31 @@ Savings execution and realization
 ### What the page shows
 
 - **Spend and Contract Compliance Trend** combines yearly eligible spend with compliance development.
-- **Top 10 Categories by Annual Savings Opportunity** highlights where modeled savings potential is concentrated.
-- **Supplier Risk Ranking** combines risk score with eligible-spend exposure.
-- Year, Business Unit, and Category filters allow management-level slicing.
+- **Top 10 Categories by Annual Savings Opportunity** shows where modeled savings potential is concentrated.
+- **Supplier Risk Ranking** connects risk score with spend exposure.
+- **Year, Business Unit, and Category** filters support management-level slicing.
 
 ### Decision supported
 
-The page answers:
-
 > **Where should procurement leadership focus first?**
 
-It combines current performance with forward-looking ML signals instead of separating them into isolated dashboards.
+The page deliberately combines current performance and forward-looking signals instead of separating them into different reporting experiences.
 
-**Modeling note:** ML risk and opportunity KPIs use the latest available prediction snapshot.
+### Modeling behavior
+
+ML risk and opportunity KPIs use the **latest available prediction snapshot**.
+
+Operational KPIs continue to respect their historical date logic.
 
 ---
 
-# 2. Spend & Contract Compliance
+# 3. Spend & Contract Compliance
 
 **Audience:** Procurement Leadership / Category Managers  
 **Purpose:** Explain the financial scale and location of off-contract purchasing.
 
-<img width="1251" height="681" alt="02-spend-compliance" src="https://github.com/user-attachments/assets/05cd1fdf-0bc7-4a5f-bf8d-2df4382d65cc" />
+<!-- SCREENSHOT: power-bi/screenshots/02-spend-compliance.jpg -->
+![Spend and Contract Compliance](screenshots/02-spend-compliance.jpg)
 
 ### Headline KPIs
 
@@ -87,13 +96,29 @@ It combines current performance with forward-looking ML signals instead of separ
 | Maverick Spend | **32.81%** |
 | Purchase Orders | **20K** |
 
+### Analytical flow
+
+```text
+Enterprise Compliance Rate
+        ↓
+Trend Over Time
+        ↓
+Category Drivers
+        ↓
+Supplier Drivers
+        ↓
+Business Unit Comparison
+        ↓
+Sourcing / Contract Action
+```
+
 ### Main analytical views
 
 **Spend and Contract Compliance Trend**  
 Shows how eligible spend and compliance changed from 2022 through 2026.
 
 **Top Categories by Maverick Spend**  
-Identifies the categories driving the largest off-contract spend exposure.
+Identifies categories creating the largest off-contract spend exposure.
 
 **Top Suppliers by Maverick Spend**  
 Provides supplier-level detail including:
@@ -109,26 +134,17 @@ Compares compliant and maverick-spend shares across organizational units.
 
 ### Decision supported
 
-```text
-Maverick Spend
-      ↓
-Category / Supplier / Business Unit
-      ↓
-Source of leakage identified
-      ↓
-Contract or sourcing action
-```
-
-The page moves from the enterprise compliance rate to the specific suppliers and categories creating the leakage.
+The page moves from the enterprise compliance rate to the suppliers, categories, and business units creating the leakage.
 
 ---
 
-# 3. Supplier Performance & Risk
+# 4. Supplier Performance & Risk
 
 **Audience:** Supplier Management / Category Managers  
-**Purpose:** Combine operational supplier performance with predictive risk.
+**Purpose:** Combine historical operational performance with predictive supplier risk.
 
-<img width="1246" height="682" alt="03-supplier-performance-risk" src="https://github.com/user-attachments/assets/132733a3-14c8-4866-91fb-a36a7cbaa82b" />
+<!-- SCREENSHOT: power-bi/screenshots/03-supplier-performance-risk.jpg -->
+![Supplier Performance and Risk](screenshots/03-supplier-performance-risk.jpg)
 
 ### Headline KPIs
 
@@ -147,13 +163,13 @@ The page moves from the enterprise compliance rate to the specific suppliers and
 Tracks OTD and Supplier Quality Index over time.
 
 **Top 10 Suppliers by Risk Score**  
-Surfaces the suppliers with the highest latest ML risk scores.
+Surfaces suppliers with the highest latest ML risk scores.
 
 **Top Suppliers by Overdue Deliveries**  
 Highlights current operational delivery issues.
 
 **Supplier Performance & Risk Detail**  
-Brings operational and predictive indicators into one supplier-level view:
+Combines:
 
 - Supplier OTD %
 - Supplier Quality Index
@@ -164,11 +180,11 @@ Brings operational and predictive indicators into one supplier-level view:
 
 ### Important filter behavior
 
-`Performance Year` filters the operational supplier-performance KPIs.
+`Performance Year` filters operational supplier-performance KPIs.
 
-Supplier-risk metrics use the **latest available ML prediction snapshot** rather than pretending the prediction is an ordinary historical transaction.
+Supplier-risk measures use the **latest available ML prediction snapshot** rather than treating the prediction as an ordinary historical transaction.
 
-This reflects the underlying data model, where:
+This reflects the data model:
 
 ```text
 fact_supplier_performance
@@ -178,16 +194,19 @@ ml_supplier_risk_prediction
 
 ### Decision supported
 
-> **Which suppliers need attention because performance weakness or predicted risk is combined with meaningful procurement exposure?**
+> **Which suppliers require attention because weak performance or predicted risk is combined with meaningful procurement exposure?**
+
+This is intentionally an **exposure-based prioritization** view rather than a simple supplier scorecard.
 
 ---
 
-# 4. Pricing Anomaly & Savings Intelligence
+# 5. Pricing Anomaly & Savings Intelligence
 
 **Audience:** Strategic Sourcing / Category Managers  
-**Purpose:** Turn ML pricing signals into prioritized procurement opportunities.
+**Purpose:** Turn ML pricing signals into prioritized commercial opportunities.
 
-<img width="1240" height="688" alt="04-pricing-savings-intelligence" src="https://github.com/user-attachments/assets/a50f528c-a7ce-435c-a9b4-07de16d61089" />
+<!-- SCREENSHOT: power-bi/screenshots/04-pricing-savings-intelligence.jpg -->
+![Pricing Anomaly and Savings Intelligence](screenshots/04-pricing-savings-intelligence.jpg)
 
 ### Headline KPIs
 
@@ -200,28 +219,7 @@ ml_supplier_risk_prediction
 | Potential Annual Savings | **€97.55M** |
 | Actionable Savings | **€96.93M** |
 
-### Main analytical views
-
-**Top Categories by Pricing Anomalies**  
-Shows where unusual transaction pricing occurs most frequently.
-
-**Top Categories by Savings Opportunity**  
-Ranks categories by modeled savings potential.
-
-**Suppliers with Highest Pricing Anomaly Exposure**  
-Combines anomaly count/rate with the eligible spend affected by anomalous transactions.
-
-**Top Supplier-Category Savings Opportunities**  
-Turns ML and procurement signals into a sourcing action list containing:
-
-- supplier
-- category
-- potential savings
-- actionable savings
-- negotiation priority
-- priority score
-
-### Decision supported
+### Analytical flow
 
 ```text
 Pricing Anomaly
@@ -237,18 +235,50 @@ Supplier-Category Opportunity
 Negotiation Priority
 ```
 
-This is the page where the platform moves from **predictive analytics to prescriptive procurement action**.
+### Main analytical views
 
-Pricing anomaly and opportunity measures use the latest available ML prediction snapshot.
+**Top Categories by Pricing Anomalies**  
+Shows where unusual purchasing-price behavior occurs most frequently.
+
+**Top Categories by Savings Opportunity**  
+Ranks categories by modeled savings potential.
+
+**Suppliers with Highest Pricing Anomaly Exposure**  
+Combines anomaly rate and count with the spend affected by anomalous transactions.
+
+**Top Supplier-Category Savings Opportunities**  
+Turns analytical signals into a sourcing action list containing:
+
+- supplier
+- category
+- potential savings
+- actionable savings
+- negotiation priority
+- priority score
+
+### Decision supported
+
+This page is where the platform moves from:
+
+```text
+Predictive Analytics
+        ↓
+Prescriptive Procurement Action
+```
+
+Pricing anomaly and savings-opportunity measures use the **latest available ML prediction snapshot**.
+
+An anomaly is not treated as confirmed overpayment, and modeled potential savings are not treated as realized results.
 
 ---
 
-# 5. Savings Pipeline & Realization
+# 6. Savings Pipeline & Realization
 
 **Audience:** Procurement Leadership / Savings Owners  
-**Purpose:** Track execution of the synthetic savings portfolio separately from ML-generated future opportunity.
+**Purpose:** Track the execution of the synthetic savings portfolio separately from ML-generated opportunity.
 
-<img width="1246" height="690" alt="05-savings-pipeline-realization" src="https://github.com/user-attachments/assets/046ab8fd-f7da-4cca-9dba-d0c7a795a39a" />
+<!-- SCREENSHOT: power-bi/screenshots/05-savings-pipeline-realization.jpg -->
+![Savings Pipeline and Realization](screenshots/05-savings-pipeline-realization.jpg)
 
 ### Headline KPIs
 
@@ -264,16 +294,16 @@ Pricing anomaly and opportunity measures use the latest available ML prediction 
 ### Main analytical views
 
 **Savings Pipeline & Realization Trend**  
-Compares forecasted, approved, and realized savings across the savings timeline.
+Compares forecasted, approved, and realized savings through the portfolio timeline.
 
 **Top Categories by Weighted Savings Forecast**  
-Highlights where the active savings pipeline is concentrated.
+Shows where the active savings pipeline is concentrated.
 
 **Approved vs. Realized Savings by Business Unit**  
-Shows where approved savings are translating into realized results.
+Highlights where approved value is translating into realized results.
 
 **Savings Project Portfolio**  
-Provides project-level execution detail including:
+Provides execution-level detail including:
 
 - project
 - supplier
@@ -289,26 +319,28 @@ Provides project-level execution detail including:
 The report deliberately separates:
 
 ```text
-Modeled opportunity
 ml_savings_opportunity
+→ Modeled future opportunity
 ```
 
 from:
 
 ```text
-Savings execution
 fact_savings
+→ Forecast / approval / realization
 ```
 
 Therefore **€97.55M Potential Annual Savings** is not treated as realized savings.
 
-The savings pipeline independently tracks forecast, approval, implementation, and realization.
+### Decision supported
+
+> **Is the procurement savings pipeline converting from forecast into approved and realized value?**
 
 ---
 
-# 6. Cross-Page Design
+# 7. Cross-Page Business Narrative
 
-The five pages are connected through a common business narrative.
+The five pages are connected through one procurement-management story.
 
 ### Spend governance
 
@@ -351,73 +383,118 @@ Pricing + Compliance + Risk
 → €68.63M Realized
 ```
 
-This progression keeps **opportunity identification** separate from **savings realization**.
+The key design principle is:
+
+> **Opportunity identification and savings realization remain separate analytical processes.**
 
 ---
 
-# 7. Semantic Model Principles Visible in the Report
+# 8. Semantic Model Behind the Report
 
-The report consumes a governed **Direct Lake semantic model**.
+The report consumes a governed **Direct Lake semantic model** rather than implementing business logic independently on each page.
 
-Several modeling decisions are visible in the report behavior:
+### Core analytical model
 
-- Procurement KPIs use consistent semantic-model measures across pages.
-- Supplier operational history and ML risk predictions remain at different grains.
-- ML pages use the latest prediction snapshot.
+<!-- SCREENSHOT: docs/screenshots/fabric/03-core-semantic-model.jpg -->
+![Core analytical semantic model](../docs/screenshots/fabric/03-core-semantic-model.jpg)
+
+*Core semantic-model evidence showing shared procurement dimensions connected to purchase-order, invoice, supplier-performance, and savings facts.*
+
+### ML extension
+
+<!-- SCREENSHOT: docs/screenshots/fabric/04-ml-semantic-model-extension.jpg -->
+![ML semantic model extension](../docs/screenshots/fabric/04-ml-semantic-model-extension.jpg)
+
+*ML extension showing supplier-risk, pricing-anomaly, and savings-opportunity tables connected to governed Gold dimensions.*
+
+### Modeling principles visible in the report
+
+- Procurement KPIs use reusable semantic-model measures across pages.
+- Supplier operational history and ML risk remain at different grains.
+- ML measures use the latest prediction snapshot where appropriate.
 - Historical operational KPIs retain their own date filtering.
-- Currency-normalized financial measures are consumed from governed upstream data.
-- Savings opportunity and savings realization remain separate analytical processes.
+- Currency-normalized financial measures are produced upstream.
+- Savings opportunity and savings realization remain separate.
+- Power BI does not recreate data-engineering or ML logic.
 
-Power BI is therefore primarily responsible for **business interaction and presentation**, not data cleansing or ML logic.
+For full model details, see the [Data Model](../docs/architecture/data-model.md).
 
 ---
 
-# 8. Report Design Strengths
+# 9. Report Design Principles
 
-The implemented report follows four useful design principles.
+The report follows four deliberate design principles.
 
-### KPI-first
+## KPI-first
 
-Each page starts with a compact KPI strip before moving into diagnostic detail.
+Each page begins with a compact KPI strip so the user sees the business state before moving into diagnostics.
 
-### Overview → Driver → Detail
+## Overview → Driver → Detail
 
 Most pages follow the same analytical pattern:
 
 ```text
 Headline KPI
     ↓
-Trend / ranking
+Trend / Ranking
     ↓
-Supplier or category driver
+Category or Supplier Driver
     ↓
-Detailed action table
+Detailed Action View
 ```
 
-### Consistent filtering
+## Consistent filtering
 
-Slicers are positioned consistently at the top of each page and adapt to the business process being analyzed.
+Slicers remain visually consistent across pages while adapting to the business process being analyzed.
 
-### ML with business context
+## ML with business context
 
-Risk scores and anomaly flags are never shown in isolation. They are connected to:
+Risk scores and anomaly flags are never presented as standalone technical outputs.
+
+They are connected to:
 
 - spend
 - supplier
 - category
 - operational performance
-- savings potential
+- savings opportunity
+- negotiation priority
 
-That makes the ML outputs useful to procurement rather than merely technically interesting.
+This makes the ML outputs useful to procurement rather than merely technically interesting.
 
 ---
 
-# 9. Screenshot Assets
+# 10. What the Report Demonstrates
 
-Recommended repository structure:
+The reporting layer demonstrates more than dashboard design.
+
+It shows how:
+
+```text
+Governed Procurement Data
+        ↓
+Reusable Semantic Measures
+        ↓
+Historical Performance
+        +
+ML Predictions
+        +
+Prescriptive Opportunity
+        ↓
+Management Decision Support
+```
+
+The report therefore serves as the final consumption layer of the wider engineering platform rather than as an isolated BI artifact.
+
+---
+
+# 11. Screenshot Assets
+
+Repository structure:
 
 ```text
 power-bi/
+├── report-guide.md
 ├── screenshots/
 │   ├── 01-executive-overview.jpg
 │   ├── 02-spend-compliance.jpg
@@ -427,17 +504,20 @@ power-bi/
 └── theme/
 ```
 
-One full-page screenshot per report page is sufficient for the portfolio.
+The full-page screenshots are intended for portfolio review.
 
-The Fabric-generated report and semantic-model definitions remain under `/fabric`; `/power-bi` contains presentation-friendly assets for GitHub reviewers.
+The Fabric-generated report and semantic-model definitions remain under `/fabric`; `/power-bi` contains presentation-oriented assets for GitHub reviewers.
 
 ---
 
 ## Related Documentation
 
-- `README.md` — project overview
-- `docs/architecture/architecture.md` — solution architecture
-- `docs/architecture/data-model.md` — analytical model
-- `docs/data-quality.md` — validation framework
-- `docs/ml/` — ML and prescriptive analytics
-- `docs/cicd/CI-CD.md` — source control and deployment
+- [Main README](../README.md)
+- [Technical Architecture](../docs/architecture/architecture.md)
+- [Data Model](../docs/architecture/data-model.md)
+- [Data Quality & Validation](../docs/data-quality.md)
+- [ML Pipeline & Fabric Integration](../docs/ml/ml-pipeline.md)
+- [Supplier Risk Modeling](../docs/ml/supplier-risk.md)
+- [Pricing Anomaly Detection](../docs/ml/pricing-anomaly.md)
+- [Savings Opportunity Engine](../docs/ml/savings-opportunity.md)
+- [CI/CD & Deployment](../docs/cicd/CI-CD.md)
