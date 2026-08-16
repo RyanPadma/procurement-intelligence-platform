@@ -1,230 +1,184 @@
 # Enterprise Procurement Intelligence Platform
-## Data Quality and Validation
+## Data Quality & Validation
 
-This document describes how data quality is validated across the procurement analytics platform.
+This document explains how data quality is validated across the procurement analytics platform from source generation through Fabric Gold and ML output promotion.
 
-> **Scope:** The project uses synthetic data. Validation results demonstrate engineering controls within the portfolio implementation and should not be interpreted as production SLAs.
+> **Portfolio note:** The project uses synthetic data. Validation results demonstrate implemented engineering controls within the portfolio environment and are not production SLAs.
 
 ---
 
 ## 1. Validation Strategy
 
-Data quality is embedded throughout the platform rather than performed only at the reporting stage.
-
-The validation flow follows the data architecture:
+Data quality is embedded throughout the platform rather than treated as a final reporting check.
 
 ```text
 Bronze source validation
         ↓
 Silver transformation validation
         ↓
-Gold model validation
+Gold dimensional-model validation
         ↓
 Databricks ML validation
         ↓
-Fabric ML output validation
+Fabric ML Gold promotion validation
         ↓
-Semantic model / reporting reconciliation
+Semantic-model consumption
 ```
 
-The goal is to detect problems as close as possible to the layer where they are introduced.
+The objective is simple:
+
+> **Catch structural, financial, relational, and ML-output issues before they reach Power BI.**
 
 ---
 
 ## 2. Validation Principles
 
-The project follows five main principles.
+The project follows five core principles.
 
-### Validate the expected grain
+### Validate the intended grain
 
-Every table should contain records at its intended analytical grain.
+Every analytical table has a defined grain.
 
 Examples:
 
-- purchase-order facts should not duplicate PO-item spend
-- supplier-risk predictions should remain at supplier prediction-snapshot grain
-- savings opportunities should remain at supplier-category grain
+```text
+fact_purchase_order
+→ PO-item analytical grain
 
-### Reconcile between layers
+ml_supplier_risk_prediction
+→ Supplier × Prediction Date
 
-Important totals and business classifications are checked between upstream and downstream datasets.
+ml_pricing_anomaly_prediction
+→ PO Item × Prediction Date
+
+ml_savings_opportunity
+→ Supplier × Category × Prediction Date
+```
+
+Duplicate detection therefore uses business-grain keys rather than relying only on row counts.
+
+### Reconcile important measures
+
+Key values are checked between layers so transformation logic does not silently create or remove business value.
 
 Examples include:
 
-- spend reconciliation
-- contract-compliance reconciliation
-- savings reconciliation
-- Databricks-to-Fabric ML reconciliation
+- eligible spend
+- compliant vs. maverick spend
+- savings components
+- ML output row counts
+- Databricks-to-Fabric promotion totals
 
 ### Validate relationships
 
-Gold facts and dimensions are checked for broken relationships and invalid historical alignment.
+Gold facts and ML outputs are checked for:
+
+- missing surrogate keys
+- orphaned relationships
+- invalid Supplier SCD2 alignment
+- incomplete dimension mapping
 
 ### Validate business rules
 
-Technical correctness alone is not sufficient.
+Technical correctness alone is not enough.
 
-Procurement logic such as contract compliance, supplier history, invoice matching, and ML outputs must also produce logically consistent results.
+The platform also checks procurement logic such as:
+
+- contract-compliance reconciliation
+- invoice matching
+- supplier history alignment
+- savings plausibility
+- ML score ranges
 
 ### Persist important validation outputs
 
-Data-quality results are retained as monitoring outputs where appropriate rather than existing only as temporary notebook messages.
+Validation results are retained where appropriate so quality evidence is auditable after notebook execution.
 
 ---
 
-# 3. Validation by Data Layer
+## 3. Validation by Layer
 
-## Bronze Validation
-
-Bronze represents synthetic ERP-style source data.
-
-Typical validation checks include:
-
-- expected schema
-- non-empty output
-- required business keys
-- duplicate source keys
-- valid quantities and amounts
-- valid foreign-key references
-- valid date ranges
-
-The objective is to prevent malformed synthetic source records from propagating into Silver.
+| Layer | Main controls |
+|---|---|
+| Bronze | schema, required keys, valid ranges, duplicate source keys |
+| Silver | standardization, EUR conversion, contract logic, invoice matching |
+| Gold | fact grain, dimension uniqueness, SCD2, referential integrity |
+| Databricks ML | feature/score validity, coverage, output grain |
+| Fabric ML Gold | surrogate-key mapping, reconciliation, persisted output validation |
 
 ---
 
-## Silver Validation
+# 4. Bronze Validation
 
-Silver contains standardized and business-enriched data.
+Bronze contains synthetic ERP-style source data.
 
-Typical validation areas include:
+Typical checks include:
+
+- output is not empty
+- required source keys are populated
+- expected columns exist
+- quantities and amounts are within valid ranges
+- foreign-key relationships are valid
+- dates fall within expected periods
+- duplicate source keys are controlled
+
+The goal is to prevent malformed synthetic records from propagating into Silver.
+
+---
+
+# 5. Silver Validation
+
+Silver standardizes Bronze data and applies procurement business logic.
+
+Validation covers:
 
 - datatype consistency
-- duplicate removal
-- missing-value handling
+- duplicate handling
+- missing-value treatment
 - EUR conversion completeness
 - contract mapping
 - maverick-spend classification
 - invoice matching
-- supplier performance derivation
+- supplier delivery and quality derivation
 
-Silver validation checks both technical transformation quality and procurement business logic.
+### Currency control
+
+EUR-normalized analytical values must reconcile to governed exchange-rate logic.
+
+Raw source-currency values remain available so conversion issues can be traced rather than hidden.
 
 ---
 
-## Gold Validation
+# 6. Gold Model Validation
 
-Gold is the reporting and analytical consumption layer.
+Gold is the main analytical consumption layer.
 
 Validation focuses on:
 
-- fact-table grain
-- dimension-key uniqueness
+- explicit fact grain
+- unique dimension keys
 - referential integrity
-- SCD Type 2 alignment
-- spend reconciliation
+- Supplier SCD Type 2 alignment
+- financial reconciliation
 - KPI-ready business logic
-- fact/dimension relationship completeness
 
-Gold tables are not considered reporting-ready until these controls pass.
-
----
-
-# 4. Core Validation Categories
-
-## Schema Validation
-
-Checks whether required columns and datatypes are available before downstream logic executes.
-
-Typical failures include:
-
-- missing columns
-- unexpected renaming
-- incorrect datatypes
-- incompatible schema changes
-
-Schema validation reduces silent downstream failures.
+The analytical model is not considered reporting-ready until these checks pass.
 
 ---
 
-## Duplicate-Grain Checks
+## 7. Spend and Compliance Reconciliation
 
-Duplicate detection is performed according to each table's intended business grain.
-
-Examples:
-
-```text
-Purchase Order Fact
-→ expected PO-item grain
-
-Supplier Risk Prediction
-→ expected supplier + prediction snapshot grain
-
-Savings Opportunity
-→ expected supplier + category grain
-```
-
-A row count alone is not sufficient; uniqueness must be tested using the correct business key combination.
-
----
-
-## Referential-Integrity Checks
-
-Facts should resolve correctly to their analytical dimensions.
-
-Examples:
-
-- supplier keys
-- category keys
-- material keys
-- business-unit keys
-- contract keys
-- date keys
-
-Typical checks include:
-
-```text
-Fact foreign key exists
-        ↓
-Matching dimension key found
-        ↓
-No unintended orphan records
-```
-
-Orphaned records are treated as model-quality issues because they can create incomplete or misleading reporting.
-
----
-
-# 5. Spend Reconciliation
-
-Spend is one of the most important financial controls in the model.
-
-Reconciliation verifies that transformation logic does not unintentionally create or remove spend.
+Spend is a core financial control.
 
 Conceptually:
 
 ```text
-Upstream eligible spend
+Upstream Eligible Spend
         ≈
-Downstream eligible spend
+Gold Eligible Spend
 ```
 
-Differences are investigated rather than assumed to be acceptable.
-
-Potential causes include:
-
-- duplicate joins
-- incorrect grain
-- missing dimension mappings
-- currency conversion issues
-- filtering differences
-
----
-
-# 6. Contract-Compliance Reconciliation
-
-Contract compliance is validated independently from the final Power BI measure.
-
-The objective is to ensure that:
+For contract governance:
 
 ```text
 Eligible Spend
@@ -234,9 +188,7 @@ Contract-Compliant Spend
 Maverick Spend
 ```
 
-subject to the project's defined eligibility rules.
-
-The corresponding percentages should remain logically consistent:
+and therefore:
 
 ```text
 Contract Compliance %
@@ -246,150 +198,212 @@ Maverick Spend %
 100%
 ```
 
-Small numerical differences may occur because of rounding, but material differences indicate transformation or classification issues.
+Material differences indicate issues such as:
+
+- duplicated joins
+- missing mappings
+- incorrect grain
+- filter mismatches
+- currency-conversion errors
 
 ---
 
-# 7. Supplier SCD Type 2 Validation
+## 8. Supplier SCD Type 2 Validation
 
-`dim_supplier` uses Slowly Changing Dimension Type 2.
+`dim_supplier` preserves historical supplier context.
 
-Validation therefore includes more than checking whether supplier IDs exist.
-
-The model must ensure that each historical transaction resolves to the correct supplier version.
-
-Conceptually:
+A fact row must resolve to the supplier version valid at the relevant date.
 
 ```text
 Supplier Business Key
         +
 Transaction Date
         ↓
-Correct Effective-Date Range
+Effective-date lookup
         ↓
-Supplier Surrogate Key
+Correct Supplier Surrogate Key
 ```
 
-Key controls include:
+Validation checks:
 
-- no overlapping supplier effective-date ranges
-- correct current-version indicator
-- valid start/end dates
-- successful as-of resolution
-- no unintended fact-to-supplier mismatches
+- no invalid overlapping effective periods
+- valid current-version indicators
+- correct effective-from/effective-to dates
+- successful historical as-of resolution
+- no unintended supplier-key gaps
 
-This prevents current supplier attributes from incorrectly rewriting historical reporting.
+This prevents current supplier attributes from rewriting historical reporting.
 
 ---
 
-# 8. Invoice and Matching Validation
+## 9. Invoice and Three-Way-Match Validation
 
-Invoice analytics require consistency between purchasing, receipt, and invoice records.
+Invoice analytics require consistent relationships between:
+
+```text
+Purchase Order
+      ↓
+Goods Receipt
+      ↓
+Invoice
+```
 
 Validation areas include:
 
-- expected invoice grain
-- invoice-to-PO relationships
+- invoice-to-PO linkage
 - goods-receipt linkage
-- expected versus invoiced value
+- expected vs. invoiced value
 - invoice exception logic
-- three-way match classification
+- dispute logic
+- three-way-match classification
 
-The purpose is to ensure that invoice KPIs are based on coherent purchasing events rather than disconnected records.
-
----
-
-# 9. ML Validation
-
-Machine-learning outputs are validated before they are consumed by the semantic model.
-
-Validation differs by model because each output has a different analytical grain.
+The purpose is to ensure invoice KPIs are based on coherent procurement events.
 
 ---
 
-## Supplier Risk Prediction
+# 10. ML Quality Gates
 
-Typical checks include:
+Machine-learning outputs are validated before they become reporting data products.
 
-- expected supplier prediction grain
-- supplier-key completeness
-- prediction-score range
-- valid risk classification
+## Supplier Risk
+
+Checks include:
+
+- supplier prediction grain
+- SupplierKey completeness
 - duplicate prediction snapshots
-- source-to-output reconciliation
+- valid score range
+- valid high-risk classification
+- row-count reconciliation
 
-The model output is treated as a prediction snapshot, not an operational supplier-performance fact.
+Validated Gold output:
+
+- **356 supplier predictions**
+- **204 high-risk suppliers**
 
 ---
 
-## Pricing Anomaly Prediction
+## Pricing Anomaly
 
-Typical checks include:
+Checks include:
 
-- scored PO-item grain
+- PO-item scoring grain
+- unique scored items
 - valid anomaly score
-- binary anomaly flag
-- no duplicate scored items
-- correct item-level linkage back to procurement spend
+- valid anomaly flag
+- Gold key completeness
+- scored population reconciliation
 
-Validated synthetic snapshot:
+Validated output:
 
-- **21,752** PO items scored
-- **1,216** pricing anomalies
-- **5.59%** anomaly rate
-
-The validation ensures that anomaly counts and rates reconcile to the scored population.
+- **21,752 PO items scored**
+- **1,216 pricing anomalies**
+- **5.59% anomaly rate**
 
 ---
 
 ## Savings Opportunity
 
-Typical checks include:
+DB_06 applies an explicit quality gate before the prescriptive output is promoted.
 
-- supplier-category grain
-- unique opportunity keys
-- non-negative analytical values where required
-- valid prioritization fields
-- source-spend reconciliation
-- opportunity-count reconciliation
+Checks include:
 
-Validated synthetic snapshot:
+- supplier-category-prediction-date grain uniqueness
+- complete business keys
+- savings-component reconciliation
+- non-negative potential savings
+- potential savings not exceeding spend
+- plausible savings percentages
+- negotiation priority score between 0 and 100
+- valid opportunity ranks
+- positive opportunity population
+- actionable opportunity population
+- minimum pricing-signal coverage
+- minimum supplier-risk coverage
 
-- **983** supplier-category opportunities
-- **955** positive savings opportunities
+<!-- SCREENSHOT: docs/screenshots/ml/06-savings-opportunity-results.jpg -->
+![Savings opportunity quality gate](screenshots/ml/06-savings-opportunity-results.jpg)
+
+*DB_06 evidence showing the savings-opportunity quality gate passing, with 100% pricing-signal coverage, 100% supplier-risk coverage, 955 positive opportunities, and 471 actionable opportunities.*
+
+---
+
+# 11. Databricks → Fabric Gold Reconciliation
+
+ML outputs are generated in Databricks but consumed from Fabric Gold.
+
+DB_07 therefore validates the cross-platform promotion step.
+
+Checks include:
+
+- source vs. target row count
+- business-grain uniqueness
+- surrogate-key mapping
+- missing dimensional keys
+- score preservation
+- classification preservation
+- savings-value reconciliation
+
+<!-- SCREENSHOT: docs/screenshots/ml/07-ml-output-promotion-validation.jpg -->
+![ML Gold promotion validation](screenshots/ml/07-ml-output-promotion-validation.jpg)
+
+*DB_07 evidence showing the three ML products promoted to physical Fabric Gold tables after validation.*
+
+Validated persisted snapshots:
+
+| ML Gold product | Rows |
+|---|---:|
+| Supplier Risk Prediction | **356** |
+| Pricing Anomaly Prediction | **21,752** |
+| Savings Opportunity | **983** |
+
+Post-write reconciliation confirmed:
+
+| Check | Difference |
+|---|---:|
+| High-risk supplier classification | **0** |
+| Pricing anomaly classification | **0** |
+| Potential Annual Savings | **€0.00** |
+
+---
+
+# 12. Final Fabric Validation
+
+The final Fabric-side validation notebook consolidates the ML Gold checks after promotion.
+
+Validated portfolio result:
+
+| Result | Count |
+|---|---:|
+| Total validation rules | **64** |
+| PASS | **64** |
+| FAIL | **0** |
+
+<img width="1144" height="780" alt="02-final-ml-gold-validation" src="https://github.com/user-attachments/assets/944509fd-308a-45d3-ab78-c3bc453b2e09" />
+
+
+*NB_40 evidence confirming the promoted supplier-risk, pricing-anomaly, and savings-opportunity outputs and the consolidated result of 64 PASS and 0 FAIL.*
+
+The same validation output confirms:
+
+- **356** supplier-risk rows
+- **204** high-risk suppliers
+- **21,752** pricing-anomaly rows
+- **1,216** pricing anomalies
+- **983** savings-opportunity rows
+- **955** positive opportunities
 - **471** actionable opportunities
 - **€97.55M** modeled potential annual savings
 
-These values are synthetic portfolio outputs, not realized business savings.
+This is the strongest final evidence that the ML outputs are ready for semantic-model consumption in the validated DEV environment.
 
 ---
 
-# 10. Databricks-to-Fabric Reconciliation
+## 13. Persisted Monitoring
 
-ML results are generated in Azure Databricks and promoted back into Fabric Gold.
+Important validation results are persisted instead of existing only in notebook output.
 
-The promotion step is validated so the Fabric-side analytical tables accurately represent the Databricks outputs.
-
-Typical checks include:
-
-- source row count versus promoted row count
-- analytical grain
-- primary/business-key uniqueness
-- score preservation
-- key-field completeness
-- aggregate reconciliation
-
-This is important because the semantic model consumes the Fabric Gold outputs rather than Databricks development tables directly.
-
----
-
-# 11. Persisted Monitoring Outputs
-
-Important validation results are persisted where appropriate.
-
-This allows quality checks to be reviewed after notebook execution and supports a monitoring-oriented design.
-
-Conceptually, a persisted result can capture:
+A monitoring result can capture fields such as:
 
 | Field | Example |
 |---|---|
@@ -400,148 +414,105 @@ Conceptually, a persisted result can capture:
 | Expected | 0 |
 | Validation timestamp | execution timestamp |
 
-This approach separates validation evidence from transient notebook logs.
-
----
-
-# 12. Final Fabric-Side Validation Result
-
-The final Fabric-side ML validation notebook executed:
-
-| Result | Count |
-|---|---:|
-| Total rules | **64** |
-| PASS | **64** |
-| FAIL | **0** |
-
-This represents the validated DEV portfolio environment.
-
-The result demonstrates that the implemented validation rules passed for the tested synthetic dataset.
-
-It does **not** imply that production data would always pass or that the project provides a production availability SLA.
-
----
-
-# 13. Example Validation Pattern
-
-A simplified rule pattern is:
-
-```python
-actual = dataframe.count()
-expected_minimum = 1
-
-status = "PASS" if actual >= expected_minimum else "FAIL"
-```
-
-Business validations extend this idea by comparing actual results with expected logical relationships.
-
-For example:
+The ML promotion process also persists:
 
 ```text
-Rule:
-Contract-compliant spend + maverick spend = eligible spend
-
-Actual:
-Calculated reconciliation difference
-
-Expected:
-Difference within accepted tolerance
-
-Status:
-PASS / FAIL
+monitoring_ml_gold_promotion_results
 ```
 
-The important design principle is that a rule produces an explicit result instead of relying only on visual notebook inspection.
+This creates an auditable record of the promotion checks.
 
 ---
 
-# 14. Failure Handling
+## 14. Failure Handling
 
-A failed validation should identify:
+A failed validation should answer four questions:
 
-1. **what failed**
-2. **where it failed**
-3. **actual result**
-4. **expected result**
-5. **which downstream process may be affected**
+1. **What failed?**
+2. **Where did it fail?**
+3. **What was the actual result?**
+4. **What downstream process could be affected?**
 
 Conceptually:
 
 ```text
-Validation failure
-      ↓
+Validation Failure
+        ↓
 Identify affected layer/table
-      ↓
-Inspect transformation or relationship
-      ↓
+        ↓
+Inspect transformation / relationship
+        ↓
 Correct issue
-      ↓
+        ↓
 Rerun affected processing
-      ↓
+        ↓
 Revalidate
 ```
 
-For a production system, critical failures would normally be integrated into orchestration gates and alerting.
-
-Automated failure gates are documented as a productionization extension for this portfolio.
+A production implementation would integrate critical failures into automated orchestration gates and alerting.
 
 ---
 
-# 15. Validation vs. Production Monitoring
+## 15. Portfolio Validation vs. Production Monitoring
 
-The current project demonstrates robust analytical validation, but production monitoring would require additional operational controls.
+### Implemented
 
-## Implemented in the portfolio
-
-- schema validation
-- duplicate-grain checks
-- spend reconciliation
+- schema checks
+- duplicate-grain validation
+- financial reconciliation
 - contract-compliance reconciliation
-- supplier SCD2 alignment
-- referential-integrity checks
-- ML prediction validation
-- score-range validation
+- SCD2 alignment
+- referential integrity
+- invoice matching validation
+- ML grain validation
+- ML score validation
 - savings reconciliation
 - Databricks-to-Fabric reconciliation
 - persisted monitoring outputs
-- final consolidated validation
+- consolidated Fabric validation
 
-## Future production extensions
+### Production extensions
+
+A production implementation would additionally include:
 
 - automated pipeline failure gates
 - notifications and alerting
-- SLA monitoring
-- freshness checks
-- volume-anomaly monitoring
+- freshness monitoring
 - source-arrival monitoring
+- volume-anomaly detection
+- SLA monitoring
 - historical rule trending
 - automated incident creation
-- environment-specific monitoring thresholds
+- environment-specific thresholds
+
+These are documented as productionization extensions rather than represented as completed portfolio functionality.
 
 ---
 
-# 16. Key Data Quality Controls
+## 16. Validation Summary
 
 | Control | Purpose |
 |---|---|
-| Schema validation | Prevent structural incompatibility |
-| Duplicate-grain validation | Protect fact and prediction grain |
+| Schema validation | Protect structural compatibility |
+| Duplicate-grain checks | Preserve intended table grain |
 | Referential integrity | Prevent orphan analytical records |
 | Spend reconciliation | Protect financial totals |
 | Compliance reconciliation | Validate procurement classification |
 | SCD2 as-of validation | Preserve historical supplier context |
-| Invoice matching validation | Protect invoice and three-way-match analytics |
-| ML grain validation | Prevent duplicated or misaligned predictions |
+| Invoice matching validation | Protect invoice and match KPIs |
+| ML grain validation | Prevent duplicated/misaligned predictions |
 | Score-range validation | Detect invalid model outputs |
 | Databricks/Fabric reconciliation | Validate cross-platform promotion |
-| Persisted rule results | Retain validation evidence |
+| Persisted monitoring | Retain validation evidence |
+| Final 64-rule validation | Confirm Gold ML reporting readiness |
 
 ---
 
 ## Related Documentation
 
-- `README.md` — project overview
-- `docs/architecture/architecture.md` — platform architecture
-- `docs/architecture/data-model.md` — analytical model and table grains
-- `docs/ml/` — ML implementation
-- `docs/cicd/` — source control and deployment
+- [Main README](../README.md)
+- [Technical Architecture](architecture/architecture.md)
+- [Data Model](architecture/data-model.md)
+- [ML Pipeline & Fabric Integration](ml/ml-pipeline.md)
+- [Power BI Report Guide](../power-bi/report-guide.md)
+- [CI/CD & Deployment](cicd/CI-CD.md)
