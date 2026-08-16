@@ -1,79 +1,224 @@
-# CI/CD Implementation
+# CI/CD and Deployment
 
-## Scope
+This project uses **GitHub source control** and **Microsoft Fabric Deployment Pipelines** to demonstrate a controlled analytics development lifecycle.
 
-This project uses native Microsoft Fabric Git integration and deployment pipelines to demonstrate a controlled analytics development lifecycle.
+> **Portfolio scope:** The implementation validates source control, pull-request promotion, Fabric Git integration, and DEV → TEST artifact deployment. Full TEST/PROD data initialization and Production promotion are documented as productionization extensions.
 
-## Implemented
+---
 
-- Fabric DEV workspace connected to GitHub
-- Dedicated `dev` branch for active development
-- Stable `main` branch
-- Pull-request based promotion from `dev` to `main`
-- Fabric-generated workspace definitions stored under `/fabric`
-- Three-stage Fabric deployment pipeline
-- Successful DEV → TEST artifact deployment
-- TEST notebook dependencies rebound to TEST workspace artifacts
+## 1. Implemented Lifecycle
 
-## Deployment model
+```mermaid
+flowchart LR
+    A[Fabric DEV Workspace] <--> B[GitHub dev]
+    B --> C[Pull Request]
+    C --> D[GitHub main]
+
+    A --> E[Fabric Deployment Pipeline]
+    E --> F[TEST]
+    F --> G[Validation]
+    G -. future .-> H[PROD]
+```
+
+Two mechanisms are intentionally separated:
+
+- **GitHub** controls versions, branches, and review.
+- **Fabric Deployment Pipelines** promote supported workspace artifacts between environments.
+
+---
+
+## 2. Fabric Git Integration
+
+The Development workspace is connected directly to the GitHub repository and the `dev` branch.
+
+![Uploading 4. Git Integration.jpg…](<img width="1014" height="924" alt="4  Git Integration" src="https://github.com/user-attachments/assets/94d0d466-daa0-43e3-8401-caa45293b6f7" />)
+
+The connection uses:
 
 ```text
-Fabric DEV
-    ↕
-GitHub dev
-    ↓
-Pull Request
-    ↓
-GitHub main
+Repository: procurement-intelligence-platform
+Git folder: /fabric
+Branch: dev
+```
 
+Fabric-generated item definitions are therefore version controlled under `/fabric`, while Databricks notebooks and project documentation are maintained separately in the repository.
+
+The synchronized repository contains Fabric notebooks, Lakehouse definitions, semantic-model artifacts, and Power BI report artifacts.
+
+![Fabric artifacts in GitHub](../screenshots/cicd/01-github-fabric-artifacts.jpg)
+
+---
+
+## 3. Branch and Pull-Request Workflow
+
+The repository uses a simple two-branch strategy:
+
+| Branch | Role |
+|---|---|
+| `dev` | Active Fabric development |
+| `main` | Reviewed stable baseline |
+
+![GitHub dev and main branches](../screenshots/cicd/02-dev-main-branches.jpg)
+
+Changes are promoted through a pull request rather than committed directly from development into the stable baseline.
+
+The initial platform baseline was successfully merged from `dev` into `main`.
+
+![Merged pull request](../screenshots/cicd/03-merged-pull-request.jpg)
+
+The initial PR included the version-controlled Fabric platform baseline, including notebooks, Lakehouse definitions, the semantic model, and report artifacts.
+
+This establishes the development pattern:
+
+```text
+Develop in Fabric DEV
+        ↓
+Synchronize to GitHub dev
+        ↓
+Review through Pull Request
+        ↓
+Merge into main
+```
+
+---
+
+## 4. Fabric Deployment Pipeline
+
+A three-stage Fabric deployment pipeline is configured:
+
+```text
+Development → Test → Production
+```
+
+![Fabric DEV TEST PROD deployment pipeline](../screenshots/cicd/05-fabric-deployment-pipeline.jpg)
+
+The **Development → Test** promotion has been executed successfully.
+
+The deployment history confirms a successful Test deployment containing **33 Fabric items**.
+
+![Successful Test deployment history](../screenshots/cicd/06-test-deployment-history.jpg)
+
+After deployment, TEST notebook dependencies were rebound to TEST workspace artifacts and the deployed environment was validated.
+
+The Production stage is intentionally retained as the next promotion stage rather than being presented as already completed.
+
+---
+
+## 5. Artifact Deployment Is Not Data Deployment
+
+A critical Fabric behavior is that deployment pipelines promote **artifact definitions**, not physical Delta Lake table data.
+
+Therefore:
+
+```text
+DEV analytical artifacts
+        ↓
 Fabric Deployment Pipeline
-    ↓
-TEST
-    ↓
-Validation
-    ↓
-PROD promotion stage
+        ↓
+TEST analytical artifacts
+
+DEV Delta data
+        ✕
+not automatically copied to TEST
 ```
 
-## Important environment behavior
-
-Fabric deployment pipelines promote analytical item definitions but do not copy physical Delta Lake table data between environments.
-
-The deployed TEST environment therefore receives Lakehouse definitions and supported artifact metadata, while target-environment physical data must be initialized independently.
-
-The intended production pattern is:
+A production implementation would combine artifact deployment with environment-specific data initialization:
 
 ```text
-Artifact deployment
-    ↓
-Environment initialization
-    ↓
-Data orchestration
-    ↓
-Validation gates
-    ↓
-Production approval
+Artifact Deployment
+        ↓
+Target Environment Initialization
+        ↓
+Pipeline / Notebook Orchestration
+        ↓
+Data Quality Validation
+        ↓
+Release Approval
+        ↓
+Production Promotion
 ```
 
-For the portfolio implementation, successful DEV → TEST artifact deployment was demonstrated and validated. Full data duplication into TEST/PROD was intentionally not performed because the dataset is synthetic and the objective of this section is to demonstrate source control and deployment lifecycle design rather than duplicate compute/storage usage.
+For this portfolio, reproducing the complete synthetic dataset in every environment would add infrastructure volume without materially improving the CI/CD demonstration.
 
-## Evidence
+---
 
-1. GitHub `/fabric` repository
-<img width="1894" height="993" alt="1  GIthub repository showing Fabric" src="https://github.com/user-attachments/assets/d1130d68-aafe-498d-a950-72e8a39ed022" />
+## 6. Validation and Release Control
 
-2. `dev` and `main` branches
-<img width="1900" height="769" alt="2  Dev and main branches" src="https://github.com/user-attachments/assets/eead4c25-d02e-4edc-9795-1d86c2987d18" />
+Deployment is not treated as complete merely because Fabric reports a successful artifact copy.
 
-3. Merged pull request
- <img width="1354" height="876" alt="3  Merged pull request" src="https://github.com/user-attachments/assets/6468d7c2-0024-4f4f-8ad7-f53cafebdba5" />
+The intended release pattern is:
 
-4. Fabric Git Integration configuration
-<img width="1014" height="924" alt="4  Git Integration" src="https://github.com/user-attachments/assets/8d21f6bd-b790-4d25-8b60-3378ab92c2ba" />
+```text
+Deploy
+  ↓
+Resolve target-environment dependencies
+  ↓
+Initialize / process required data
+  ↓
+Run validation
+  ↓
+Approve next-stage promotion
+```
 
-5. Fabric Development → Test → Production deployment pipeline
-<img width="1566" height="583" alt="5  Deployment Pipeline" src="https://github.com/user-attachments/assets/e7045e74-56a5-4b28-8da8-f6038a40a951" />
+The wider platform includes reconciliation, referential-integrity, grain, and ML-output controls.
 
-6. Successful DEV → TEST deployment status
-<img width="1912" height="826" alt="6" src="https://github.com/user-attachments/assets/ddc39907-9aac-41b5-816f-6fa1e3dd4640" />
+In the validated DEV analytical environment, the final Fabric-side ML validation completed:
 
+**64 rules → 64 PASS → 0 FAIL**
+
+A production implementation would automate these checks as formal CI/CD release gates.
+
+---
+
+## 7. What the Portfolio Demonstrates
+
+### Implemented
+
+- Fabric workspace connected to GitHub
+- `/fabric` managed through native Fabric Git integration
+- `dev` development branch
+- `main` stable baseline
+- pull-request based promotion
+- successful initial PR merge
+- three-stage DEV → TEST → PROD pipeline
+- successful **33-item DEV → TEST deployment**
+- deployment-history evidence
+- TEST dependency rebinding and validation
+- separation of artifact deployment from physical environment data
+
+### Production extensions
+
+- automated target-environment initialization
+- environment-specific configuration and secrets
+- automated CI quality gates
+- full TEST and PROD data orchestration
+- formal release approvals
+- rollback procedures
+- deployment monitoring and alerting
+- completed Production promotion
+
+---
+
+## 8. Design Summary
+
+| Area | Implementation |
+|---|---|
+| Source control | GitHub |
+| Fabric Git branch | `dev` |
+| Stable branch | `main` |
+| Review mechanism | Pull Request |
+| Fabric repository path | `/fabric` |
+| Environment pipeline | DEV → TEST → PROD |
+| Validated promotion | DEV → TEST |
+| Items in validated TEST deployment | **33** |
+| Environment data | Initialized separately |
+| Release principle | Deploy → initialize → validate → approve |
+
+---
+
+## Related Documentation
+
+- `README.md` — project overview
+- `docs/architecture/architecture.md` — solution architecture
+- `docs/data-quality.md` — validation framework
+- `docs/ml/ml-pipeline.md` — Databricks-to-Fabric ML lifecycle
