@@ -68,23 +68,23 @@ For implementation details, Fabric-generated item definitions are maintained und
 # Solution Architecture
 
 ```mermaid
-flowchart LR
-    A[Synthetic ERP-style Sources] --> B[Fabric Bronze]
-    B --> C[Fabric Silver]
-    C --> D[Fabric Gold]
+graph LR;
+    A["Synthetic ERP-style Sources"] --> B["Fabric Bronze"];
+    B --> C["Fabric Silver"];
+    C --> D["Fabric Gold"];
 
-    D --> E[Azure Databricks]
-    E --> F[Supplier Risk]
-    E --> G[Pricing Anomaly]
-    E --> H[Savings Opportunity]
+    D --> E["Azure Databricks"];
+    E --> F["Supplier Risk"];
+    E --> G["Pricing Anomaly"];
+    E --> H["Savings Opportunity"];
 
-    F --> I[Fabric Gold ML Outputs]
-    G --> I
-    H --> I
+    F --> I["Fabric Gold ML Outputs"];
+    G --> I;
+    H --> I;
 
-    D --> J[Direct Lake Semantic Model]
-    I --> J
-    J --> K[Power BI]
+    D --> J["Direct Lake Semantic Model"];
+    I --> J;
+    J --> K["Power BI"];
 ```
 
 Bronze preserves synthetic ERP-style master and transaction data. Silver standardizes and enriches it with governed procurement logic. Gold contains the dimensional model, KPI-ready fact tables, Supplier SCD Type 2, and promoted ML outputs.
