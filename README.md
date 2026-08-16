@@ -1,58 +1,82 @@
 # Enterprise Procurement Intelligence Platform
 
-An end-to-end procurement analytics engineering portfolio project built with **Microsoft Fabric, Azure Databricks, PySpark, Delta Lake, MLflow, Direct Lake, and Power BI**.
+An end-to-end **procurement analytics engineering portfolio** built with **Microsoft Fabric, Azure Databricks, PySpark, Delta Lake, MLflow, Direct Lake, Power BI, and GitHub**.
 
-The platform demonstrates how raw ERP-style procurement data can be transformed into governed analytical data products, enriched with machine learning and prescriptive analytics, and exposed through a decision-ready semantic model and executive reporting layer.
+The platform demonstrates how ERP-style procurement data can be transformed into governed analytical products, enriched with machine learning and prescriptive analytics, and delivered through a decision-ready semantic model and Power BI reporting layer.
 
-> **Portfolio note:** The project uses synthetic data. Financial values, supplier results, risks, anomalies, and savings opportunities are simulated for demonstration purposes and should not be interpreted as realized business outcomes.
+> **Portfolio note:** This project uses synthetic data. Financial values, supplier outcomes, ML predictions, anomalies, and savings opportunities are simulated for demonstration purposes and are not realized business results.
 
 ---
 
-## What this project demonstrates
+## Project at a Glance
 
-- Medallion data architecture in Microsoft Fabric
+```text
+Synthetic ERP-style data
+        ↓
+Microsoft Fabric Bronze
+        ↓
+Microsoft Fabric Silver
+        ↓
+Microsoft Fabric Gold
+        ↓
+Azure Databricks ML & Prescriptive Analytics
+        ↓
+Fabric Gold ML Outputs
+        ↓
+Direct Lake Semantic Model
+        ↓
+Power BI Decision Layer
+```
+
+The project demonstrates:
+
+- Medallion architecture in Microsoft Fabric
 - PySpark transformation and data-quality engineering
-- Delta Lake based Bronze, Silver, and Gold layers
-- Dimensional modeling and governed procurement KPIs
-- Supplier risk modeling in Azure Databricks
-- Pricing anomaly detection using Isolation Forest
-- Prescriptive supplier-category savings opportunity analytics
-- MLflow based experiment/model management
+- Delta Lake Bronze, Silver, and Gold layers
+- Dimensional modeling and Supplier SCD Type 2
+- Governed procurement KPIs
+- Supplier risk prediction
+- Pricing anomaly detection with Isolation Forest
+- Prescriptive supplier-category savings analytics
+- MLflow experiment and model management
 - ML output promotion back into Fabric Gold
-- Direct Lake semantic modeling
-- DAX business measures and Power BI reporting
-- GitHub source control with `dev` and `main` branches
-- Pull-request based promotion
-- Microsoft Fabric DEV → TEST → PROD deployment pipeline
+- Direct Lake semantic modeling and DAX
+- Power BI decision support
+- GitHub source control and pull-request promotion
+- Fabric DEV → TEST → PROD deployment pipeline
 
 ---
 
-## Business questions addressed
+## Explore the Project
 
-- How much eligible spend is contract compliant?
-- Where is maverick spend concentrated?
-- Which suppliers have the weakest delivery and quality performance?
-- Which suppliers are predicted to carry higher risk?
-- Which purchasing transactions exhibit unusual pricing behavior?
-- Which supplier-category combinations offer the greatest savings potential?
-- How large is the savings pipeline, and how much has been realized?
+| Area | Documentation |
+|---|---|
+| Platform architecture | [Technical Architecture](docs/architecture/architecture.md) |
+| Analytical model | [Data Model](docs/architecture/data-model.md) |
+| Data quality | [Data Quality & Validation](docs/data-quality.md) |
+| ML lifecycle | [ML Pipeline & Fabric Integration](docs/ml/ml-pipeline.md) |
+| Supplier risk | [Supplier Risk Modeling](docs/ml/supplier-risk.md) |
+| Pricing anomaly | [Pricing Anomaly Detection](docs/ml/pricing-anomaly.md) |
+| Savings opportunity | [Savings Opportunity Engine](docs/ml/savings-opportunity.md) |
+| Power BI | [Power BI Report Guide](power-bi/report-guide.md) |
+| CI/CD | [CI/CD & Deployment](docs/cicd/CI-CD.md) |
 
-Core KPI domains include Contract Compliance %, Maverick Spend %, Supplier OTD %, Supplier Quality Index, Three-Way Match %, Invoice Exception %, Supplier Risk Score, Pricing Anomaly Rate, Potential Annual Savings, Savings Forecast, Approved Savings, and Realized Savings.
+For implementation details, Fabric-generated item definitions are maintained under [`/fabric`](fabric/) and Databricks notebooks under [`/databricks`](databricks/).
 
 ---
 
-## Solution architecture
+# Solution Architecture
 
 ```mermaid
 flowchart LR
-    A[Synthetic ERP-style Sources] --> B[Microsoft Fabric Bronze]
-    B --> C[Microsoft Fabric Silver]
-    C --> D[Microsoft Fabric Gold]
+    A[Synthetic ERP-style Sources] --> B[Fabric Bronze]
+    B --> C[Fabric Silver]
+    C --> D[Fabric Gold]
 
-    D --> E[Azure Databricks Feature Engineering]
-    E --> F[Supplier Risk Model]
-    E --> G[Pricing Anomaly Detection]
-    E --> H[Savings Opportunity Engine]
+    D --> E[Azure Databricks]
+    E --> F[Supplier Risk]
+    E --> G[Pricing Anomaly]
+    E --> H[Savings Opportunity]
 
     F --> I[Fabric Gold ML Outputs]
     G --> I
@@ -60,97 +84,77 @@ flowchart LR
 
     D --> J[Direct Lake Semantic Model]
     I --> J
-    J --> K[Power BI Decision Layer]
+    J --> K[Power BI]
 ```
 
-### Data architecture
+Bronze preserves synthetic ERP-style master and transaction data. Silver standardizes and enriches it with governed procurement logic. Gold contains the dimensional model, KPI-ready fact tables, Supplier SCD Type 2, and promoted ML outputs.
 
-**Bronze**
-- Raw synthetic procurement source data
-- ERP-style master and transactional entities
-- Delta Lake persistence
+<img width="1225" height="817" alt="01-fabric-platform-artifacts" src="https://github.com/user-attachments/assets/b23a4f81-be37-45d1-88fb-5614de7899d3" />
 
-**Silver**
-- Standardization and cleansing
-- Currency normalization to EUR
-- Contract/spend governance logic
-- Invoice matching logic
-- Supplier performance derivation
-- Data-quality monitoring outputs
 
-**Gold**
-- Dimensional model
-- SCD Type 2 supplier dimension
-- Governed fact tables
-- Procurement KPI-ready measures
-- ML prediction outputs
-- Referential-integrity and reconciliation controls
+*Fabric implementation showing the Bronze, Silver, and Gold Lakehouses together with the validation notebook, semantic model, and Power BI report artifacts.*
+
+For the detailed design, see the [Technical Architecture](docs/architecture/architecture.md).
 
 ---
 
-## Analytical model
+# Analytical Model
+
+The Gold analytical layer follows a star-schema-oriented design.
 
 ### Dimensions
-- `dim_date`
-- `dim_supplier`
-- `dim_category`
-- `dim_material`
-- `dim_buyer`
-- `dim_business_unit`
-- `dim_contract`
-- `dim_currency`
+
+`dim_date` · `dim_supplier` · `dim_category` · `dim_material` · `dim_buyer` · `dim_business_unit` · `dim_contract` · `dim_currency`
 
 ### Facts
-- `fact_purchase_order`
-- `fact_invoice`
-- `fact_savings`
-- `fact_supplier_performance`
+
+`fact_purchase_order` · `fact_invoice` · `fact_savings` · `fact_supplier_performance`
 
 ### ML outputs
-- `ml_supplier_risk_prediction`
-- `ml_pricing_anomaly_prediction`
-- `ml_savings_opportunity`
 
-Supplier history is modeled using **SCD Type 2**, with version-aware surrogate keys and effective-date logic.
+`ml_supplier_risk_prediction` · `ml_pricing_anomaly_prediction` · `ml_savings_opportunity`
 
----
+Supplier history uses **SCD Type 2** with version-aware surrogate keys and effective-date logic.
 
-## Machine learning and prescriptive analytics
+<img width="1399" height="541" alt="03-core-semantic-model" src="https://github.com/user-attachments/assets/06a5054b-4fd3-4e91-b393-bec849a2cd1d" />
 
-### Supplier risk prediction
 
-Azure Databricks is used to engineer supplier-level features and train a baseline supplier risk model.
+*Core analytical model showing shared dimensions connected to purchase-order, invoice, supplier-performance, and savings facts.*
 
-Example feature domains include late-delivery behavior, dispute history, spend volatility, country/risk attributes, and synthetic financial/ESG-style indicators.
+<img width="457" height="514" alt="04-ml-semantic-model-extension" src="https://github.com/user-attachments/assets/8e7d6d63-72bb-4d78-975c-bc50419214cd" />
 
-The current model is an experimental portfolio baseline rather than a production claim. Model evaluation is retained as part of the project to demonstrate transparent ML validation.
+*ML extension showing supplier-risk, pricing-anomaly, and savings-opportunity tables connected to governed Gold dimensions.*
 
-### Pricing anomaly detection
-
-Purchasing transactions are scored using **Isolation Forest**.
-
-Latest validated scoring snapshot:
-
-- **21,752** PO items scored
-- **1,216** pricing anomalies
-- **5.59%** anomaly rate
-
-### Savings opportunity engine
-
-A prescriptive analytics layer ranks supplier-category combinations using pricing anomaly signals, maverick-spend leakage, supplier risk, annualized eligible spend, and negotiation potential.
-
-Latest validated synthetic portfolio snapshot:
-
-- **983** supplier-category opportunities
-- **955** positive savings opportunities
-- **471** actionable opportunities
-- **€97.55M** modeled potential annual savings
-
-These figures are simulated portfolio outputs, not realized business savings.
+See the [Data Model](docs/architecture/data-model.md) for grains, relationships, date roles, SCD2 logic, and ML-table design.
 
 ---
 
-## Power BI decision layer
+# Validated Portfolio Snapshot
+
+Selected results from the validated synthetic dataset:
+
+| Metric | Result |
+|---|---:|
+| Eligible Spend | **€7.46B** |
+| Contract Compliance | **67.19%** |
+| Maverick Spend | **32.81%** |
+| Supplier OTD | **86.91%** |
+| Supplier Quality Index | **96%** |
+| High-Risk Suppliers | **204** |
+| Pricing Items Scored | **21,752** |
+| Pricing Anomalies | **1,216** |
+| Pricing Anomaly Rate | **5.59%** |
+| Anomalous Spend | **€139.84M** |
+| Supplier-Category Opportunities | **983** |
+| Actionable Opportunities | **471** |
+| Modeled Potential Annual Savings | **€97.55M** |
+| Realized Savings | **€68.63M** |
+
+These values demonstrate the analytical outputs of the portfolio and should not be interpreted as real procurement results.
+
+---
+
+# Power BI Decision Layer
 
 The final report contains five business-facing pages:
 
@@ -160,91 +164,140 @@ The final report contains five business-facing pages:
 4. **Pricing Anomaly & Savings Intelligence**
 5. **Savings Pipeline & Realization**
 
-Selected validated headline metrics from the synthetic dataset include:
+<!-- SCREENSHOT: power-bi/screenshots/01-executive-overview.jpg -->
+![Enterprise Procurement Intelligence - Executive Overview](power-bi/screenshots/01-executive-overview.jpg)
 
-| Metric | Result |
-|---|---:|
-| Eligible Spend | €7.46B |
-| Contract Compliance | 67.19% |
-| Maverick Spend | 32.81% |
-| Supplier OTD | 86.91% |
-| High-Risk Suppliers | 204 |
-| Pricing Items Scored | 21,752 |
-| Pricing Anomalies | 1,216 |
-| Pricing Anomaly Rate | 5.59% |
-| Modeled Potential Annual Savings | €97.55M |
-| Realized Savings in Synthetic Savings Pipeline | €68.63M |
+The Executive Overview combines spend, compliance, supplier performance, risk, realized savings, and modeled savings opportunity in one management view.
 
-The semantic model uses a **Direct Lake** architecture with governed relationships, inactive date roles where required, and DAX measures for business logic.
+<!-- SCREENSHOT: power-bi/screenshots/04-pricing-savings-intelligence.jpg -->
+![Pricing Anomaly and Savings Intelligence](power-bi/screenshots/04-pricing-savings-intelligence.jpg)
+
+The Pricing Anomaly & Savings Intelligence page connects ML pricing signals to supplier-category savings opportunities and negotiation priority.
+
+The report follows a deliberate decision flow:
+
+```text
+Executive Performance
+        ↓
+Spend Governance
+        ↓
+Supplier Performance & Risk
+        ↓
+Pricing & Savings Opportunity
+        ↓
+Savings Execution & Realization
+```
+
+The semantic model uses **Direct Lake**, governed relationships, inactive date roles where required, and reusable DAX measures.
+
+See the full [Power BI Report Guide](power-bi/report-guide.md).
 
 ---
 
-## Data quality and validation
+# Machine Learning & Prescriptive Analytics
+
+Azure Databricks is used for feature engineering, model development, MLflow tracking, scoring, and prescriptive analytics.
+
+```text
+Fabric Gold
+    ↓
+Databricks Feature Engineering / ML
+    ↓
+MLflow
+    ↓
+Validated Predictions
+    ↓
+Fabric Gold ML Tables
+    ↓
+Direct Lake / Power BI
+```
+
+## Supplier Risk
+
+A supervised supplier-level workflow predicts future operational risk using historical delivery, dispute, spend, supplier, and contextual risk features.
+
+The workflow includes future-looking target construction, leakage prevention, grouped cross-validation, temporal holdout testing, candidate-model comparison, MLflow tracking, and Gold promotion.
+
+<!-- SCREENSHOT: docs/screenshots/ml/02-supplier-risk-feature-engineering.jpg -->
+![Supplier risk feature engineering](docs/screenshots/ml/02-supplier-risk-feature-engineering.jpg)
+
+*Supplier-risk feature engineering and profiling in Azure Databricks.*
+
+<!-- SCREENSHOT: docs/screenshots/ml/03-mlflow-supplier-risk-experiment.jpg -->
+![MLflow supplier risk experiment](docs/screenshots/ml/03-mlflow-supplier-risk-experiment.jpg)
+
+*MLflow evidence showing tracked supplier-risk model-development, temporal-test, and production-candidate runs.*
+
+The selected Random Forest remains an **experimental portfolio baseline** rather than a production-performance claim.
+
+[Read the Supplier Risk documentation →](docs/ml/supplier-risk.md)
+
+---
+
+## Pricing Anomaly Detection
+
+An **Isolation Forest** scores PO items using leakage-safe historical pricing benchmarks.
+
+Validated scoring snapshot:
+
+- **21,752** items scored
+- **1,216** anomalies
+- **5.59%** anomaly rate
+
+<!-- SCREENSHOT: docs/screenshots/ml/05-pricing-anomaly-results.jpg -->
+![Pricing anomaly scoring results](docs/screenshots/ml/05-pricing-anomaly-results.jpg)
+
+*2026 production-scoring evidence from Databricks.*
+
+The workflow uses temporal diagnostics and validates anomaly enrichment against independent pricing signals before production scoring.
+
+[Read the Pricing Anomaly documentation →](docs/ml/pricing-anomaly.md)
+
+---
+
+## Savings Opportunity Engine
+
+A prescriptive layer combines pricing signals, maverick-spend leakage, supplier risk, eligible spend, and negotiation potential at **supplier-category grain**.
+
+Validated output:
+
+- **983** supplier-category opportunities
+- **955** positive opportunities
+- **471** actionable opportunities
+- **€97.55M** modeled potential annual savings
+
+<!-- SCREENSHOT: docs/screenshots/ml/06-savings-opportunity-results.jpg -->
+![Savings opportunity engine validation](docs/screenshots/ml/06-savings-opportunity-results.jpg)
+
+*Savings-engine quality-gate evidence showing passed validation, 100% pricing-signal coverage, 100% supplier-risk coverage, and actionable opportunity counts.*
+
+[Read the Savings Opportunity documentation →](docs/ml/savings-opportunity.md)
+
+The complete cross-platform flow is documented in [ML Pipeline & Fabric Integration](docs/ml/ml-pipeline.md).
+
+---
+
+# Data Quality & Validation
 
 Validation is embedded throughout the platform rather than treated as a final reporting step.
 
-Examples include:
+Controls include schema validation, duplicate-grain checks, spend reconciliation, contract-compliance reconciliation, Supplier SCD2 as-of alignment, referential-integrity checks, invoice matching validation, ML prediction-grain validation, score-range validation, savings reconciliation, Databricks-to-Fabric reconciliation, and persisted monitoring outputs.
 
-- Schema validation
-- Duplicate-grain checks
-- Spend reconciliation
-- Contract-compliance reconciliation
-- Supplier SCD2 as-of alignment
-- Referential-integrity controls
-- ML prediction-grain validation
-- Score-range validation
-- Savings reconciliation
-- Databricks-to-Fabric source reconciliation
-- Monitoring persistence
+The final Fabric-side validation notebook executed:
 
-The final Fabric-side ML validation notebook executed **64 validation rules with 64 PASS and 0 FAIL** in the validated DEV environment.
+**64 validation rules → 64 PASS → 0 FAIL**
+
+<img width="1144" height="780" alt="02-final-ml-gold-validation" src="https://github.com/user-attachments/assets/3b1b95de-b00c-44a2-9942-8ad528853cbb" />
+
+*NB_40 evidence confirming the three promoted ML products and the consolidated 64 PASS / 0 FAIL validation result.*
+
+[Read the Data Quality & Validation documentation →](docs/data-quality.md)
 
 ---
 
-## CI/CD and source control
+# CI/CD & Source Control
 
-The project uses Microsoft Fabric's native Git integration and deployment pipelines to demonstrate a controlled analytics development lifecycle.
-
-### Source control
-
-- `dev` is used as the active development branch
-- `main` represents the stable reviewed baseline
-- Fabric workspace definitions are synchronized into `/fabric`
-- Changes are promoted from `dev` to `main` through pull requests
-
-### Deployment
-
-A three-stage Microsoft Fabric deployment pipeline was configured:
-
-```text
-Development → Test → Production
-```
-
-The initial **Development → Test** artifact deployment was completed successfully and validated.
-
-### Environment data strategy
-
-Fabric artifact deployment does not copy physical Delta Lake table data between environments.
-
-A production implementation would therefore use:
-
-```text
-Git / Artifact Deployment
-        ↓
-Target Environment Initialization
-        ↓
-Pipeline / Notebook Orchestration
-        ↓
-Data Quality Validation
-        ↓
-Release Approval
-```
-
-For this portfolio implementation, DEV → TEST artifact promotion was validated. Full physical data initialization and Production promotion are documented as the next productionization step rather than duplicating the synthetic portfolio dataset across environments.
-
----
-
-## CI/CD workflow
+The project demonstrates a controlled analytics development lifecycle using **GitHub** and **Microsoft Fabric Deployment Pipelines**.
 
 ```mermaid
 flowchart LR
@@ -255,40 +308,63 @@ flowchart LR
     A --> E[Fabric Deployment Pipeline]
     E --> F[TEST]
     F --> G[Validation]
-    G --> H[PROD Promotion Stage]
+    G -. next stage .-> H[PROD]
 ```
+
+Implemented evidence includes Fabric Git integration, `dev` and `main` branches, pull-request promotion, a DEV → TEST → PROD deployment pipeline, and a successful **33-item DEV → TEST deployment**.
+
+<!-- SCREENSHOT: docs/screenshots/cicd/04-fabric-git-integration.jpg -->
+![Fabric Git integration](docs/screenshots/cicd/04-fabric-git-integration.jpg)
+
+*Fabric DEV workspace connected to the GitHub repository, `/fabric` folder, and `dev` branch.*
+
+<!-- SCREENSHOT: docs/screenshots/cicd/03-merged-pull-request.jpg -->
+![Merged GitHub pull request](docs/screenshots/cicd/03-merged-pull-request.jpg)
+
+*Pull-request based promotion of the initial Fabric platform baseline from `dev` into `main`.*
+
+<!-- SCREENSHOT: docs/screenshots/cicd/05-fabric-deployment-pipeline.jpg -->
+![Fabric deployment pipeline](docs/screenshots/cicd/05-fabric-deployment-pipeline.jpg)
+
+*Configured Development → Test → Production Fabric deployment pipeline.*
+
+<!-- SCREENSHOT: docs/screenshots/cicd/06-test-deployment-history.jpg -->
+![Successful Fabric Test deployment](docs/screenshots/cicd/06-test-deployment-history.jpg)
+
+*Deployment-history evidence showing the successful 33-item Development → Test promotion.*
+
+Fabric deployment promotes analytical **artifacts**, not physical Delta Lake data. Full target-environment data initialization and Production promotion are documented as productionization extensions.
+
+[Read the CI/CD & Deployment documentation →](docs/cicd/CI-CD.md)
 
 ---
 
-## Repository structure
+# Repository Structure
 
 ```text
 procurement-intelligence-platform/
 │
 ├── README.md
 ├── fabric/
-│   ├── notebooks and Fabric item definitions
-│   ├── lakehouse definitions
-│   ├── semantic model artifacts
-│   └── Power BI report artifacts
 ├── databricks/
-│   ├── supplier-risk/
-│   ├── pricing-anomaly/
-│   └── savings-opportunity/
 ├── docs/
 │   ├── architecture/
+│   ├── ml/
+│   ├── cicd/
 │   ├── screenshots/
-│   └── cicd/
+│   │   ├── fabric/
+│   │   ├── ml/
+│   │   └── cicd/
+│   └── data-quality.md
 └── power-bi/
+    ├── report-guide.md
     ├── screenshots/
     └── theme/
 ```
 
-The `/fabric` directory is managed through Fabric Git integration. Databricks notebooks and portfolio documentation are maintained separately for readability.
-
 ---
 
-## Technology stack
+# Technology Stack
 
 | Layer | Technology |
 |---|---|
@@ -298,53 +374,56 @@ The `/fabric` directory is managed through Fabric Git integration. Databricks no
 | ML platform | Azure Databricks |
 | ML lifecycle | MLflow |
 | ML techniques | Random Forest, Isolation Forest |
-| Semantic model | Microsoft Fabric / Power BI Direct Lake |
+| Semantic model | Power BI / Fabric Direct Lake |
 | BI | Power BI, DAX |
 | Source control | GitHub |
 | CI/CD | Fabric Git Integration, Deployment Pipelines |
 
 ---
 
-## Engineering decisions
+# Key Engineering Decisions
 
-- **EUR normalization occurs in Silver** so downstream analytics use a governed currency basis.
-- **Raw contract currency prices are not directly compared to EUR unit prices.**
-- **Supplier history uses SCD Type 2** to preserve historical dimensional context.
-- **Operational supplier performance and ML prediction snapshots are modeled at different grains.**
+- **EUR normalization occurs in Silver** so downstream analytics use a governed reporting currency.
+- **Raw contract currency prices are not directly compared with EUR unit prices.**
+- **Supplier history uses SCD Type 2** to preserve historical analytical context.
+- **Operational supplier performance and ML predictions remain at different grains.**
 - **ML prediction dates are not treated as normal transaction dates.**
-- **Data-quality rules are persisted as monitoring outputs.**
-- **Model outputs are promoted back to Fabric Gold before semantic-model consumption.**
+- **ML outputs return to Fabric Gold before semantic-model consumption.**
+- **Data-quality results are persisted as monitoring outputs.**
 - **CI/CD versions analytical artifacts, not environment data.**
 
----
-
-## Limitations and productionization roadmap
-
-This is a portfolio implementation using synthetic data.
-
-A production deployment would additionally include:
-
-- Automated target-environment initialization after deployment
-- Environment-specific configuration and secrets management
-- Automated CI validation checks
-- Full TEST and PROD data orchestration
-- Production-grade model monitoring
-- Incremental ingestion patterns
-- Expanded role-level security and access governance
-- Production model retraining strategy
-
-These items are intentionally documented as productionization extensions rather than represented as completed functionality.
+Detailed rationale is documented in the [Technical Architecture](docs/architecture/architecture.md).
 
 ---
 
-## Why this project
+# Productionization Roadmap
 
-The goal was to demonstrate the connection between analytics engineering and business decision-making:
+A production deployment would additionally require automated target-environment initialization, environment-specific configuration and secrets management, automated CI validation gates, full TEST and PROD data orchestration, incremental ingestion patterns, production-grade model monitoring, automated retraining and model governance, expanded role-level security, and production release monitoring.
 
-**Raw procurement data → governed data products → machine learning → semantic model → management action**
+These items are intentionally documented as extensions rather than represented as completed functionality.
 
-A pricing anomaly becomes more useful when its spend exposure is quantified.
+---
 
-A supplier risk score becomes more useful when it is connected to delivery, quality, and procurement spend.
+# Why This Project
 
-A savings model becomes more useful when it identifies where procurement teams should focus and why.
+The project was built to demonstrate the connection between **procurement domain knowledge and modern analytics engineering**.
+
+```text
+Raw Procurement Data
+        ↓
+Governed Data Products
+        ↓
+Machine Learning
+        ↓
+Prescriptive Analytics
+        ↓
+Semantic Model
+        ↓
+Management Action
+```
+
+A pricing anomaly becomes useful when its spend exposure is quantified.
+
+A supplier-risk score becomes useful when it is connected to delivery, quality, and procurement exposure.
+
+A savings model becomes useful when it identifies **where procurement should focus and why**.
