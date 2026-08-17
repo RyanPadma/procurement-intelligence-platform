@@ -165,12 +165,12 @@ The final report contains five business-facing pages:
 5. **Savings Pipeline & Realization**
 
 <!-- SCREENSHOT: power-bi/screenshots/01-executive-overview.jpg -->
-![Enterprise Procurement Intelligence - Executive Overview](power-bi/screenshots/01-executive-overview.jpg)
+<img width="1252" height="685" alt="01-executive-overview" src="https://github.com/user-attachments/assets/697d522c-a597-4d42-a69f-13f358dc8bc6" />
 
 The Executive Overview combines spend, compliance, supplier performance, risk, realized savings, and modeled savings opportunity in one management view.
 
 <!-- SCREENSHOT: power-bi/screenshots/04-pricing-savings-intelligence.jpg -->
-![Pricing Anomaly and Savings Intelligence](power-bi/screenshots/04-pricing-savings-intelligence.jpg)
+<img width="1240" height="688" alt="04-pricing-savings-intelligence" src="https://github.com/user-attachments/assets/47387b38-ca94-4a00-a876-47d4e37df2d0" />
 
 The Pricing Anomaly & Savings Intelligence page connects ML pricing signals to supplier-category savings opportunities and negotiation priority.
 
@@ -219,12 +219,12 @@ A supervised supplier-level workflow predicts future operational risk using hist
 The workflow includes future-looking target construction, leakage prevention, grouped cross-validation, temporal holdout testing, candidate-model comparison, MLflow tracking, and Gold promotion.
 
 <!-- SCREENSHOT: docs/screenshots/ml/02-supplier-risk-feature-engineering.jpg -->
-![Supplier risk feature engineering](docs/screenshots/ml/02-supplier-risk-feature-engineering.jpg)
+<img width="1849" height="834" alt="02-supplier-risk-feature-engineering" src="https://github.com/user-attachments/assets/68dd9d9b-06ff-4bc0-878b-36941b0d2166" />
 
 *Supplier-risk feature engineering and profiling in Azure Databricks.*
 
 <!-- SCREENSHOT: docs/screenshots/ml/03-mlflow-supplier-risk-experiment.jpg -->
-![MLflow supplier risk experiment](docs/screenshots/ml/03-mlflow-supplier-risk-experiment.jpg)
+<img width="1899" height="846" alt="03-mlflow-supplier-risk-experiment" src="https://github.com/user-attachments/assets/bbe50e21-ebb3-4186-bdcf-45593485d853" />
 
 *MLflow evidence showing tracked supplier-risk model-development, temporal-test, and production-candidate runs.*
 
@@ -245,7 +245,7 @@ Validated scoring snapshot:
 - **5.59%** anomaly rate
 
 <!-- SCREENSHOT: docs/screenshots/ml/05-pricing-anomaly-results.jpg -->
-![Pricing anomaly scoring results](docs/screenshots/ml/05-pricing-anomaly-results.jpg)
+<img width="1911" height="873" alt="05-pricing-anomaly-results" src="https://github.com/user-attachments/assets/6e5d098a-b57f-419f-af1f-39cca3673bff" />
 
 *2026 production-scoring evidence from Databricks.*
 
@@ -267,7 +267,8 @@ Validated output:
 - **€97.55M** modeled potential annual savings
 
 <!-- SCREENSHOT: docs/screenshots/ml/06-savings-opportunity-results.jpg -->
-![Savings opportunity engine validation](docs/screenshots/ml/06-savings-opportunity-results.jpg)
+<img width="1905" height="867" alt="06-savings-opportunity-results" src="https://github.com/user-attachments/assets/b83aaf8f-3b8a-463c-8214-22438efef115" />
+
 
 *Savings-engine quality-gate evidence showing passed validation, 100% pricing-signal coverage, 100% supplier-risk coverage, and actionable opportunity counts.*
 
@@ -314,22 +315,22 @@ flowchart LR
 Implemented evidence includes Fabric Git integration, `dev` and `main` branches, pull-request promotion, a DEV → TEST → PROD deployment pipeline, and a successful **33-item DEV → TEST deployment**.
 
 <!-- SCREENSHOT: docs/screenshots/cicd/04-fabric-git-integration.jpg -->
-![Fabric Git integration](docs/screenshots/cicd/04-fabric-git-integration.jpg)
+<img width="1014" height="924" alt="04-fabric-git-integration" src="https://github.com/user-attachments/assets/15df4601-11cb-48ee-b4e6-54a6b22a5a1c" />
 
 *Fabric DEV workspace connected to the GitHub repository, `/fabric` folder, and `dev` branch.*
 
 <!-- SCREENSHOT: docs/screenshots/cicd/03-merged-pull-request.jpg -->
-![Merged GitHub pull request](docs/screenshots/cicd/03-merged-pull-request.jpg)
+<img width="1354" height="876" alt="03-merged-pull-request" src="https://github.com/user-attachments/assets/2f89af99-b8fe-4d91-8b01-ea3d37095a97" />
 
 *Pull-request based promotion of the initial Fabric platform baseline from `dev` into `main`.*
 
 <!-- SCREENSHOT: docs/screenshots/cicd/05-fabric-deployment-pipeline.jpg -->
-![Fabric deployment pipeline](docs/screenshots/cicd/05-fabric-deployment-pipeline.jpg)
+<img width="1566" height="583" alt="05-fabric-deployment-pipeline" src="https://github.com/user-attachments/assets/17ae2888-8de4-468e-ab9f-8aaffb742cd7" />
 
 *Configured Development → Test → Production Fabric deployment pipeline.*
 
 <!-- SCREENSHOT: docs/screenshots/cicd/06-test-deployment-history.jpg -->
-![Successful Fabric Test deployment](docs/screenshots/cicd/06-test-deployment-history.jpg)
+<img width="1912" height="826" alt="06-test-deployment-history" src="https://github.com/user-attachments/assets/3e457ce9-0958-46de-84ec-7c375b94d200" />
 
 *Deployment-history evidence showing the successful 33-item Development → Test promotion.*
 
